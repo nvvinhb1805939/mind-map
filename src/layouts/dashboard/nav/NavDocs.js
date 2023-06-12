@@ -1,5 +1,5 @@
 // @mui
-import { Stack, Button, Typography, Box } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 // auth
 import { useAuthContext } from '../../../auth/useAuthContext';
 // locales
@@ -27,20 +27,21 @@ export default function NavDocs() {
       }}
     >
       <Box component="img" src="/assets/illustrations/illustration_docs.svg" />
+      <Stack
+        justifyContent="center"
+        alignItems="center"
+        sx={{
+          py: 1,
+          px: 2,
 
-      <div>
-        <Typography gutterBottom variant="subtitle1">
-          {`${translate('docs.hi')}, ${user?.displayName}`}
-        </Typography>
-
-        <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
-          {`${translate('docs.description')}`}
-        </Typography>
-      </div>
-
-      <Button href={PATH_DOCS.root} target="_blank" rel="noopener" variant="contained">
-        {`${translate('docs.documentation')}`}
-      </Button>
+          bgcolor: 'primary.main',
+          color: 'primary.contrastText',
+          borderRadius: 1,
+        }}
+      >
+        <Typography variant="subtitle1">© 2022 GD VIỆT NAM</Typography>
+        <Typography variant="button">Sơ đồ tư duy</Typography>
+      </Stack>
     </Stack>
   );
 }

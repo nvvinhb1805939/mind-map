@@ -32,7 +32,7 @@ export const PATH_PAGE = {
   page404: '/404',
   page500: '/500',
   components: '/components',
-  mindmap: '/mindmap',
+  mindMap: '/mind-map',
 };
 
 export const PATH_DASHBOARD = {

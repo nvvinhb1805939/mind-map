@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Box, Link } from '@mui/material';
+import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -79,7 +80,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   }
 
   return (
-    <Link component={RouterLink} to="/" sx={{ display: 'contents' }}>
+    <Link component={RouterLink} to={PATH_AFTER_LOGIN} sx={{ display: 'contents' }}>
       {logo}
     </Link>
   );

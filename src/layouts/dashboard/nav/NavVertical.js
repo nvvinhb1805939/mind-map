@@ -2,20 +2,20 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
-import { Box, Stack, Drawer } from '@mui/material';
+import { Box, Drawer, Stack } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // config
 import { NAV } from '../../../config-global';
 // components
 import Logo from '../../../components/logo';
-import Scrollbar from '../../../components/scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
+import Scrollbar from '../../../components/scrollbar';
 //
-import navConfig from './config-navigation';
-import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
+import NavDocs from './NavDocs';
 import NavToggleButton from './NavToggleButton';
+import navConfig from './config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       >
         <Logo />
 
-        <NavAccount />
+        {/* <NavAccount /> */}
       </Stack>
 
       <NavSectionVertical data={navConfig} />

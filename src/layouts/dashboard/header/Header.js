@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
+import { AppBar, IconButton, Stack, Toolbar } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // hooks
@@ -10,15 +10,15 @@ import useResponsive from '../../../hooks/useResponsive';
 // config
 import { HEADER, NAV } from '../../../config-global';
 // components
-import Logo from '../../../components/logo';
 import Iconify from '../../../components/iconify';
+import Logo from '../../../components/logo';
 import { useSettingsContext } from '../../../components/settings';
 //
-import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
 import ContactsPopover from './ContactsPopover';
+import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import Searchbar from './Searchbar';
 
 // ----------------------------------------------------------------------
 

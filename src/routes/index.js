@@ -3,79 +3,76 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import AuthGuard from '../auth/AuthGuard';
 import GuestGuard from '../auth/GuestGuard';
 // layouts
-import MainLayout from '../layouts/main';
-import SimpleLayout from '../layouts/simple';
 import CompactLayout from '../layouts/compact';
 import DashboardLayout from '../layouts/dashboard';
 // config
 import { PATH_AFTER_LOGIN } from '../config-global';
 //
 import {
-  // Auth
-  LoginPage,
-  RegisterPage,
-  VerifyCodePage,
-  NewPasswordPage,
-  ResetPasswordPage,
+  AboutPage,
+  //
+  BlankPage,
+  BlogNewPostPage,
+  BlogPostPage,
+  // Dashboard: Blog
+  BlogPostsPage,
+  CalendarPage,
+  // Dashboard: App
+  ChatPage,
+  ComingSoonPage,
+  //
+  ComponentsOverviewPage,
+  Contact,
+  //
+  DemoAnimatePage,
+  DemoCarouselsPage,
+  DemoChartsPage,
+  DemoCopyToClipboardPage,
+  DemoEditorPage,
+  DemoFormValidationPage,
+  DemoImagePage,
+  DemoLabelPage,
+  DemoLightboxPage,
+  DemoMapPage,
+  DemoMarkdownPage,
+  DemoMegaMenuPage,
+  DemoMultiLanguagePage,
+  DemoNavigationBarPage,
+  DemoOrganizationalChartPage,
+  DemoScrollbarPage,
+  DemoSnackbarPage,
+  DemoTextMaxLinePage,
+  DemoUploadPage,
+  EcommerceCheckoutPage,
+  EcommerceProductCreatePage,
+  EcommerceProductDetailsPage,
+  EcommerceProductEditPage,
+  EcommerceProductListPage,
+  // Dashboard: Ecommerce
+  EcommerceShopPage,
+  FaqsPage,
+  // Dashboard: FileManager
+  FileManagerPage,
+  FoundationColorsPage,
+  FoundationGridPage,
+  FoundationIconsPage,
+  FoundationShadowsPage,
+  FoundationTypographyPage,
+  GeneralAnalyticsPage,
   // Dashboard: General
   GeneralAppPage,
-  GeneralFilePage,
   GeneralBankingPage,
   GeneralBookingPage,
   GeneralEcommercePage,
-  GeneralAnalyticsPage,
-  // Dashboard: User
-  UserListPage,
-  UserEditPage,
-  UserCardsPage,
-  UserCreatePage,
-  UserProfilePage,
-  UserAccountPage,
-  // Dashboard: Ecommerce
-  EcommerceShopPage,
-  EcommerceCheckoutPage,
-  EcommerceProductListPage,
-  EcommerceProductEditPage,
-  EcommerceProductCreatePage,
-  EcommerceProductDetailsPage,
+  GeneralFilePage,
+  HomePage,
+  InvoiceCreatePage,
+  InvoiceDetailsPage,
+  InvoiceEditPage,
   // Dashboard: Invoice
   InvoiceListPage,
-  InvoiceDetailsPage,
-  InvoiceCreatePage,
-  InvoiceEditPage,
-  // Dashboard: Blog
-  BlogPostsPage,
-  BlogPostPage,
-  BlogNewPostPage,
-  // Dashboard: FileManager
-  FileManagerPage,
-  // Dashboard: App
-  ChatPage,
-  MailPage,
-  CalendarPage,
   KanbanPage,
-  //
-  BlankPage,
-  PermissionDeniedPage,
-  //
-  Page500,
-  Page403,
-  Page404,
-  HomePage,
-  FaqsPage,
-  AboutPage,
-  Contact,
-  PricingPage,
-  PaymentPage,
-  ComingSoonPage,
-  MaintenancePage,
-  //
-  ComponentsOverviewPage,
-  FoundationColorsPage,
-  FoundationTypographyPage,
-  FoundationShadowsPage,
-  FoundationGridPage,
-  FoundationIconsPage,
+  LoginPage,
   //
   MUIAccordionPage,
   MUIAlertPage,
@@ -106,27 +103,29 @@ import {
   MUITooltipPage,
   MUITransferListPage,
   MUITreesViewPage,
+  MailPage,
+  MaintenancePage,
+  MindMapPage,
+  NewPasswordPage,
+  Page403,
+  Page404,
   //
-  DemoAnimatePage,
-  DemoCarouselsPage,
-  DemoChartsPage,
-  DemoCopyToClipboardPage,
-  DemoEditorPage,
-  DemoFormValidationPage,
-  DemoImagePage,
-  DemoLabelPage,
-  DemoLightboxPage,
-  DemoMapPage,
-  DemoMegaMenuPage,
-  DemoMultiLanguagePage,
-  DemoNavigationBarPage,
-  DemoOrganizationalChartPage,
-  DemoScrollbarPage,
-  DemoSnackbarPage,
-  DemoTextMaxLinePage,
-  DemoUploadPage,
-  DemoMarkdownPage,
+  Page500,
+  PaymentPage,
+  PermissionDeniedPage,
+  PricingPage,
+  RegisterPage,
+  ResetPasswordPage,
+  UserAccountPage,
+  UserCardsPage,
+  UserCreatePage,
+  UserEditPage,
+  // Dashboard: User
+  UserListPage,
+  UserProfilePage,
+  VerifyCodePage,
 } from './elements';
+import { PATH_PAGE } from './paths';
 
 // ----------------------------------------------------------------------
 
@@ -135,6 +134,7 @@ export default function Router() {
     // Auth
     {
       path: 'auth',
+      element: <Navigate to={PATH_AFTER_LOGIN} replace />,
       children: [
         {
           path: 'login',
@@ -168,11 +168,12 @@ export default function Router() {
     // Dashboard
     {
       path: 'dashboard',
-      element: (
-        <AuthGuard>
-          <DashboardLayout />
-        </AuthGuard>
-      ),
+      element: <Navigate to={PATH_AFTER_LOGIN} replace />,
+      // element: (
+      //   <AuthGuard>
+      //     <DashboardLayout />
+      //   </AuthGuard>
+      // ),
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: 'app', element: <GeneralAppPage /> },
@@ -250,9 +251,21 @@ export default function Router() {
       ],
     },
 
+    // Mind map
+    {
+      path: PATH_PAGE.mindMap,
+      element: (
+        <AuthGuard>
+          <DashboardLayout />
+        </AuthGuard>
+      ),
+      children: [{ element: <MindMapPage />, index: true }],
+    },
+
     // Main Routes
     {
-      element: <MainLayout />,
+      element: <Navigate to={PATH_AFTER_LOGIN} replace />,
+      // element: <MainLayout />,
       children: [
         { element: <HomePage />, index: true },
         { path: 'about-us', element: <AboutPage /> },
@@ -339,14 +352,16 @@ export default function Router() {
       ],
     },
     {
-      element: <SimpleLayout />,
+      // element: <SimpleLayout />,
+      element: <Navigate to={PATH_AFTER_LOGIN} replace />,
       children: [
         { path: 'pricing', element: <PricingPage /> },
         { path: 'payment', element: <PaymentPage /> },
       ],
     },
     {
-      element: <CompactLayout />,
+      element: <Navigate to={PATH_AFTER_LOGIN} replace />,
+      // element: <CompactLayout />,
       children: [
         { path: 'coming-soon', element: <ComingSoonPage /> },
         { path: 'maintenance', element: <MaintenancePage /> },
