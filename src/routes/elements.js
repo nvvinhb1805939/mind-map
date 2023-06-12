@@ -255,3 +255,4 @@ export const DemoMarkdownPage = Loadable(
   lazy(() => import('../pages/components/extra/DemoMarkdownPage'))
 );
 export const MindMapPage = Loadable(lazy(() => import('../pages/mindmap')));
+export const TemplatePage = Loadable(lazy(() => import('../pages/mindmap/TemplatePage')));

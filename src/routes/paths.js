@@ -6,6 +6,7 @@ function path(root, sublink) {
 
 const ROOTS_AUTH = '/auth';
 const ROOTS_DASHBOARD = '/dashboard';
+const ROOTS_MINDMAP = '/mind-map';
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +33,11 @@ export const PATH_PAGE = {
   page404: '/404',
   page500: '/500',
   components: '/components',
-  mindMap: '/mind-map',
+};
+
+export const PATH_MINDMAP = {
+  root: ROOTS_MINDMAP,
+  templates: path(ROOTS_MINDMAP, '/templates'),
 };
 
 export const PATH_DASHBOARD = {

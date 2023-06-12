@@ -116,6 +116,7 @@ import {
   PricingPage,
   RegisterPage,
   ResetPasswordPage,
+  TemplatePage,
   UserAccountPage,
   UserCardsPage,
   UserCreatePage,
@@ -125,7 +126,7 @@ import {
   UserProfilePage,
   VerifyCodePage,
 } from './elements';
-import { PATH_PAGE } from './paths';
+import { PATH_MINDMAP, PATH_PAGE } from './paths';
 
 // ----------------------------------------------------------------------
 
@@ -253,13 +254,16 @@ export default function Router() {
 
     // Mind map
     {
-      path: PATH_PAGE.mindMap,
+      path: PATH_MINDMAP.root,
       element: (
         <AuthGuard>
           <DashboardLayout />
         </AuthGuard>
       ),
-      children: [{ element: <MindMapPage />, index: true }],
+      children: [
+        { element: <MindMapPage />, index: true },
+        { path: PATH_MINDMAP.templates, element: <TemplatePage /> },
+      ],
     },
 
     // Main Routes

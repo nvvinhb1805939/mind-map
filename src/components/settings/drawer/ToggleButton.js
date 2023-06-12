@@ -24,8 +24,8 @@ export default function ToggleButton({ notDefault, open, onToggle }) {
   return (
     <Box
       sx={{
-        p: 0.5,
-        right: 24,
+        p: 1,
+        right: 32,
         bottom: 24,
         zIndex: 999,
         position: 'fixed',

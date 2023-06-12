@@ -1,5 +1,5 @@
 // routes
-import { PATH_PAGE } from '../../../routes/paths';
+import { PATH_MINDMAP, PATH_PAGE } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 
@@ -32,13 +32,17 @@ const ICONS = {
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
   mindMap: icon('ic_mind_map'),
+  template: icon('ic_template'),
 };
 
 const navConfig = [
   // Mind Map
   {
     subheader: 'Sơ đồ tư duy',
-    items: [{ title: 'Trang chủ', path: PATH_PAGE.mindMap, icon: ICONS.mindMap }],
+    items: [
+      { title: 'Thiết kế', path: PATH_MINDMAP.root, icon: ICONS.mindMap },
+      { title: 'Mẫu', path: PATH_MINDMAP.templates, icon: ICONS.template },
+    ],
   },
 
   // GENERAL

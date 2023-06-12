@@ -55,6 +55,7 @@ import { AuthProvider } from './auth/JwtContext';
 // import { AuthProvider } from './auth/Auth0Context';
 // import { AuthProvider } from './auth/FirebaseContext';
 // import { AuthProvider } from './auth/AwsCognitoContext';
+import './App.css';
 
 // ----------------------------------------------------------------------
 

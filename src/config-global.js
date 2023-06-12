@@ -1,5 +1,5 @@
 // routes
-import { PATH_DASHBOARD, PATH_PAGE } from './routes/paths';
+import { PATH_DASHBOARD, PATH_MINDMAP, PATH_PAGE } from './routes/paths';
 
 // API
 // ----------------------------------------------------------------------
@@ -29,12 +29,13 @@ export const AUTH0_API = {
 export const MAP_API = process.env.REACT_APP_MAPBOX_API;
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
-export const PATH_AFTER_LOGIN = PATH_PAGE.mindMap; // as '/dashboard/app'
+export const PATH_AFTER_LOGIN = PATH_MINDMAP.root; // as '/dashboard/app'
 
 // LAYOUT
 // ----------------------------------------------------------------------
 
 export const HEADER = {
+  H_DEFAULT: 64,
   H_MOBILE: 64,
   H_MAIN_DESKTOP: 88,
   H_DASHBOARD_DESKTOP: 92,
