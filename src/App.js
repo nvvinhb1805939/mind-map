@@ -56,6 +56,7 @@ import { AuthProvider } from './auth/JwtContext';
 // import { AuthProvider } from './auth/FirebaseContext';
 // import { AuthProvider } from './auth/AwsCognitoContext';
 import './App.css';
+import { ReactFlowProvider } from 'reactflow';
 
 // ----------------------------------------------------------------------
 
@@ -74,8 +75,10 @@ export default function App() {
                       <ThemeSettings>
                         <ThemeLocalization>
                           <SnackbarProvider>
-                            <StyledChart />
-                            <Router />
+                            <ReactFlowProvider>
+                              <StyledChart />
+                              <Router />
+                            </ReactFlowProvider>
                           </SnackbarProvider>
                         </ThemeLocalization>
                       </ThemeSettings>

@@ -58,3 +58,17 @@ export const ICON = {
   NAV_ITEM_HORIZONTAL: 22,
   NAV_ITEM_MINI: 22,
 };
+
+export const NODE_SIZE = {
+  HEIGHT: 60,
+  WIDTH: 160,
+};
+
+export const HANDLE_SIZE = {
+  HEIGHT: 16,
+  WIDTH: 40,
+};
+
+export const MINDMAP = {
+  DRAG_HANDLE: '.mindMap-drag-hanlde',
+};

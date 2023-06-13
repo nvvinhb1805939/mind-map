@@ -1,15 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { Edge, EdgeChange, Node, NodeChange, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import { createSlice, current } from '@reduxjs/toolkit';
+import { applyEdgeChanges, applyNodeChanges } from 'reactflow';
 
 const initialState = {
-  nodes: [
-    {
-      id: 'root',
-      type: 'mindmap',
-      data: { label: 'Sơ đồ tư duy' },
-      position: { x: 0, y: 0 },
-    },
-  ],
+  isEdit: false,
+  nodes: [],
   edges: [],
 };
 
@@ -17,15 +11,25 @@ const mindMapSlice = createSlice({
   name: 'mindMap',
   initialState,
   reducers: {
-    setNodes: (state, action) => {
-      state.nodes = applyNodeChanges(action.payload, state.nodes);
+    changeNodes: (state, action) => {
+      state.nodes = applyNodeChanges(action.payload, state.node);
     },
-    setEdges: (state, action) => {
+    changEdges: (state, action) => {
+      state.edges = applyEdgeChanges(action.payload, state.edge);
+    },
+    addNodes: (state, action) => {
+      state.nodes.push(action.payload);
+    },
+    addEdges: (state, action) => {
       state.edges = applyEdgeChanges(action.payload, state.edges);
+    },
+    toggleEdit: (state, action) => {
+      state.isEdit = action.payload;
     },
   },
 });
 
-export const { setNodes, setEdges } = mindMapSlice.actions;
+export const { changeNodes, changEdges, onEdgesChange, addNodes, addEdges, toggleEdit } =
+  mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

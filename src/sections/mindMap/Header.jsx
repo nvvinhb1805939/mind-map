@@ -1,11 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar } from '@mui/material';
 import { HEADER } from 'src/config-global';
 
 export const Header = (props) => {
+  const { isEdit } = props;
+
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box
+      sx={{
+        position: 'relative',
+        transform: `translateY(-100%)`,
+        ...(isEdit && {
+          transform: `translateY(100%)`,
+        }),
+      }}
+    >
       <AppBar position="absolute" color="transparent" sx={{ bgcolor: 'background.paper' }}>
         <Toolbar></Toolbar>
       </AppBar>
