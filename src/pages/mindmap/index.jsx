@@ -10,11 +10,11 @@ const MindMapPage = (props) => {
 
   return (
     <>
-      {isEdit && <Header isEdit={isEdit} />}
+      <Header isEdit={isEdit} />
       <Box
         sx={{
           height: '100vh',
-          ...(isEdit && { pt: `${HEADER.H_DEFAULT}px` }),
+          pt: `${HEADER.H_DEFAULT}px`,
           bgcolor: 'background.neutral',
           overflow: 'hidden',
         }}

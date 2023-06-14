@@ -12,16 +12,16 @@ const mindMapSlice = createSlice({
   initialState,
   reducers: {
     changeNodes: (state, action) => {
-      state.nodes = applyNodeChanges(action.payload, state.node);
+      state.nodes = applyNodeChanges(action.payload, state.nodes);
     },
     changEdges: (state, action) => {
-      state.edges = applyEdgeChanges(action.payload, state.edge);
+      state.edges = applyEdgeChanges(action.payload, state.edges);
     },
     addNodes: (state, action) => {
       state.nodes.push(action.payload);
     },
     addEdges: (state, action) => {
-      state.edges = applyEdgeChanges(action.payload, state.edges);
+      state.edges.push(action.payload);
     },
     toggleEdit: (state, action) => {
       state.isEdit = action.payload;

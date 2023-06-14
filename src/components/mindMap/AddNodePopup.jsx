@@ -1,6 +1,8 @@
 import { Box, Button, Popover, Stack, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { POSITION } from 'src/config-global';
 import { addNodes } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
@@ -50,19 +52,8 @@ export const AddNodePopup = (props) => {
   };
 
   return (
-    <Box>
-      <Button
-        onClick={handleClick}
-        variant="contained"
-        size="large"
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 2,
-        }}
-      >
+    <>
+      <Button onClick={handleClick} variant="contained" size="large">
         Thêm nút
       </Button>
       {open && (
@@ -72,12 +63,12 @@ export const AddNodePopup = (props) => {
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: 'center',
-            horizontal: 'center',
+            vertical: 'top',
+            horizontal: 'left',
           }}
           transformOrigin={{
-            vertical: 'center',
-            horizontal: 'center',
+            vertical: 'top',
+            horizontal: 'left',
           }}
         >
           <Box
@@ -105,6 +96,7 @@ export const AddNodePopup = (props) => {
                 variant="outlined"
                 error={!!error}
                 helperText={error}
+                autoComplete="off"
                 autoFocus
                 fullWidth
                 size="small"
@@ -117,8 +109,10 @@ export const AddNodePopup = (props) => {
           </Box>
         </Popover>
       )}
-    </Box>
+    </>
   );
 };
 
-AddNodePopup.propTypes = {};
+AddNodePopup.propTypes = {
+  position: PropTypes.string,
+};

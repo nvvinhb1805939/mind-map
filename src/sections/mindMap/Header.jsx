@@ -1,5 +1,6 @@
 import { AppBar, Box, Toolbar } from '@mui/material';
-import { HEADER } from 'src/config-global';
+import { AddNodePopup } from 'src/components/mindMap/AddNodePopup';
+import { HEADER, POSITION } from 'src/config-global';
 
 export const Header = (props) => {
   const { isEdit } = props;
@@ -15,7 +16,9 @@ export const Header = (props) => {
       }}
     >
       <AppBar position="absolute" color="transparent" sx={{ bgcolor: 'background.paper' }}>
-        <Toolbar></Toolbar>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <AddNodePopup />
+        </Toolbar>
       </AppBar>
     </Box>
   );
