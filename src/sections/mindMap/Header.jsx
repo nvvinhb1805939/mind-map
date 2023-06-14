@@ -15,7 +15,7 @@ export const Header = (props) => {
         }),
       }}
     >
-      <AppBar position="absolute" color="transparent" sx={{ bgcolor: 'background.paper' }}>
+      <AppBar position="absolute" color="transparent" sx={{ px: 1, bgcolor: 'background.paper' }}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <AddNodePopup />
         </Toolbar>

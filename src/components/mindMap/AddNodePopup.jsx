@@ -51,65 +51,70 @@ export const AddNodePopup = (props) => {
     enqueueSnackbar('Thêm nút thành công!');
   };
 
-  return (
-    <>
-      <Button onClick={handleClick} variant="contained" size="large">
-        Thêm nút
-      </Button>
-      {open && (
-        <Popover
-          id="add-node-popup"
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
+  return open ? (
+    <Popover
+      id="add-node-popup"
+      open={open}
+      anchorEl={anchorEl}
+      onClose={handleClose}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+      sx={{
+        '& .MuiPaper-root': {
+          borderRadius: 1,
+        },
+        '& .MuiPopover-paper': {
+          boxShadow: 11,
+        },
+      }}
+    >
+      <Box
+        sx={{
+          p: 4,
+          maxWidth: 600,
+          width: 600,
+        }}
+      >
+        <Typography variant="h4" sx={{ mb: 2 }}>
+          Thêm nút
+        </Typography>
+        <Stack
+          component="form"
+          onSubmit={handleOnSubmit}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          gap={2}
         >
-          <Box
-            sx={{
-              p: 4,
-              maxWidth: 600,
-              width: 600,
-            }}
-          >
-            <Typography variant="h4" sx={{ mb: 2 }}>
-              Thêm nút
-            </Typography>
-            <Stack
-              component="form"
-              onSubmit={handleOnSubmit}
-              direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
-              gap={2}
-            >
-              <TextField
-                id="label"
-                name="label"
-                label="Nhập tên nút"
-                variant="outlined"
-                error={!!error}
-                helperText={error}
-                autoComplete="off"
-                autoFocus
-                fullWidth
-                size="small"
-                onChange={(event) => setLabel(event.target.value)}
-              />
-              <Button type="submit" variant="contained" sx={{ py: 1, px: 4 }}>
-                Thêm
-              </Button>
-            </Stack>
-          </Box>
-        </Popover>
-      )}
-    </>
+          <TextField
+            id="label"
+            name="label"
+            label="Nhập tên nút"
+            variant="outlined"
+            error={!!error}
+            helperText={error}
+            autoComplete="off"
+            autoFocus
+            fullWidth
+            size="small"
+            onChange={(event) => setLabel(event.target.value)}
+          />
+          <Button type="submit" variant="contained" sx={{ py: 1, px: 4 }}>
+            Thêm
+          </Button>
+        </Stack>
+      </Box>
+    </Popover>
+  ) : (
+    <Button onClick={handleClick} variant="contained" size="large">
+      Thêm nút
+    </Button>
   );
 };
 

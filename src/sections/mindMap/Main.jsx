@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
-import { useCallback, useRef } from 'react';
+import { useRef, useState } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { MindMapNode } from 'src/components/mindMap';
-import { NODE_SIZE } from 'src/config-global';
+import { DEFAULT_MAX_ZOOM, NODE_SIZE } from 'src/config-global';
 import { addEdges, addNodes, changEdges, changeNodes } from 'src/redux/slices/mindMap';
 import { useDispatch, useSelector } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,15 +18,17 @@ export const Main = (props) => {
   const dispatch = useDispatch();
   const { nodes, edges } = useSelector((state) => state.mindMap);
 
+  const [hasConnect, setHasConnect] = useState(false);
+
   const reactFlowWrapper = useRef(null);
   const connectingNodeId = useRef(null);
 
   const { project, getZoom } = useReactFlow();
 
-  const onConnect = useCallback(
-    ({ source, target }) => dispatch(addEdges({ id: uuidv4(), source, target })),
-    []
-  );
+  const onConnect = ({ source, target }) => {
+    dispatch(addEdges({ id: uuidv4(), source, target }));
+    setHasConnect(true); // emit that source node is connected to target node successfully
+  };
 
   const onNodesChange = (changes) => {
     dispatch(changeNodes(changes));
@@ -36,33 +38,34 @@ export const Main = (props) => {
     dispatch(changEdges(changes));
   };
 
-  const onConnectStart = useCallback((_, { nodeId }) => {
+  const onConnectStart = (_, { nodeId }) => {
+    setHasConnect(false); // clear connect status when on drag
     connectingNodeId.current = nodeId;
-  }, []);
+  };
 
-  const onConnectEnd = useCallback(
-    (event) => {
-      const isTargetInPane = event.target.classList.contains('react-flow__pane');
+  // this method is used to add node on drop edge
+  const onConnectEnd = (event) => {
+    if (hasConnect) return; // if source node is connected to target node then do nothing
 
-      if (!isTargetInPane) return;
+    const isTargetInPane = event.target.classList.contains('react-flow__pane'); // check whether target is inside of pane or not
 
-      const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
+    if (!isTargetInPane) return; // if target isn't inside of pane then do nothing
 
-      const newNode = {
-        id: uuidv4(),
-        type: 'mindMap',
-        position: project({
-          x: event.clientX - left - NODE_SIZE.WIDTH * getZoom(),
-          y: event.clientY - top,
-        }),
-        data: { label: `Nút ${++quantityNewNode}` },
-      };
+    const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
 
-      dispatch(addNodes(newNode));
-      dispatch(addEdges({ id: uuidv4(), source: connectingNodeId.current, target: newNode.id }));
-    },
-    [project]
-  );
+    const newNode = {
+      id: uuidv4(),
+      type: 'mindMap',
+      position: project({
+        x: event.clientX - left - NODE_SIZE.WIDTH * (getZoom() / DEFAULT_MAX_ZOOM), // responsive position relative to zoom
+        y: event.clientY - top,
+      }),
+      data: { label: `Nút ${++quantityNewNode}` },
+    };
+
+    dispatch(addNodes(newNode)); // add new node
+    dispatch(addEdges({ id: uuidv4(), source: connectingNodeId.current, target: newNode.id })); // add new edge
+  };
 
   return (
     <Box
@@ -84,6 +87,7 @@ export const Main = (props) => {
         onConnectStart={onConnectStart}
         onConnectEnd={onConnectEnd}
         fitView={true}
+        maxZoom={DEFAULT_MAX_ZOOM}
       >
         <Controls showInteractive={false} />
         <MiniMap ariaLabel="Sơ đồ tư duy" />

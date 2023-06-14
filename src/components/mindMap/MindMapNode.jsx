@@ -36,7 +36,6 @@ export const MindMapNode = memo((props) => {
         <Typography
           sx={{
             textAlign: 'center',
-            // color: 'primary.main'
           }}
         >
           {data.label}

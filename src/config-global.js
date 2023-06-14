@@ -72,3 +72,5 @@ export const HANDLE_SIZE = {
 export const MINDMAP = {
   DRAG_HANDLE: '.mindMap-drag-hanlde',
 };
+
+export const DEFAULT_MAX_ZOOM = 2;
