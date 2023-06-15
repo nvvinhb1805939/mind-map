@@ -2,7 +2,8 @@ import { Box, Button, Popover, Stack, TextField, Typography } from '@mui/materia
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { addNodes } from 'src/redux/slices/mindMap';
+import { TYPES } from 'src/config-global';
+import { addNode } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -37,12 +38,12 @@ export const AddNodePopup = (props) => {
 
     const newNode = {
       id: uuidv4(),
-      type: 'mindMap',
+      type: TYPES.MIND_MAP,
       position: { x: 0, y: 0 },
       data: { label: label.trim() },
     };
 
-    dispatch(addNodes(newNode)); // add node
+    dispatch(addNode(newNode)); // add node
 
     setAnchorEl(null); // close add node form
     setLabel(''); // clear form data

@@ -1,5 +1,5 @@
-import { createSlice, current } from '@reduxjs/toolkit';
-import { applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import { createSlice } from '@reduxjs/toolkit';
+import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from 'reactflow';
 
 const initialState = {
   isEdit: false,
@@ -17,11 +17,19 @@ const mindMapSlice = createSlice({
     changEdges: (state, action) => {
       state.edges = applyEdgeChanges(action.payload, state.edges);
     },
-    addNodes: (state, action) => {
+    addNode: (state, action) => {
       state.nodes.push(action.payload);
     },
-    addEdges: (state, action) => {
+    addEdge: (state, action) => {
       state.edges.push(action.payload);
+    },
+    updateEdge: (state, action) => {
+      const { oldEdge, newConnection } = action.payload;
+      state.edges = onUpdateEdge(oldEdge, newConnection, state.edges);
+    },
+    deleteEdge: (state, action) => {
+      const { edge } = action.payload;
+      state.edges.filter((edge) => edge.id !== edge.id);
     },
     toggleEdit: (state, action) => {
       state.isEdit = action.payload;
@@ -29,7 +37,7 @@ const mindMapSlice = createSlice({
   },
 });
 
-export const { changeNodes, changEdges, onEdgesChange, addNodes, addEdges, toggleEdit } =
+export const { changeNodes, changEdges, addNode, addEdge, updateEdge, deleteEdge, toggleEdit } =
   mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

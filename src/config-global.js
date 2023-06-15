@@ -1,4 +1,5 @@
 // routes
+import { MindMapNode } from './components/mindMap';
 import { PATH_DASHBOARD, PATH_MINDMAP, PATH_PAGE } from './routes/paths';
 
 // API
@@ -69,8 +70,12 @@ export const HANDLE_SIZE = {
   WIDTH: 40,
 };
 
-export const MINDMAP = {
-  DRAG_HANDLE: '.mindMap-drag-hanlde',
+export const TYPES = {
+  MIND_MAP: 'mindMap',
+};
+
+export const NODE_TYPES = {
+  [TYPES.MIND_MAP]: MindMapNode,
 };
 
 export const DEFAULT_MAX_ZOOM = 2;
