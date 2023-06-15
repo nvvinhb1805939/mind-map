@@ -14,6 +14,8 @@ export const MindMapNode = memo((props) => {
         p: 1.5,
         width: NODE_SIZE.WIDTH,
         height: NODE_SIZE.HEIGHT,
+
+        bgcolor: 'background.paper',
         border: (theme) => `2px solid ${theme.palette.text.primary}`,
         borderRadius: 1,
 
