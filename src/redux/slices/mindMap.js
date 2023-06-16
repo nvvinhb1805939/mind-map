@@ -17,6 +17,13 @@ const mindMapSlice = createSlice({
     changEdges: (state, action) => {
       state.edges = applyEdgeChanges(action.payload, state.edges);
     },
+    renewEdges: (state, action) => {
+      state.edges = action.payload;
+    },
+    changEdge: (state, action) => {
+      const changedEdgeIndex = state.edges.findIndex((edge) => edge.id === action.payload.id);
+      state.edges[changedEdgeIndex] = action.payload;
+    },
     addNode: (state, action) => {
       state.nodes.push(action.payload);
     },
@@ -28,8 +35,7 @@ const mindMapSlice = createSlice({
       state.edges = onUpdateEdge(oldEdge, newConnection, state.edges);
     },
     deleteEdge: (state, action) => {
-      const { edge } = action.payload;
-      state.edges.filter((edge) => edge.id !== edge.id);
+      state.edges = state.edges.filter((edge) => edge.id !== action.payload.id);
     },
     toggleEdit: (state, action) => {
       state.isEdit = action.payload;
@@ -37,7 +43,16 @@ const mindMapSlice = createSlice({
   },
 });
 
-export const { changeNodes, changEdges, addNode, addEdge, updateEdge, deleteEdge, toggleEdit } =
-  mindMapSlice.actions;
+export const {
+  changeNodes,
+  changEdges,
+  renewEdges,
+  changEdge,
+  addNode,
+  addEdge,
+  updateEdge,
+  deleteEdge,
+  toggleEdit,
+} = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

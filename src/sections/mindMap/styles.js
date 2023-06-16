@@ -9,6 +9,12 @@ export const useStyles = () => {
 
   const style = useMemo(
     () => ({
+      /** style for react-flow wrapper */
+      position: 'relative',
+      bgcolor: 'background.paper',
+      height: '100%',
+      borderRadius: 1,
+
       /** Style for Edge */
       '& .react-flow__edge:hover .react-flow__edge-path': {
         stroke: '#555', // default stroke color of react-flow
