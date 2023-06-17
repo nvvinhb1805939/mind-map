@@ -2,6 +2,11 @@
 import { MindMapNode } from './components/mindMap';
 import { PATH_DASHBOARD, PATH_MINDMAP, PATH_PAGE } from './routes/paths';
 
+import {
+  ClearOutlined as ClearOutlinedIcon,
+  RemoveOutlined as RemoveOutlinedIcon,
+} from '@mui/icons-material';
+
 // API
 // ----------------------------------------------------------------------
 
@@ -79,3 +84,23 @@ export const NODE_TYPES = {
 };
 
 export const DEFAULT_MAX_ZOOM = 2;
+
+export const DELETE_CONTEXT_MENU_TYPES = {
+  CLEAR_ALL: 'clear-all',
+  ONLY_NODE: 'only-node',
+};
+
+export const DELETE_CONTEXT_MENU = [
+  {
+    id: 1,
+    title: 'Xóa nút và các liên kết',
+    type: DELETE_CONTEXT_MENU_TYPES.CLEAR_ALL,
+    icon: <ClearOutlinedIcon />,
+  },
+  {
+    id: 2,
+    title: 'Chỉ xóa nút',
+    type: DELETE_CONTEXT_MENU_TYPES.ONLY_NODE,
+    icon: <RemoveOutlinedIcon />,
+  },
+];

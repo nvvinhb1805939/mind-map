@@ -1,7 +1,8 @@
 import { Box } from '@mui/material';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
+import { DeleteContextMenu } from 'src/components/mindMap';
 import { DEFAULT_MAX_ZOOM, NODE_SIZE, NODE_TYPES, TYPES } from 'src/config-global';
 import {
   addEdge,
@@ -28,6 +29,8 @@ export const Main = (props) => {
 
   const dispatch = useDispatch();
   const { nodes, edges } = useSelector((state) => state.mindMap);
+
+  const [nodeSelected, setNodeSelected] = useState(null); // is used to store selected node anchor
 
   const reactFlowWrapper = useRef(null); // access DOM
   const isOnEdgeUpdateEvents = useRef(false); //when user MOVE edge, it is used to check whether current event is onEdgeUpdate events or onConnect events ()
@@ -99,6 +102,21 @@ export const Main = (props) => {
   const onNodesChange = (nodeChanges) => {
     dispatch(changeNodes(nodeChanges));
   };
+  /** this method is used to open delete menu contexts */
+  const onNodeContextMenu = (event, selectedNode) => {
+    setNodeSelected({
+      options: selectedNode,
+      anchorEl: event.target,
+      setNodeSelected,
+    }); // open delete context menu
+
+    /** update selected node */
+    const updateSelectedNodes = nodes.map((node) =>
+      node.id === selectedNode.id ? { ...node, selected: true } : { ...node, selected: false }
+    );
+
+    dispatch(renewNodes(updateSelectedNodes)); // apply changes
+  };
 
   /** Edges */
   const onEdgesChange = (edgeChanges) => {
@@ -154,11 +172,13 @@ export const Main = (props) => {
 
   return (
     <Box ref={reactFlowWrapper} sx={styles}>
+      {!!nodeSelected?.anchorEl && <DeleteContextMenu node={nodeSelected} />}
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={NODE_TYPES}
         onNodesChange={onNodesChange}
+        onNodeContextMenu={onNodeContextMenu}
         onEdgesChange={onEdgesChange}
         onEdgeUpdateStart={onEdgeUpdateStart}
         onEdgeUpdate={onEdgeUpdate}
@@ -178,5 +198,3 @@ export const Main = (props) => {
     </Box>
   );
 };
-
-Main.propTypes = {};

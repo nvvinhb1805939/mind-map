@@ -1,5 +1,5 @@
 import { AppBar, Box, Toolbar } from '@mui/material';
-import { AddNodePopup } from 'src/components/mindMap/AddNodePopup';
+import { AddNodePopup } from 'src/components/mindMap';
 import { HEADER, POSITION } from 'src/config-global';
 
 export const Header = (props) => {

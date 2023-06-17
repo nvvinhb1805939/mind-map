@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
-import { addNode, renewEdges, renewNodes } from 'src/redux/slices/mindMap';
+import { addNode, renewNodes } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 
-export const AddNodePopup = (props) => {
+export const AddNodePopup = () => {
   const dispatch = useDispatch();
   const { nodes } = useSelector((state) => state[TYPES.MIND_MAP]);
 
@@ -47,11 +47,7 @@ export const AddNodePopup = (props) => {
     };
 
     /** clear selected nodes */
-    const clearSelectedNodes = nodes.map((node) => {
-      const clearSelectedNode = { ...node, selected: false };
-
-      return clearSelectedNode;
-    });
+    const clearSelectedNodes = nodes.map((node) => ({ ...node, selected: false }));
 
     dispatch(renewNodes(clearSelectedNodes)); // apply changes
 
@@ -132,8 +128,4 @@ export const AddNodePopup = (props) => {
       )}
     </>
   );
-};
-
-AddNodePopup.propTypes = {
-  position: PropTypes.string,
 };
