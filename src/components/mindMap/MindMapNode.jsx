@@ -1,13 +1,14 @@
 import { Stack, Typography } from '@mui/material';
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { NODE_SIZE } from 'src/config-global';
+import { NODE_SIZE, TYPES } from 'src/config-global';
 
 export const MindMapNode = memo((props) => {
   const { data } = props;
 
   return (
     <Stack
+      className={TYPES.MIND_MAP}
       alignItems="center"
       justifyContent="center"
       sx={{

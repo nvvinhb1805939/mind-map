@@ -20,6 +20,9 @@ const mindMapSlice = createSlice({
     renewEdges: (state, action) => {
       state.edges = action.payload;
     },
+    renewNodes: (state, action) => {
+      state.nodes = action.payload;
+    },
     changEdge: (state, action) => {
       const changedEdgeIndex = state.edges.findIndex((edge) => edge.id === action.payload.id);
       state.edges[changedEdgeIndex] = action.payload;
@@ -46,6 +49,7 @@ const mindMapSlice = createSlice({
 export const {
   changeNodes,
   changEdges,
+  renewNodes,
   renewEdges,
   changEdge,
   addNode,

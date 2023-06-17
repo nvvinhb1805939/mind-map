@@ -1,11 +1,9 @@
-import { useTheme } from '@mui/material';
 import { useMemo } from 'react';
 import { useSettingsContext } from 'src/components/settings';
-import { HANDLE_SIZE } from 'src/config-global';
+import { HANDLE_SIZE, TYPES } from 'src/config-global';
 
 export const useStyles = () => {
-  const { presetsColor } = useSettingsContext();
-  const theme = useTheme();
+  const { presetsColor, themeMode } = useSettingsContext();
 
   const style = useMemo(
     () => ({
@@ -15,12 +13,23 @@ export const useStyles = () => {
       height: '100%',
       borderRadius: 1,
 
-      /** Style for Edge */
+      /** Style for Nodes */
+      [`& .react-flow__node.selected .${TYPES.MIND_MAP}, & .react-flow__node.dragging .${TYPES.MIND_MAP}`]:
+        {
+          borderColor: 'primary.main',
+          boxShadow: (theme) =>
+            themeMode === 'dark'
+              ? `0 0 5px 5px ${theme.palette.primary.dark}`
+              : `0 0 5px 5px ${theme.palette.primary.lighter}`,
+          color: 'primary.main',
+        },
+
+      /** Style for Edges */
       '& .react-flow__edge:hover .react-flow__edge-path': {
         stroke: '#555', // default stroke color of react-flow
       },
 
-      /** Style for Handle */
+      /** Style for Handles */
       '& .react-flow__handle': {
         width: HANDLE_SIZE.WIDTH,
         height: HANDLE_SIZE.HEIGHT,
@@ -34,7 +43,7 @@ export const useStyles = () => {
         bottom: -HANDLE_SIZE.HEIGHT / 2,
       },
     }),
-    [presetsColor]
+    [presetsColor, themeMode]
   );
 
   return style;

@@ -2,13 +2,15 @@ import { Box, Button, Popover, Stack, TextField, Typography } from '@mui/materia
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
-import { addNode } from 'src/redux/slices/mindMap';
+import { addNode, renewEdges, renewNodes } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 
 export const AddNodePopup = (props) => {
   const dispatch = useDispatch();
+  const { nodes } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -41,7 +43,17 @@ export const AddNodePopup = (props) => {
       type: TYPES.MIND_MAP,
       position: { x: 0, y: 0 },
       data: { label: label.trim() },
+      selected: true,
     };
+
+    /** clear selected nodes */
+    const clearSelectedNodes = nodes.map((node) => {
+      const clearSelectedNode = { ...node, selected: false };
+
+      return clearSelectedNode;
+    });
+
+    dispatch(renewNodes(clearSelectedNodes)); // apply changes
 
     dispatch(addNode(newNode)); // add node
 

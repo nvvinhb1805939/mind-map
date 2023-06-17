@@ -11,6 +11,7 @@ import {
   changeNodes,
   deleteEdge,
   renewEdges,
+  renewNodes,
   updateEdge,
 } from 'src/redux/slices/mindMap';
 import { useDispatch, useSelector } from 'src/redux/store';
@@ -78,6 +79,7 @@ export const Main = (props) => {
         y: event.clientY - top,
       }),
       data: { label: `Nút ${++quantityNewNode}` },
+      selected: true,
     };
 
     dispatch(addNode(newNode)); // add new node
