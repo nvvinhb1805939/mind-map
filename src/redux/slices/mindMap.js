@@ -38,10 +38,14 @@ const mindMapSlice = createSlice({
       state.edges = onUpdateEdge(oldEdge, newConnection, state.edges);
     },
     deleteEdges: (state, action) => {
-      state.edges = '';
+      const extractIds = action.payload.map((edge) => edge.id);
+      state.edges = state.edges.filter((edge) => !extractIds.includes(edge.id));
     },
     deleteEdge: (state, action) => {
       state.edges = state.edges.filter((edge) => edge.id !== action.payload.id);
+    },
+    deleteNode: (state, action) => {
+      state.nodes = state.nodes.filter((node) => node.id !== action.payload.id);
     },
     toggleEdit: (state, action) => {
       state.isEdit = action.payload;
@@ -59,6 +63,8 @@ export const {
   addEdge,
   updateEdge,
   deleteEdge,
+  deleteEdges,
+  deleteNode,
   toggleEdit,
 } = mindMapSlice.actions;
 

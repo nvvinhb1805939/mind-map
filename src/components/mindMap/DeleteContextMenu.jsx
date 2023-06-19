@@ -1,7 +1,13 @@
 import { Menu, MenuItem, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getConnectedEdges, getIncomers } from 'reactflow';
-import { DELETE_CONTEXT_MENU, NODE_SIZE, TYPES } from 'src/config-global';
+import {
+  DELETE_CONTEXT_MENU,
+  DELETE_CONTEXT_MENU_TYPES,
+  NODE_SIZE,
+  TYPES,
+} from 'src/config-global';
+import { deleteEdges, deleteNode } from 'src/redux/slices/mindMap';
 
 export const DeleteContextMenu = (props) => {
   const {
@@ -22,13 +28,28 @@ export const DeleteContextMenu = (props) => {
   };
 
   const onDeleteClick = (type) => {
+    switch (type) {
+      case DELETE_CONTEXT_MENU_TYPES.ONLY_NODE:
+        deleteOnlyNode(options);
+        break;
+
+      default:
+        clearNodeAndConnectedEdges(options);
+        break;
+    }
+
     closeMenuContext();
   };
 
-  const deleteOnlyNode = (node) => {};
+  const deleteOnlyNode = (node) => {
+    console.log('deleteOnlyNode ', node);
+  };
 
   const clearNodeAndConnectedEdges = (node) => {
-    const connectedEdges = getConnectedEdges([options], edges);
+    const connectedEdges = getConnectedEdges([node], edges); // get connected edges of node
+
+    connectedEdges.length > 0 && dispatch(deleteEdges(connectedEdges)); // delete connected edges
+    dispatch(deleteNode(node)); // delete node
   };
 
   return (
