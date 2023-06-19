@@ -5,6 +5,7 @@ import { PATH_DASHBOARD, PATH_MINDMAP, PATH_PAGE } from './routes/paths';
 import {
   ClearOutlined as ClearOutlinedIcon,
   RemoveOutlined as RemoveOutlinedIcon,
+  BrokenImageOutlined as BrokenImageOutlinedIcon,
 } from '@mui/icons-material';
 
 // API
@@ -84,6 +85,7 @@ export const NODE_TYPES = {
 };
 
 export const DEFAULT_MAX_ZOOM = 2;
+export const DEFAULT_MIN_ZOOM = 0.5;
 
 export const DELETE_CONTEXT_MENU_TYPES = {
   CLEAR_ALL: 'clear-all',
@@ -104,3 +106,32 @@ export const DELETE_CONTEXT_MENU = [
     icon: <ClearOutlinedIcon />,
   },
 ];
+
+export const DOWNLOAD_CONTEXT_MENU_TYPES = {
+  PNG: 'png',
+  JPG: 'jpg',
+};
+
+export const DOWNLOAD_CONTEXT_MENU = [
+  {
+    id: DOWNLOAD_CONTEXT_MENU_TYPES.JPG,
+    title: 'JPG',
+    caption: 'Phù hợp cho việc chia sẻ',
+    icon: <BrokenImageOutlinedIcon />,
+  },
+  {
+    id: DOWNLOAD_CONTEXT_MENU_TYPES.PNG,
+    title: 'PNG',
+    caption: 'Phù hợp cho hình minh họa phức tạp',
+    icon: <BrokenImageOutlinedIcon />,
+  },
+];
+
+export const DOWNLOAD_CANVAS_SIZE = {
+  WIDTH: 1024 * 2,
+  HEIGHT: 768 * 2,
+};
+
+export const DOWNLOAD_FILE_NAME = 'mind-map';
+
+export const MIND_MAP_SELECTOR = '.react-flow__viewport';

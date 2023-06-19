@@ -25,6 +25,7 @@ export const MindMapNode = memo((props) => {
       {!!data?.label && (
         <Typography
           sx={{
+            fontSize: '1.25rem',
             textAlign: 'center',
           }}
         >
@@ -35,5 +36,3 @@ export const MindMapNode = memo((props) => {
     </Stack>
   );
 });
-
-MindMapNode.propTypes = {};
