@@ -93,14 +93,14 @@ export const DELETE_CONTEXT_MENU_TYPES = {
 export const DELETE_CONTEXT_MENU = [
   {
     id: 1,
-    title: 'Xóa nút và các liên kết',
-    type: DELETE_CONTEXT_MENU_TYPES.CLEAR_ALL,
-    icon: <ClearOutlinedIcon />,
-  },
-  {
-    id: 2,
     title: 'Chỉ xóa nút',
     type: DELETE_CONTEXT_MENU_TYPES.ONLY_NODE,
     icon: <RemoveOutlinedIcon />,
+  },
+  {
+    id: 2,
+    title: 'Xóa nút và các liên kết',
+    type: DELETE_CONTEXT_MENU_TYPES.CLEAR_ALL,
+    icon: <ClearOutlinedIcon />,
   },
 ];

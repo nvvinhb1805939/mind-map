@@ -38,8 +38,7 @@ const mindMapSlice = createSlice({
       state.edges = onUpdateEdge(oldEdge, newConnection, state.edges);
     },
     deleteEdges: (state, action) => {
-      const extractIds = action.payload.map((edge) => edge.id);
-      state.edges = state.edges.filter((edge) => !extractIds.includes(edge.id));
+      state.edges = action.payload;
     },
     deleteEdge: (state, action) => {
       state.edges = state.edges.filter((edge) => edge.id !== action.payload.id);
