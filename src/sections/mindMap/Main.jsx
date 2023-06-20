@@ -1,9 +1,10 @@
-import { Box } from '@mui/material';
+import { Box, ClickAwayListener } from '@mui/material';
 import { useRef, useState } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { DeleteContextMenu } from 'src/components/mindMap';
-import { DEFAULT_MAX_ZOOM, NODE_SIZE, NODE_TYPES, TYPES } from 'src/config-global';
+import { DEFAULT_MAX_ZOOM, EDIT_MODES, NODE_SIZE, NODE_TYPES, TYPES } from 'src/config-global';
+import { switchMode } from 'src/redux/slices/editMode';
 import {
   addEdge,
   addNode,
@@ -33,7 +34,7 @@ export const Main = (props) => {
   const [nodeSelected, setNodeSelected] = useState(null); // is used to store selected node anchor
 
   const reactFlowWrapper = useRef(null); // access DOM
-  const isOnEdgeUpdateEvents = useRef(false); //when user MOVE edge, it is used to check whether current event is onEdgeUpdate events or onConnect events ()
+  const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to check whether current event is onEdgeUpdate events or onConnect events ()
   const isEdgeUpdated = useRef(true); // check whether selected edge is updated or not
   const isNodesConnected = useRef(true); // check whether source node is connected to target node or not
   const connectingNodeId = useRef(null); // store id of source node
@@ -82,7 +83,6 @@ export const Main = (props) => {
         y: event.clientY - top,
       }),
       data: { label: `Nút ${++quantityNewNode}` },
-      selected: true,
     };
 
     dispatch(addNode(newNode)); // add new node
@@ -116,6 +116,14 @@ export const Main = (props) => {
     );
 
     dispatch(renewNodes(updateSelectedNodes)); // apply changes
+  };
+  const onNodeClick = (event, node) => {
+    dispatch(
+      switchMode({
+        mode: EDIT_MODES.NODE_EDITING,
+        current: node,
+      })
+    );
   };
 
   /** Edges */
@@ -169,32 +177,58 @@ export const Main = (props) => {
     selectedEdge.zIndex = 100;
     dispatch(changEdge(selectedEdge));
   };
+  const onEdgeClick = (event, edge) => {
+    dispatch(
+      switchMode({
+        mode: EDIT_MODES.EDGE_EDITING,
+        current: edge,
+      })
+    );
+  };
+
+  /** Pane */
+  const onPaneClick = (event) => {
+    dispatch(switchMode({ mode: EDIT_MODES.PANE_EDITING }));
+  };
+
+  const onClickAway = () =>
+    dispatch(
+      switchMode({
+        mode: null,
+        current: null,
+      })
+    );
 
   return (
-    <Box ref={reactFlowWrapper} sx={styles}>
-      {!!nodeSelected?.anchorEl && <DeleteContextMenu node={nodeSelected} />}
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={NODE_TYPES}
-        onNodesChange={onNodesChange}
-        onNodeContextMenu={onNodeContextMenu}
-        onEdgesChange={onEdgesChange}
-        onEdgeUpdateStart={onEdgeUpdateStart}
-        onEdgeUpdate={onEdgeUpdate}
-        onEdgeUpdateEnd={onEdgeUpdateEnd}
-        onEdgeDoubleClick={onEdgeDoubleClick}
-        onEdgeMouseEnter={onEdgeMouseEnter}
-        onConnect={onConnect}
-        onConnectStart={onConnectStart}
-        onConnectEnd={onConnectEnd}
-        fitView={true}
-        maxZoom={DEFAULT_MAX_ZOOM}
-        deleteKeyCode="Delete"
-      >
-        <Controls showInteractive={false} />
-        <MiniMap ariaLabel="Sơ đồ tư duy" />
-      </ReactFlow>
-    </Box>
+    <ClickAwayListener onClickAway={onClickAway}>
+      <Box ref={reactFlowWrapper} sx={styles}>
+        {!!nodeSelected?.anchorEl && <DeleteContextMenu node={nodeSelected} />}
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={NODE_TYPES}
+          onNodesChange={onNodesChange}
+          onNodeContextMenu={onNodeContextMenu}
+          onEdgesChange={onEdgesChange}
+          onEdgeUpdateStart={onEdgeUpdateStart}
+          onEdgeUpdate={onEdgeUpdate}
+          onEdgeUpdateEnd={onEdgeUpdateEnd}
+          onEdgeDoubleClick={onEdgeDoubleClick}
+          onEdgeMouseEnter={onEdgeMouseEnter}
+          onConnect={onConnect}
+          onConnectStart={onConnectStart}
+          onConnectEnd={onConnectEnd}
+          onPaneClick={onPaneClick}
+          onNodeClick={onNodeClick}
+          onEdgeClick={onEdgeClick}
+          fitView={true}
+          maxZoom={DEFAULT_MAX_ZOOM}
+          deleteKeyCode="Delete"
+        >
+          <Controls showInteractive={false} />
+          <MiniMap ariaLabel="Sơ đồ tư duy" />
+        </ReactFlow>
+      </Box>
+    </ClickAwayListener>
   );
 };

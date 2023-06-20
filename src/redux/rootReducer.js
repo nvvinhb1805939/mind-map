@@ -2,12 +2,13 @@ import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 // slices
-import mailReducer from './slices/mail';
-import chatReducer from './slices/chat';
-import productReducer from './slices/product';
 import calendarReducer from './slices/calendar';
+import chatReducer from './slices/chat';
+import editModeReducer from './slices/editMode';
 import kanbanReducer from './slices/kanban';
+import mailReducer from './slices/mail';
 import mindMapReducer from './slices/mindMap';
+import productReducer from './slices/product';
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   kanban: kanbanReducer,
   product: persistReducer(productPersistConfig, productReducer),
   mindMap: mindMapReducer,
+  editMode: editModeReducer,
 });
 
 export default rootReducer;

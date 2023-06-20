@@ -1,14 +1,11 @@
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
 import { HEADER } from 'src/config-global';
-import { useSelector } from 'src/redux/store';
 import { Header, Main } from 'src/sections/mindMap';
 
 const PADDING = 4;
 
 const MindMapPage = (props) => {
-  const { isEdit } = useSelector((state) => state.mindMap);
-
   /** disable default right click event of browser  */
   useEffect(() => {
     const handleContextmenu = (e) => {
@@ -22,7 +19,7 @@ const MindMapPage = (props) => {
 
   return (
     <>
-      <Header isEdit={isEdit} />
+      <Header />
       <Box
         sx={{
           height: '100vh',

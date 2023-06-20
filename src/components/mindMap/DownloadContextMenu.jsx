@@ -151,7 +151,7 @@ export const DownloadContextMenu = (props) => {
             />
 
             <Typography variant="caption" sx={{ display: 'block', textAlign: 'right' }}>
-              {size.WIDTH}px x {size.HEIGHT}px
+              {size.WIDTH}px &times; {size.HEIGHT}px
             </Typography>
           </Box>
         )}

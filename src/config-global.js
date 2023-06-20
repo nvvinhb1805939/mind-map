@@ -135,3 +135,9 @@ export const DOWNLOAD_CANVAS_SIZE = {
 export const DOWNLOAD_FILE_NAME = 'mind-map';
 
 export const MIND_MAP_SELECTOR = '.react-flow__viewport';
+
+export const EDIT_MODES = {
+  PANE_EDITING: 'pane-editing',
+  NODE_EDITING: 'node-editing',
+  EDGE_EDITING: 'edge-editing',
+};

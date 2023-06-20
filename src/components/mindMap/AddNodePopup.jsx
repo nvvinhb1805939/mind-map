@@ -2,12 +2,13 @@ import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { TYPES } from 'src/config-global';
+import { EDIT_MODES, TYPES } from 'src/config-global';
 import { addNode, renewNodes } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { BasePopover } from './BasePopover';
 import { Add as AddIcon } from '@mui/icons-material';
+import { switchMode } from 'src/redux/slices/editMode';
 
 export const AddNodePopup = () => {
   const dispatch = useDispatch();
@@ -46,6 +47,13 @@ export const AddNodePopup = () => {
     dispatch(renewNodes(clearSelectedNodes)); // apply changes
 
     dispatch(addNode(newNode)); // add node
+
+    dispatch(
+      switchMode({
+        mode: EDIT_MODES.NODE_EDITING,
+        current: newNode,
+      })
+    ); // switch node edit mode
 
     setClose(true); // close add node form
     setLabel(''); // clear form data

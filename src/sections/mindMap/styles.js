@@ -1,15 +1,17 @@
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { useSettingsContext } from 'src/components/settings';
 import { HANDLE_SIZE, TYPES } from 'src/config-global';
 
 export const useStyles = () => {
   const { presetsColor, themeMode } = useSettingsContext();
+  const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const style = useMemo(
     () => ({
       /** style for react-flow wrapper */
       position: 'relative',
-      bgcolor: 'background.paper',
+      bgcolor,
       height: '100%',
       borderRadius: 1,
 

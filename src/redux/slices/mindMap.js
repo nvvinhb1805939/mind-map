@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from 'reactflow';
 
 const initialState = {
-  isEdit: false,
+  bgcolor: '#fff',
   nodes: [],
   edges: [],
 };
@@ -46,9 +46,6 @@ const mindMapSlice = createSlice({
     deleteNode: (state, action) => {
       state.nodes = state.nodes.filter((node) => node.id !== action.payload.id);
     },
-    toggleEdit: (state, action) => {
-      state.isEdit = action.payload;
-    },
   },
 });
 
@@ -64,7 +61,6 @@ export const {
   deleteEdge,
   deleteEdges,
   deleteNode,
-  toggleEdit,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;
