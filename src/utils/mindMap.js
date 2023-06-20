@@ -64,7 +64,8 @@ export const exportToTextFile = (type, nodes, edges) => {
   element.click();
 };
 
-export const importTextFile = (file) => {
-  // const bytes = CryptoJS.AES.decrypt(encryptedData, process.env.REACT_APP_CRYPTO_SECRET_KEY);
-  // const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+export const importTextFile = (encryptedData) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedData, process.env.REACT_APP_CRYPTO_SECRET_KEY);
+  const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+  return decryptedData;
 };

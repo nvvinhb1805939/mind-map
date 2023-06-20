@@ -1,5 +1,5 @@
-import { AppBar, Box, Toolbar } from '@mui/material';
-import { AddNodePopup } from 'src/components/mindMap';
+import { AppBar, Box, Button, Toolbar } from '@mui/material';
+import { AddNodePopup, ImportBox } from 'src/components/mindMap';
 import { DownloadContextMenu } from 'src/components/mindMap/DownloadContextMenu';
 
 export const Header = (props) => {

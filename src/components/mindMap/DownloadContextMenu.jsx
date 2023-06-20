@@ -67,8 +67,8 @@ export const DownloadContextMenu = (props) => {
 
   const handleDownloadClick = () => {
     type.id === DOWNLOAD_CONTEXT_MENU_TYPES.PNG
-      ? htmlToImage(getNodes(), toPng, type.id, size)
-      : exportToTextFile(type.id, nodes, edges); // download with type is image
+      ? htmlToImage(getNodes(), toPng, type.id, size) // download with type is image
+      : exportToTextFile(type.id, nodes, edges); // download with type is text
   };
 
   return (
