@@ -23,25 +23,26 @@ const downloadImage = (dataUrl, type) => {
   a.click();
 };
 
-export const htmlToImage = (nodes, callback, type) => {
+export const htmlToImage = (nodes, callback, type, size, backgroundColor = '#fff', style = {}) => {
   const nodesBounds = getRectOfNodes(nodes);
   const [x, y, zoom] = getTransformForBounds(
     nodesBounds,
-    DOWNLOAD_CANVAS_SIZE.WIDTH,
-    DOWNLOAD_CANVAS_SIZE.HEIGHT,
+    size.WIDTH,
+    size.HEIGHT,
     DEFAULT_MIN_ZOOM,
     DEFAULT_MAX_ZOOM
   );
 
   callback(document.querySelector(MIND_MAP_SELECTOR), {
-    backgroundColor: '#fff',
-    width: DOWNLOAD_CANVAS_SIZE.WIDTH,
-    height: DOWNLOAD_CANVAS_SIZE.HEIGHT,
+    backgroundColor,
+    width: size.WIDTH,
+    height: size.HEIGHT,
     type: `image/${type}`,
     style: {
-      width: `${DOWNLOAD_CANVAS_SIZE.WIDTH}px`,
-      height: `${DOWNLOAD_CANVAS_SIZE.HEIGHT}px`,
+      width: `${size.WIDTH}px`,
+      height: `${size.HEIGHT}px`,
       transform: `translate(${x}px, ${y}px) scale(${zoom})`,
+      ...style,
     },
   }).then((dataUrl) => downloadImage(dataUrl, type));
 };

@@ -1,11 +1,11 @@
 // routes
 import { MindMapNode } from './components/mindMap';
 import { PATH_DASHBOARD, PATH_MINDMAP, PATH_PAGE } from './routes/paths';
-
 import {
   ClearOutlined as ClearOutlinedIcon,
   RemoveOutlined as RemoveOutlinedIcon,
   BrokenImageOutlined as BrokenImageOutlinedIcon,
+  AccountTreeOutlined as AccountTreeOutlinedIcon,
 } from '@mui/icons-material';
 
 // API
@@ -109,27 +109,27 @@ export const DELETE_CONTEXT_MENU = [
 
 export const DOWNLOAD_CONTEXT_MENU_TYPES = {
   PNG: 'png',
-  JPG: 'jpg',
+  TEXT: 'txt',
 };
 
 export const DOWNLOAD_CONTEXT_MENU = [
   {
-    id: DOWNLOAD_CONTEXT_MENU_TYPES.JPG,
-    title: 'JPG',
-    caption: 'Phù hợp cho việc chia sẻ',
+    id: DOWNLOAD_CONTEXT_MENU_TYPES.PNG,
+    title: 'Ảnh',
+    caption: 'Phù hợp cho việc chia sẻ, in ấn',
     icon: <BrokenImageOutlinedIcon />,
   },
   {
-    id: DOWNLOAD_CONTEXT_MENU_TYPES.PNG,
-    title: 'PNG',
-    caption: 'Phù hợp cho hình minh họa phức tạp',
-    icon: <BrokenImageOutlinedIcon />,
+    id: DOWNLOAD_CONTEXT_MENU_TYPES.TEXT,
+    title: 'Sơ đồ',
+    caption: 'Phù hợp cho việc tái sử dụng',
+    icon: <AccountTreeOutlinedIcon />,
   },
 ];
 
 export const DOWNLOAD_CANVAS_SIZE = {
-  WIDTH: 1024 * 2,
-  HEIGHT: 768 * 2,
+  WIDTH: 1024,
+  HEIGHT: 768,
 };
 
 export const DOWNLOAD_FILE_NAME = 'mind-map';
