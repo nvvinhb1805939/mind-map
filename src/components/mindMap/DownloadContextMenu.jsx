@@ -17,18 +17,22 @@ import {
 } from '@mui/material';
 import { toPng } from 'html-to-image';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useReactFlow } from 'reactflow';
 import {
   DOWNLOAD_CANVAS_SIZE,
   DOWNLOAD_CONTEXT_MENU,
   DOWNLOAD_CONTEXT_MENU_TYPES,
+  TYPES,
 } from 'src/config-global';
-import { htmlToImage } from 'src/utils/mindMap';
+import { exportToTextFile, htmlToImage } from 'src/utils/mindMap';
 import { BasePopover } from './BasePopover';
 
 const DEFAULT_SLIDER_VALUE = 50;
 
 export const DownloadContextMenu = (props) => {
+  const { nodes, edges } = useSelector((state) => state[TYPES.MIND_MAP]);
+
   const [close, setClose] = useState(false);
   const [type, setType] = useState(DOWNLOAD_CONTEXT_MENU[0]);
   const [downloadTypeAnchorEl, setDownloadTypeAnchorEl] = useState(null);
@@ -62,7 +66,9 @@ export const DownloadContextMenu = (props) => {
   };
 
   const handleDownloadClick = () => {
-    type.id === DOWNLOAD_CONTEXT_MENU_TYPES.PNG && htmlToImage(getNodes(), toPng, type.id, size); // download with type is image
+    type.id === DOWNLOAD_CONTEXT_MENU_TYPES.PNG
+      ? htmlToImage(getNodes(), toPng, type.id, size)
+      : exportToTextFile(type.id, nodes, edges); // download with type is image
   };
 
   return (

@@ -1,10 +1,12 @@
+import CryptoJS from 'crypto-js';
 import { getRectOfNodes, getTransformForBounds } from 'reactflow';
 import {
   DEFAULT_MAX_ZOOM,
   DEFAULT_MIN_ZOOM,
-  DOWNLOAD_CANVAS_SIZE,
+  DOWNLOAD_CONTEXT_MENU_TYPES,
   DOWNLOAD_FILE_NAME,
   MIND_MAP_SELECTOR,
+  TYPES,
 } from 'src/config-global';
 
 export const hasConnectBetweenTwoNode = (edges, node1, node2) =>
@@ -45,4 +47,24 @@ export const htmlToImage = (nodes, callback, type, size, backgroundColor = '#fff
       ...style,
     },
   }).then((dataUrl) => downloadImage(dataUrl, type));
+};
+
+export const exportToTextFile = (type, nodes, edges) => {
+  const encryptedData = CryptoJS.AES.encrypt(
+    JSON.stringify({ nodes, edges }),
+    process.env.REACT_APP_CRYPTO_SECRET_KEY
+  ).toString(); // ecrypt data
+
+  /** download file */
+  const element = document.createElement('a');
+  const file = new Blob([encryptedData], { type: 'text/plain' });
+  element.href = URL.createObjectURL(file);
+  element.download = `${TYPES.MIND_MAP}.${DOWNLOAD_CONTEXT_MENU_TYPES.TEXT}`;
+  document.body.appendChild(element);
+  element.click();
+};
+
+export const importTextFile = (file) => {
+  // const bytes = CryptoJS.AES.decrypt(encryptedData, process.env.REACT_APP_CRYPTO_SECRET_KEY);
+  // const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 };
