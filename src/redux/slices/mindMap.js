@@ -46,6 +46,9 @@ const mindMapSlice = createSlice({
     deleteNode: (state, action) => {
       state.nodes = state.nodes.filter((node) => node.id !== action.payload.id);
     },
+    changeBgColor: (state, action) => {
+      state.bgcolor = action.payload;
+    },
   },
 });
 
@@ -61,6 +64,7 @@ export const {
   deleteEdge,
   deleteEdges,
   deleteNode,
+  changeBgColor,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

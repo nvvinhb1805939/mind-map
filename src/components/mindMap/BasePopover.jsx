@@ -1,27 +1,42 @@
 import { Button, Popover } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { HEADER } from 'src/config-global';
+import { switchMode } from 'src/redux/slices/editMode';
 
 export const BasePopover = (props) => {
   const {
+    hasDispatch = false,
     children,
     id,
     close = false,
     variant = 'contained',
     size = 'large',
     color = 'primary',
-    label = 'Button',
+    label = '',
     icon = null,
     anchorHorizontal = 'left',
     transformHorizontal = 'left',
+    buttonStyles = {},
+    popoverStyles = {},
   } = props;
+
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+
+    hasDispatch &&
+      dispatch(
+        switchMode({
+          mode: null,
+          current: null,
+        })
+      );
   };
 
   const handleClose = () => {
@@ -40,13 +55,13 @@ export const BasePopover = (props) => {
         size={size}
         color={color}
         startIcon={icon}
-        sx={{ fontSize: '1rem', fontWeight: 400, textTransform: 'unset' }}
+        sx={{ fontSize: '1rem', fontWeight: 400, textTransform: 'unset', ...buttonStyles }}
       >
         {label}
       </Button>
       {open && (
         <Popover
-          id="download-context-menu"
+          id={id}
           open={open}
           anchorEl={anchorEl}
           onClose={handleClose}
@@ -66,6 +81,8 @@ export const BasePopover = (props) => {
             '& .MuiPopover-paper': {
               boxShadow: 11,
             },
+
+            ...popoverStyles,
           }}
         >
           {children}

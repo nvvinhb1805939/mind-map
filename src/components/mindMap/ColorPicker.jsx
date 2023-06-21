@@ -1,33 +1,48 @@
-import { Box } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChromePicker } from 'react-color';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
+import { BasePopover } from './BasePopover';
+import { changeBgColor } from 'src/redux/slices/mindMap';
+import { Box } from '@mui/material';
 
 export const ColorPicker = (props) => {
+  const dispatch = useDispatch();
   const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
 
-  const [displayColorPicker, setDisplayColorPicker] = useState(false);
+  const [close, setClose] = useState(false);
   const [color, setColor] = useState(bgcolor);
 
-  const onClick = (event) => {
-    event.stopPropagation();
+  useEffect(() => {
+    return () => setClose(false);
+  });
 
-    setDisplayColorPicker(true);
-  };
+  const onChange = ({ hex }, event) => {
+    setColor(hex);
 
-  const onChange = (color, event) => {
-    setColor(color.rgb);
+    dispatch(changeBgColor(hex));
   };
 
   return (
-    <Box onClick={onClick} sx={{ position: 'relative', cursor: 'pointer' }}>
-      <Box sx={{ width: 40, height: 40, bgcolor, borderRadius: 1, boxShadow: 11 }} />
-      {displayColorPicker && (
-        <Box sx={{ position: 'absolute', top: 0 }}>
-          <ChromePicker color={color} onChange={onChange} />
-        </Box>
-      )}
-    </Box>
+    <BasePopover
+      id="color-pikcer"
+      close={close}
+      buttonStyles={{
+        p: 0,
+        minWidth: 'unset',
+        width: 40,
+        height: 40,
+
+        '&:hover': { bgcolor, boxShadow: 11 },
+
+        bgcolor,
+        borderRadius: 1,
+        boxShadow: 11,
+      }}
+    >
+      <Box sx={{ p: 2, '& .chrome-picker': { boxShadow: 'unset !important' } }}>
+        <ChromePicker color={color} disableAlpha onChange={onChange} />
+      </Box>
+    </BasePopover>
   );
 };

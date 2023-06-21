@@ -4,9 +4,13 @@ import { AddNodePopup, DownloadContextMenu, EditModeRendering } from 'src/compon
 export const Header = () => {
   return (
     <Box
+      onClick={(event) => {
+        event.stopPropagation();
+      }}
       sx={{
         position: 'relative',
         transform: `translateY(-100%)`,
+        zIndex: 'fab',
       }}
     >
       <AppBar position="absolute" color="transparent" sx={{ px: 1, bgcolor: 'background.paper' }}>

@@ -62,7 +62,7 @@ export const AddNodePopup = () => {
   };
 
   return (
-    <BasePopover id="add-node-popup" close={close} label="Thêm nút">
+    <BasePopover id="add-node-popup" hasDispatch={true} close={close} label="Thêm nút">
       <Box
         sx={{
           p: 4,

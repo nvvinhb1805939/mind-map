@@ -4,7 +4,7 @@ import { useSettingsContext } from 'src/components/settings';
 import { HANDLE_SIZE, TYPES } from 'src/config-global';
 
 export const useStyles = () => {
-  const { presetsColor, themeMode } = useSettingsContext();
+  const { themeMode } = useSettingsContext();
   const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const style = useMemo(
@@ -14,6 +14,11 @@ export const useStyles = () => {
       bgcolor,
       height: '100%',
       borderRadius: 1,
+
+      /** Style for Flow */
+      // '& .react-flow': {
+
+      // },
 
       /** Style for Nodes */
       [`& .react-flow__node.selected .${TYPES.MIND_MAP}, & .react-flow__node.dragging .${TYPES.MIND_MAP}`]:
@@ -45,7 +50,7 @@ export const useStyles = () => {
         bottom: -HANDLE_SIZE.HEIGHT / 2,
       },
     }),
-    [presetsColor, themeMode]
+    [themeMode, bgcolor]
   );
 
   return style;
