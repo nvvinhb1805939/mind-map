@@ -37,6 +37,7 @@ export const DownloadContextMenu = (props) => {
   const [type, setType] = useState(DOWNLOAD_CONTEXT_MENU[0]);
   const [downloadTypeAnchorEl, setDownloadTypeAnchorEl] = useState(null);
   const [size, setSize] = useState(DOWNLOAD_CANVAS_SIZE);
+  const [sliderValue, setSliderValue] = useState(DEFAULT_SLIDER_VALUE);
 
   const { getNodes } = useReactFlow();
 
@@ -58,6 +59,8 @@ export const DownloadContextMenu = (props) => {
   };
 
   const onSizeSliderChange = (event, newValue) => {
+    setSliderValue(newValue);
+
     /** By default, DEFAULT_SLIDER_VALUE is equivalent to DOWNLOAD_CANVAS_SIZE */
     setSize({
       WIDTH: 2 * Math.round((DOWNLOAD_CANVAS_SIZE.WIDTH * newValue) / DEFAULT_SLIDER_VALUE / 2), // round to nearest even number
@@ -69,6 +72,8 @@ export const DownloadContextMenu = (props) => {
     type.id === DOWNLOAD_CONTEXT_MENU_TYPES.PNG
       ? htmlToImage(getNodes(), toPng, type.id, size, bgcolor) // download with type is image
       : exportToTextFile(type.id, nodes, edges); // download with type is text
+
+    setClose(true);
   };
 
   return (
@@ -147,7 +152,7 @@ export const DownloadContextMenu = (props) => {
               max={100}
               disabled={type.id !== DOWNLOAD_CONTEXT_MENU_TYPES.PNG}
               size="small"
-              defaultValue={DEFAULT_SLIDER_VALUE}
+              defaultValue={sliderValue}
               aria-label="Small"
             />
 
