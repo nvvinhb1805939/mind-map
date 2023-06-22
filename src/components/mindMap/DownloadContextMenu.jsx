@@ -79,7 +79,6 @@ export const DownloadContextMenu = (props) => {
   return (
     <BasePopover
       id="download-context-menu"
-      hasDispatch={true}
       close={close}
       label="Tải xuống"
       variant="outlined"

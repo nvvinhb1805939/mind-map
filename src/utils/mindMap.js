@@ -17,6 +17,18 @@ export const hasConnectBetweenTwoNode = (edges, node1, node2) =>
       (edge.source === node2 && edge.target === node1)
   );
 
+export const clearZIndexEdges = (edges) =>
+  edges.map((edge) => {
+    const { zIndex, ...options } = edge;
+    return options;
+  });
+
+export const resetEdges = (edges) =>
+  edges.map((edge) => {
+    const { zIndex, selected, ...options } = edge;
+    return options;
+  });
+
 const downloadImage = (dataUrl, type) => {
   const a = document.createElement('a');
 

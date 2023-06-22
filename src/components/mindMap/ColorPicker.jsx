@@ -22,33 +22,39 @@ export const ColorPicker = (props) => {
   });
 
   return (
-    <BasePopover
-      id="color-pikcer"
-      close={close}
-      buttonStyles={{
-        p: 0,
-        minWidth: 'unset',
-        width: 40,
-        height: 40,
+    <Box onClick={(event) => event.stopPropagation()}>
+      <BasePopover
+        id="color-pikcer"
+        hasDispatch={true}
+        close={close}
+        buttonStyles={{
+          p: 0,
+          minWidth: 'unset',
+          width: 40,
+          height: 40,
 
-        '&:hover': { bgcolor, boxShadow: 11 },
+          '&:hover': { bgcolor, boxShadow: 11 },
 
-        bgcolor,
-        borderRadius: 1,
-        boxShadow: 11,
-      }}
-    >
-      <Box sx={{ p: 2, '& .rcp-saturation': { borderRadius: 1 } }}>
-        <ColorPickerPalette
-          width={456}
-          height={228}
-          color={color}
-          onChange={setColor}
-          onChangeComplete={onChangeComplete}
-          hideHSV
-          dark={themeMode === 'dark'}
-        />
-      </Box>
-    </BasePopover>
+          bgcolor,
+          borderRadius: 1,
+          boxShadow: 11,
+        }}
+      >
+        <Box
+          onClick={(event) => event.stopPropagation()}
+          sx={{ p: 2, '& .rcp-saturation': { borderRadius: 1 } }}
+        >
+          <ColorPickerPalette
+            width={456}
+            height={228}
+            color={color}
+            onChange={setColor}
+            onChangeComplete={onChangeComplete}
+            hideHSV
+            dark={themeMode === 'dark'}
+          />
+        </Box>
+      </BasePopover>
+    </Box>
   );
 };

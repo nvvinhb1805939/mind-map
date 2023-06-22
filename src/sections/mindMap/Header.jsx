@@ -4,9 +4,6 @@ import { AddNodePopup, DownloadContextMenu, EditModeRendering } from 'src/compon
 export const Header = () => {
   return (
     <Box
-      onClick={(event) => {
-        event.stopPropagation();
-      }}
       sx={{
         position: 'relative',
         transform: `translateY(-100%)`,

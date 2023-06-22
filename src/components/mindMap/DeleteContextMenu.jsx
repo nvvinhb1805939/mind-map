@@ -7,6 +7,7 @@ import {
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
+import { switchMode } from 'src/redux/slices/editMode';
 import { deleteEdges, deleteNode } from 'src/redux/slices/mindMap';
 import { hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,6 +31,13 @@ export const DeleteContextMenu = (props) => {
   };
 
   const onDeleteClick = (type) => {
+    dispatch(
+      switchMode({
+        mode: null,
+        current: null,
+      })
+    ); // clear node mode
+
     switch (type) {
       case DELETE_CONTEXT_MENU_TYPES.ONLY_NODE:
         deleteOnlyNode(options);

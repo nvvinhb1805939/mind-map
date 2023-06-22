@@ -29,7 +29,10 @@ export const BasePopover = (props) => {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+  };
 
+  const handleClose = () => {
+    setAnchorEl(null);
     hasDispatch &&
       dispatch(
         switchMode({
@@ -37,10 +40,6 @@ export const BasePopover = (props) => {
           current: null,
         })
       );
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   useEffect(() => {

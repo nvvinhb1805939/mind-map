@@ -15,10 +15,13 @@ export const useStyles = () => {
       height: '100%',
       borderRadius: 1,
 
-      /** Style for Flow */
-      // '& .react-flow': {
-
-      // },
+      '&.selected': {
+        outline: (theme) => `4px solid ${theme.palette.primary.main}`,
+        boxShadow: (theme) =>
+          themeMode === 'dark'
+            ? `0 0 10px 16px ${theme.palette.primary.dark}`
+            : `0 0 10px 16px ${theme.palette.primary.lighter}`,
+      },
 
       /** Style for Nodes */
       [`& .react-flow__node.selected .${TYPES.MIND_MAP}, & .react-flow__node.dragging .${TYPES.MIND_MAP}`]:
@@ -32,7 +35,7 @@ export const useStyles = () => {
         },
 
       /** Style for Edges */
-      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__edge.selected .react-flow__edge-path, & .react-flow__connection-path':
+      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__edge.selected .react-flow__edge-path, & .react-flow__connection-path, .react-flow__edge:focus .react-flow__edge-path, .react-flow__edge:focus-visible .react-flow__edge-path, .react-flow__edge.updating .react-flow__edge-path':
         {
           stroke: (theme) => `${theme.palette.primary.main}`,
         },

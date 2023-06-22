@@ -1,5 +1,5 @@
 import { Box, ClickAwayListener } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import { DeleteContextMenu } from 'src/components/mindMap';
 import { DEFAULT_MAX_ZOOM, EDIT_MODES, NODE_SIZE, NODE_TYPES, TYPES } from 'src/config-global';
@@ -16,7 +16,7 @@ import {
   updateEdge,
 } from 'src/redux/slices/mindMap';
 import { useDispatch, useSelector } from 'src/redux/store';
-import { hasConnectBetweenTwoNode } from 'src/utils/mindMap';
+import { clearZIndexEdges, hasConnectBetweenTwoNode, resetEdges } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { useStyles } from './styles';
 
@@ -29,6 +29,7 @@ export const Main = (props) => {
 
   const dispatch = useDispatch();
   const { nodes, edges } = useSelector((state) => state.mindMap);
+  const { mode } = useSelector((state) => state.editMode);
 
   const [nodeSelected, setNodeSelected] = useState(null); // is used to store selected node anchor
 
@@ -116,11 +117,21 @@ export const Main = (props) => {
 
     dispatch(renewNodes(updateSelectedNodes)); // apply changes
   };
+  /** this methos is used to switch to node editing mode */
   const onNodeClick = (event, node) => {
     dispatch(
       switchMode({
         mode: EDIT_MODES.NODE_EDITING,
         current: node,
+      })
+    );
+  };
+  /** this method is used to clear node editing mode when selected nodes are deleted */
+  const onNodesDelete = () => {
+    dispatch(
+      switchMode({
+        mode: null,
+        current: null,
       })
     );
   };
@@ -165,17 +176,13 @@ export const Main = (props) => {
 
     if (selectedEdge.zIndex) return;
 
-    /** clear zIndex of each edge*/
-    const clearZIndexEdges = edges.map((edge) => {
-      const { zIndex, ...options } = edge;
-      return options;
-    });
-    dispatch(renewEdges(clearZIndexEdges)); // apply changes
+    dispatch(renewEdges(clearZIndexEdges(edges))); // apply changes
 
     /** elevate zIndex of selectedEdge */
     selectedEdge.zIndex = 100;
     dispatch(changEdge(selectedEdge));
   };
+  /** this method is used to switch to edge editing mode */
   const onEdgeClick = (event, edge) => {
     dispatch(
       switchMode({
@@ -186,17 +193,32 @@ export const Main = (props) => {
   };
 
   /** Pane */
+  /** this method is used to switch to pane editing mode */
   const onPaneClick = (event) => {
     dispatch(switchMode({ mode: EDIT_MODES.PANE_EDITING }));
+    reactFlowWrapper.current.classList.add('selected');
   };
 
-  const onClickAway = () =>
+  /** clear editing mode and selected*/
+  const onClickAway = () => {
     dispatch(
       switchMode({
         mode: null,
         current: null,
       })
-    );
+    ); // clear editing mode
+    dispatch(renewNodes(nodes.map((node) => ({ ...node, selected: false })))); // clear selected nodes
+    dispatch(renewEdges(resetEdges(edges))); // clear selected edges
+
+    reactFlowWrapper.current.classList.remove('selected'); // clear pane selected
+  };
+
+  /** Toggle pane selected  */
+  useEffect(() => {
+    mode === EDIT_MODES.PANE_EDITING
+      ? reactFlowWrapper.current.classList.add('selected')
+      : reactFlowWrapper.current.classList.remove('selected');
+  });
 
   return (
     <ClickAwayListener onClickAway={onClickAway}>
@@ -220,6 +242,7 @@ export const Main = (props) => {
           onPaneClick={onPaneClick}
           onNodeClick={onNodeClick}
           onEdgeClick={onEdgeClick}
+          onNodesDelete={onNodesDelete}
           fitView={true}
           maxZoom={DEFAULT_MAX_ZOOM}
           deleteKeyCode="Delete"

@@ -3,12 +3,11 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { EDIT_MODES, TYPES } from 'src/config-global';
+import { switchMode } from 'src/redux/slices/editMode';
 import { addNode, renewNodes } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { BasePopover } from './BasePopover';
-import { Add as AddIcon } from '@mui/icons-material';
-import { switchMode } from 'src/redux/slices/editMode';
 
 export const AddNodePopup = () => {
   const dispatch = useDispatch();
@@ -62,7 +61,7 @@ export const AddNodePopup = () => {
   };
 
   return (
-    <BasePopover id="add-node-popup" hasDispatch={true} close={close} label="Thêm nút">
+    <BasePopover id="add-node-popup" close={close} label="Thêm nút">
       <Box
         sx={{
           p: 4,
