@@ -1,9 +1,9 @@
+import { Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { EDIT_MODES } from 'src/config-global';
-import { PaneEditing } from './PaneEditing';
-import { NodeEditing } from './NodeEditing';
 import { EdgeEditing } from './EdgeEditing';
-import { Stack } from '@mui/material';
+import { NodeEditing } from './NodeEditing';
+import { PaneEditing } from './PaneEditing';
 
 export const EditModeRendering = (props) => {
   const { mode } = useSelector((state) => state.editMode);

@@ -1,14 +1,14 @@
 import { Box } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ColorPicker as ColorPickerPalette, useColor } from 'react-color-palette';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
-import { changeBgColor } from 'src/redux/slices/mindMap';
-import { BasePopover } from './BasePopover';
 import { useSettingsContext } from '../settings';
+import { BasePopover } from './BasePopover';
 
-export const ColorPicker = memo((props) => {
-  const dispatch = useDispatch();
+export const ColorPicker = (props) => {
+  const { onChangeComplete } = props;
+
   const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { themeMode } = useSettingsContext();
@@ -20,10 +20,6 @@ export const ColorPicker = memo((props) => {
   useEffect(() => {
     return () => setClose(false);
   });
-
-  const onChangeComplete = (newColor) => {
-    dispatch(changeBgColor(newColor.hex));
-  };
 
   return (
     <BasePopover
@@ -55,4 +51,4 @@ export const ColorPicker = memo((props) => {
       </Box>
     </BasePopover>
   );
-});
+};
