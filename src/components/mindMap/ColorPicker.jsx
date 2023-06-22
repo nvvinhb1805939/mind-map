@@ -1,26 +1,28 @@
-import { useEffect, useState } from 'react';
-import { ChromePicker } from 'react-color';
+import { Box } from '@mui/material';
+import { memo, useEffect, useState } from 'react';
+import { ColorPicker as ColorPickerPalette, useColor } from 'react-color-palette';
 import { useDispatch, useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
-import { BasePopover } from './BasePopover';
 import { changeBgColor } from 'src/redux/slices/mindMap';
-import { Box } from '@mui/material';
+import { BasePopover } from './BasePopover';
+import { useSettingsContext } from '../settings';
 
-export const ColorPicker = (props) => {
+export const ColorPicker = memo((props) => {
   const dispatch = useDispatch();
   const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
 
+  const { themeMode } = useSettingsContext();
+
+  const [color, setColor] = useColor('hex', bgcolor);
+
   const [close, setClose] = useState(false);
-  const [color, setColor] = useState(bgcolor);
 
   useEffect(() => {
     return () => setClose(false);
   });
 
-  const onChange = ({ hex }, event) => {
-    setColor(hex);
-
-    dispatch(changeBgColor(hex));
+  const onChangeComplete = (newColor) => {
+    dispatch(changeBgColor(newColor.hex));
   };
 
   return (
@@ -40,9 +42,17 @@ export const ColorPicker = (props) => {
         boxShadow: 11,
       }}
     >
-      <Box sx={{ p: 2, '& .chrome-picker': { boxShadow: 'unset !important' } }}>
-        <ChromePicker color={color} disableAlpha onChange={onChange} />
+      <Box sx={{ p: 2, '& .rcp-saturation': { borderRadius: 1 } }}>
+        <ColorPickerPalette
+          width={456}
+          height={228}
+          color={color}
+          onChange={setColor}
+          onChangeComplete={onChangeComplete}
+          hideHSV
+          dark={themeMode === 'dark'}
+        />
       </Box>
     </BasePopover>
   );
-};
+});

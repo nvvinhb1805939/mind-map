@@ -1,7 +1,6 @@
 import { Box, ClickAwayListener } from '@mui/material';
 import { useRef, useState } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
-import 'reactflow/dist/style.css';
 import { DeleteContextMenu } from 'src/components/mindMap';
 import { DEFAULT_MAX_ZOOM, EDIT_MODES, NODE_SIZE, NODE_TYPES, TYPES } from 'src/config-global';
 import { switchMode } from 'src/redux/slices/editMode';

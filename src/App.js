@@ -24,6 +24,12 @@ import 'slick-carousel/slick/slick-theme.css';
 // lazy image
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
+// react flow
+import 'reactflow/dist/style.css';
+
+// react color
+import 'react-color-palette/lib/css/styles.css';
+
 // ----------------------------------------------------------------------
 
 import { BrowserRouter } from 'react-router-dom';
