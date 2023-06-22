@@ -32,9 +32,10 @@ export const useStyles = () => {
         },
 
       /** Style for Edges */
-      '& .react-flow__edge:hover .react-flow__edge-path': {
-        stroke: '#555', // default stroke color of react-flow
-      },
+      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__edge.selected .react-flow__edge-path, & .react-flow__connection-path':
+        {
+          stroke: (theme) => `${theme.palette.primary.main}`,
+        },
 
       /** Style for Handles */
       '& .react-flow__handle': {
