@@ -1,6 +1,6 @@
 import { Box, Button, Input } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { changEdges, changeNodes, renewEdges, renewNodes } from 'src/redux/slices/mindMap';
+import { renewEdges, renewNodes } from 'src/redux/slices/mindMap';
 import { importTextFile } from 'src/utils/mindMap';
 
 export const ImportBox = (props) => {

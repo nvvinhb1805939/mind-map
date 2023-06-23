@@ -1,12 +1,12 @@
 // routes
-import { MindMapNode } from './components/mindMap';
-import { PATH_DASHBOARD, PATH_MINDMAP, PATH_PAGE } from './routes/paths';
 import {
+  AccountTreeOutlined as AccountTreeOutlinedIcon,
+  BrokenImageOutlined as BrokenImageOutlinedIcon,
   ClearOutlined as ClearOutlinedIcon,
   RemoveOutlined as RemoveOutlinedIcon,
-  BrokenImageOutlined as BrokenImageOutlinedIcon,
-  AccountTreeOutlined as AccountTreeOutlinedIcon,
 } from '@mui/icons-material';
+import { MindMapNode } from './components/mindMap';
+import { PATH_MINDMAP } from './routes/paths';
 
 // API
 // ----------------------------------------------------------------------
@@ -140,4 +140,8 @@ export const EDIT_MODES = {
   PANE_EDITING: 'pane-editing',
   NODE_EDITING: 'node-editing',
   EDGE_EDITING: 'edge-editing',
+};
+
+export const STORAGE_KEYS = {
+  MIND_MAP: 'mindMap',
 };

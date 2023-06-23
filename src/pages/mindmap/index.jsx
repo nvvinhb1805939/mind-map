@@ -32,10 +32,6 @@ const MindMapPage = (props) => {
           sx={{
             p: PADDING,
             height: '100%',
-
-            '& .react-flow__attribution': {
-              display: 'none',
-            },
           }}
         >
           <Main />

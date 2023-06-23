@@ -5,3 +5,8 @@ export * from './MindMapNode';
 export * from './ImportBox';
 export * from './EditModeRendering';
 export * from './ColorPicker';
+export * from './SaveToolbarButton';
+export * from './RestoreToolbarButton';
+export * from './ClearToolbarButton';
+export * from './UndoToolbarButton';
+export * from './RedoToolbarButton';

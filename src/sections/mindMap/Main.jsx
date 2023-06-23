@@ -24,6 +24,7 @@ import {
 } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { useStyles } from './styles';
+import { FlowToolbar } from './FlowToolbar';
 
 let quantityNewNode = 0;
 
@@ -297,6 +298,7 @@ export const Main = (props) => {
           selectionKeyCode={null}
           deleteKeyCode="Delete"
         >
+          <FlowToolbar />
           <Controls showInteractive={false} />
           <MiniMap ariaLabel="Sơ đồ tư duy" />
         </ReactFlow>

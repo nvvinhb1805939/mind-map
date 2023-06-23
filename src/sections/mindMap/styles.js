@@ -23,6 +23,11 @@ export const useStyles = () => {
             : `0 0 10px 16px ${theme.palette.primary.lighter}`,
       },
 
+      /** Style for attribution */
+      '& .react-flow__attribution': {
+        display: 'none',
+      },
+
       /** Style for Nodes */
       [`& .react-flow__node.selected .${TYPES.MIND_MAP}, & .react-flow__node.dragging .${TYPES.MIND_MAP}`]:
         {
@@ -39,10 +44,6 @@ export const useStyles = () => {
         {
           stroke: (theme) => `${theme.palette.primary.main}`,
         },
-      // '& .react-flow__edge:focus .react-flow__edge-path, & .react-flow__edge:focus-visible .react-flow__edge-path':
-      //   {
-      //     stroke: '#b1b1b7', // default stroke color
-      //   },
 
       /** Style for Handles */
       '& .react-flow__handle': {
