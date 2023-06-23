@@ -4,6 +4,7 @@ import { getConnectedEdges, getIncomers, getOutgoers } from 'reactflow';
 import {
   DELETE_CONTEXT_MENU,
   DELETE_CONTEXT_MENU_TYPES,
+  EDIT_MODES,
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
@@ -19,6 +20,7 @@ export const DeleteContextMenu = (props) => {
 
   const dispatch = useDispatch();
   const { nodes, edges } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const { mode } = useSelector((state) => state.editMode);
 
   const closeMenuContext = () =>
     setNodeSelected((previousState) => ({
@@ -31,12 +33,13 @@ export const DeleteContextMenu = (props) => {
   };
 
   const onDeleteClick = (type) => {
-    dispatch(
-      switchMode({
-        mode: null,
-        current: null,
-      })
-    ); // clear node mode
+    mode === EDIT_MODES.NODE_EDITING &&
+      dispatch(
+        switchMode({
+          mode: null,
+          current: null,
+        })
+      ); // clear node mode
 
     switch (type) {
       case DELETE_CONTEXT_MENU_TYPES.ONLY_NODE:

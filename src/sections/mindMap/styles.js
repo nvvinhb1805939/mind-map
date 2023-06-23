@@ -35,10 +35,14 @@ export const useStyles = () => {
         },
 
       /** Style for Edges */
-      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__edge.selected .react-flow__edge-path, & .react-flow__connection-path, .react-flow__edge:focus .react-flow__edge-path, .react-flow__edge:focus-visible .react-flow__edge-path, .react-flow__edge.updating .react-flow__edge-path':
+      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__edge.selected .react-flow__edge-path, & .react-flow__connection-path, & .react-flow__edge.updating .react-flow__edge-path, & .react-flow__edge:focus .react-flow__edge-path, & .react-flow__edge:focus-visible .react-flow__edge-path':
         {
           stroke: (theme) => `${theme.palette.primary.main}`,
         },
+      // '& .react-flow__edge:focus .react-flow__edge-path, & .react-flow__edge:focus-visible .react-flow__edge-path':
+      //   {
+      //     stroke: '#b1b1b7', // default stroke color
+      //   },
 
       /** Style for Handles */
       '& .react-flow__handle': {

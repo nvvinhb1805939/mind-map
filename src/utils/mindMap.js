@@ -29,6 +29,11 @@ export const resetEdges = (edges) =>
     return options;
   });
 
+export const updateSelectedNodes = (nodes, selectedNode) =>
+  nodes.map((node) =>
+    node.id === selectedNode.id ? { ...node, selected: true } : { ...node, selected: false }
+  );
+
 const downloadImage = (dataUrl, type) => {
   const a = document.createElement('a');
 

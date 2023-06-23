@@ -3,6 +3,8 @@ import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from '
 
 const initialState = {
   bgcolor: '#fff',
+  selectedNode: null,
+  selectedEdge: null,
   nodes: [],
   edges: [],
 };
