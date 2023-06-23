@@ -146,12 +146,12 @@ export const DownloadContextMenu = (props) => {
             <Typography variant="body2">Kích cỡ</Typography>
             <Slider
               name="sizeSlider"
-              onChangeCommitted={onSizeSliderChange}
-              min={10}
+              onChange={onSizeSliderChange}
+              min={20}
               max={100}
               disabled={type.id !== DOWNLOAD_CONTEXT_MENU_TYPES.PNG}
               size="small"
-              defaultValue={sliderValue}
+              value={sliderValue}
               aria-label="Small"
             />
 
