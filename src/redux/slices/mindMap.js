@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from 'reactflow';
+import { TYPES } from 'src/config-global';
 
 export const initialState = {
   bgcolor: '#fff',
@@ -78,5 +79,7 @@ export const {
   deleteNode,
   changeBgColor,
 } = mindMapSlice.actions;
+
+export const presentMindMap = (state) => state[TYPES.MIND_MAP].present;
 
 export default mindMapSlice.reducer;

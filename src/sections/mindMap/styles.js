@@ -2,10 +2,11 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useSettingsContext } from 'src/components/settings';
 import { HANDLE_SIZE, TYPES } from 'src/config-global';
+import { presentMindMap } from 'src/redux/slices/mindMap';
 
 export const useStyles = () => {
   const { themeMode } = useSettingsContext();
-  const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const { bgcolor } = useSelector(presentMindMap);
 
   const style = useMemo(
     () => ({

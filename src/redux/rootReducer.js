@@ -9,6 +9,7 @@ import kanbanReducer from './slices/kanban';
 import mailReducer from './slices/mail';
 import mindMapReducer from './slices/mindMap';
 import productReducer from './slices/product';
+import undoable from 'redux-undo';
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +33,7 @@ const rootReducer = combineReducers({
   calendar: calendarReducer,
   kanban: kanbanReducer,
   product: persistReducer(productPersistConfig, productReducer),
-  mindMap: mindMapReducer,
+  mindMap: undoable(mindMapReducer),
   editMode: editModeReducer,
 });
 

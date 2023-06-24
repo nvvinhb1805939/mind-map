@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { EDIT_MODES, TYPES } from 'src/config-global';
 import { switchMode } from 'src/redux/slices/editMode';
-import { addNode, renewNodes } from 'src/redux/slices/mindMap';
+import { addNode, presentMindMap, renewNodes } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { BasePopover } from './BasePopover';
 
 export const AddNodePopup = () => {
   const dispatch = useDispatch();
-  const { nodes } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const { nodes } = useSelector(presentMindMap);
 
   const { enqueueSnackbar } = useSnackbar();
 

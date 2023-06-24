@@ -5,11 +5,12 @@ import { useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
 import { useSettingsContext } from '../settings';
 import { BasePopover } from './BasePopover';
+import { presentMindMap } from 'src/redux/slices/mindMap';
 
 export const ColorPicker = (props) => {
   const { onChangeComplete } = props;
 
-  const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const { bgcolor } = useSelector(presentMindMap);
 
   const { themeMode } = useSettingsContext();
 

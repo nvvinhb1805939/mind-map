@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux';
 import { STORAGE_KEYS, TYPES } from 'src/config-global';
 import { saveDataToLocalStorage } from 'src/utils/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
+import { presentMindMap } from 'src/redux/slices/mindMap';
 
 export const SaveToolbarButton = () => {
-  const mindMap = useSelector((state) => state[TYPES.MIND_MAP]);
+  const mindMap = useSelector(presentMindMap);
 
   const { enqueueSnackbar } = useSnackbar();
 
