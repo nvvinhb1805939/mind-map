@@ -18,7 +18,6 @@ import {
   changEdges,
   changeNodes,
   deleteEdge,
-  presentMindMap,
   renewEdges,
   renewNodes,
   restoreMindMap,
@@ -44,8 +43,7 @@ export const Main = (props) => {
   const { project, getZoom } = useReactFlow();
 
   const dispatch = useDispatch();
-  const { nodes, edges } = useSelector(presentMindMap);
-
+  const { nodes, edges } = useSelector((state) => state.mindMap);
   const { mode } = useSelector((state) => state.editMode);
 
   const [nodeSelected, setNodeSelected] = useState(null); // is used to store selected node anchor

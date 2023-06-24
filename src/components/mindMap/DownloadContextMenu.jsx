@@ -27,12 +27,11 @@ import {
 } from 'src/config-global';
 import { exportToTextFile, htmlToImage } from 'src/utils/mindMap';
 import { BasePopover } from './BasePopover';
-import { presentMindMap } from 'src/redux/slices/mindMap';
 
 const DEFAULT_SLIDER_VALUE = 50;
 
 export const DownloadContextMenu = (props) => {
-  const { bgcolor, nodes, edges } = useSelector(presentMindMap);
+  const { bgcolor, nodes, edges } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const [close, setClose] = useState(false);
   const [type, setType] = useState(DOWNLOAD_CONTEXT_MENU[0]);
