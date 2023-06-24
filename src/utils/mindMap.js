@@ -6,7 +6,6 @@ import {
   DOWNLOAD_CONTEXT_MENU_TYPES,
   DOWNLOAD_FILE_NAME,
   MIND_MAP_SELECTOR,
-  STORAGE_KEYS,
   TYPES,
 } from 'src/config-global';
 
@@ -88,9 +87,8 @@ export const importTextFile = (encryptedData) => {
   return decryptedData;
 };
 
-export const saveDataToLocalStorage = (data) => {
-  localStorage.setItem(STORAGE_KEYS.MIND_MAP, JSON.stringify(data));
+export const saveDataToLocalStorage = (data, storageKey) => {
+  localStorage.setItem(storageKey, JSON.stringify(data));
 };
 
-export const getDataFromLocalStorage = () =>
-  JSON.parse(localStorage.getItem(STORAGE_KEYS.MIND_MAP));
+export const getDataFromLocalStorage = (storageKey) => JSON.parse(localStorage.getItem(storageKey));
