@@ -1,21 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from 'reactflow';
-import { getDataFromLocalStorage } from 'src/utils/mindMap';
-
-const { bgcolor, selectedNode, selectedEdge, nodes, edges } = getDataFromLocalStorage('mindMap');
 
 const initialState = {
-  bgcolor,
-  selectedNode,
-  selectedEdge,
-  nodes,
-  edges,
+  bgcolor: '#fff',
+  selectedNode: null,
+  selectedEdge: null,
+  nodes: [],
+  edges: [],
 };
 
 const mindMapSlice = createSlice({
   name: 'mindMap',
   initialState,
   reducers: {
+    restoreMindMap: (state, action) => {
+      const { bgcolor, selectedNode, selectedEdge, nodes, edges } = action.payload;
+
+      state.bgcolor = bgcolor;
+      state.selectedNode = selectedNode;
+      state.selectedEdge = selectedEdge;
+      state.nodes = nodes;
+      state.edges = edges;
+    },
     changeNodes: (state, action) => {
       state.nodes = applyNodeChanges(action.payload, state.nodes);
     },
@@ -58,6 +64,7 @@ const mindMapSlice = createSlice({
 });
 
 export const {
+  restoreMindMap,
   changeNodes,
   changEdges,
   renewNodes,

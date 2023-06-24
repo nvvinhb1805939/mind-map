@@ -2,7 +2,14 @@ import { Box, ClickAwayListener } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import { DeleteContextMenu } from 'src/components/mindMap';
-import { DEFAULT_MAX_ZOOM, EDIT_MODES, NODE_SIZE, NODE_TYPES, TYPES } from 'src/config-global';
+import {
+  DEFAULT_MAX_ZOOM,
+  EDIT_MODES,
+  NODE_SIZE,
+  NODE_TYPES,
+  STORAGE_KEYS,
+  TYPES,
+} from 'src/config-global';
 import { switchMode } from 'src/redux/slices/editMode';
 import {
   addEdge,
@@ -13,11 +20,13 @@ import {
   deleteEdge,
   renewEdges,
   renewNodes,
+  restoreMindMap,
   updateEdge,
 } from 'src/redux/slices/mindMap';
 import { useDispatch, useSelector } from 'src/redux/store';
 import {
   clearZIndexEdges,
+  getDataFromLocalStorage,
   hasConnectBetweenTwoNode,
   resetEdges,
   updateSelectedNodes,
@@ -267,6 +276,12 @@ export const Main = (props) => {
       ? reactFlowWrapper.current.classList.add('selected')
       : reactFlowWrapper.current.classList.remove('selected');
   });
+
+  /** Get mindMap from localStorage */
+  useEffect(() => {
+    const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
+    dispatch(restoreMindMap(mindMap));
+  }, [dispatch]);
 
   return (
     <ClickAwayListener onClickAway={onClickAway}>
