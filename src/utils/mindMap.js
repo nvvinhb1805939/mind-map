@@ -91,4 +91,8 @@ export const saveDataToLocalStorage = (data, storageKey) => {
   localStorage.setItem(storageKey, JSON.stringify(data));
 };
 
+export const clearDataFromLocalStorage = (storageKey) => {
+  localStorage.removeItem(storageKey);
+};
+
 export const getDataFromLocalStorage = (storageKey) => JSON.parse(localStorage.getItem(storageKey));

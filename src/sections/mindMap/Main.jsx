@@ -280,7 +280,7 @@ export const Main = (props) => {
   /** Get mindMap from localStorage */
   useEffect(() => {
     const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
-    dispatch(restoreMindMap(mindMap));
+    mindMap && dispatch(restoreMindMap(mindMap));
   }, [dispatch]);
 
   return (

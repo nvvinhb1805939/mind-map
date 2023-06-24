@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from 'reactflow';
 
-const initialState = {
+export const initialState = {
   bgcolor: '#fff',
   selectedNode: null,
   selectedEdge: null,

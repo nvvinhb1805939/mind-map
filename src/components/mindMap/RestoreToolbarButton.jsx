@@ -31,9 +31,15 @@ export const RestoreToolbarButton = () => {
 
   const onRestore = () => {
     const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
-    dispatch(restoreMindMap(mindMap));
 
-    enqueueSnackbar('Khôi phục dữ liệu thành công');
+    if (mindMap) {
+      dispatch(restoreMindMap(mindMap));
+      enqueueSnackbar('Khôi phục dữ liệu thành công!');
+    } else {
+      enqueueSnackbar('Không tìm thấy dữ liệu đã lưu!', {
+        variant: 'error',
+      });
+    }
 
     handleClose();
   };
