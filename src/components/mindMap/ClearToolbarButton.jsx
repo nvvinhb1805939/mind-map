@@ -10,8 +10,8 @@ import {
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { STORAGE_KEYS } from 'src/config-global';
-import { initialState, restoreMindMap } from 'src/redux/slices/mindMap';
+import { INITIAL_MIND_MAP, STORAGE_KEYS } from 'src/config-global';
+import { renewMindMap } from 'src/redux/slices/mindMap';
 import { clearDataFromLocalStorage } from 'src/utils/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
 
@@ -30,7 +30,7 @@ export const ClearToolbarButton = () => {
   };
 
   const onRestore = () => {
-    dispatch(restoreMindMap(initialState));
+    dispatch(renewMindMap(INITIAL_MIND_MAP));
 
     clearDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { HEADER } from 'src/config-global';
-import { switchMode } from 'src/redux/slices/editMode';
+import { setSelected } from 'src/redux/slices/mindMap';
 
 export const BasePopover = (props) => {
   const {
@@ -33,13 +33,7 @@ export const BasePopover = (props) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-    hasDispatch &&
-      dispatch(
-        switchMode({
-          mode: null,
-          current: null,
-        })
-      );
+    hasDispatch && dispatch(setSelected(null));
   };
 
   useEffect(() => {

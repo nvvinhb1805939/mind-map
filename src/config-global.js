@@ -145,3 +145,10 @@ export const EDIT_MODES = {
 export const STORAGE_KEYS = {
   MIND_MAP: 'mindMap',
 };
+
+export const INITIAL_MIND_MAP = {
+  bgcolor: '#fff',
+  nodes: [],
+  edges: [],
+  selected: [],
+};

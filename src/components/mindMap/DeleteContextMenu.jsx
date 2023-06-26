@@ -8,9 +8,8 @@ import {
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
-import { switchMode } from 'src/redux/slices/editMode';
-import { deleteEdges, deleteNode } from 'src/redux/slices/mindMap';
-import { hasConnectBetweenTwoNode } from 'src/utils/mindMap';
+import { deleteEdges, deleteNode, setSelected } from 'src/redux/slices/mindMap';
+import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 
 export const DeleteContextMenu = (props) => {
@@ -20,9 +19,8 @@ export const DeleteContextMenu = (props) => {
 
   const dispatch = useDispatch();
   const {
-    mindMap: { nodes, edges },
+    mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
-  const { mode } = useSelector((state) => state.editMode);
 
   const closeMenuContext = () =>
     setNodeSelected((previousState) => ({
@@ -35,13 +33,7 @@ export const DeleteContextMenu = (props) => {
   };
 
   const onDeleteClick = (type) => {
-    mode === EDIT_MODES.NODE_EDITING &&
-      dispatch(
-        switchMode({
-          mode: null,
-          current: null,
-        })
-      ); // clear node mode
+    getEditingMode(selected) === EDIT_MODES.NODE_EDITING && dispatch(setSelected(null)); // clear node mode
 
     switch (type) {
       case DELETE_CONTEXT_MENU_TYPES.ONLY_NODE:

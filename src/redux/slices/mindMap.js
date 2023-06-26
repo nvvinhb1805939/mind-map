@@ -1,109 +1,107 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from 'reactflow';
+import { EDIT_MODES } from 'src/config-global';
 
 export const initialState = {
-  mindMap: {
-    bgcolor: '#fff',
-    selectedNode: null,
-    selectedEdge: null,
-    nodes: [],
-    edges: [],
-  },
+  mindMap: {},
   history: [],
   currentIndex: -1,
+};
+
+const pushHistory = (state) => {
+  state.history.push(state.mindMap);
+  state.currentIndex = state.history.length - 1;
 };
 
 const mindMapSlice = createSlice({
   name: 'mindMap',
   initialState,
   reducers: {
-    restoreMindMap: (state, action) => {
+    /** this action is used to renew mind map */
+    renewMindMap: (state, action) => {
       state.mindMap = action.payload;
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
+      pushHistory(state);
     },
+    /** this action is triggered when nodes change */
     changeNodes: (state, action) => {
       state.mindMap.nodes = applyNodeChanges(action.payload, state.mindMap.nodes);
     },
+    /** this action is triggered when edges change */
     changEdges: (state, action) => {
       state.mindMap.edges = applyEdgeChanges(action.payload, state.mindMap.edges);
     },
-    renewEdges: (state, action) => {
-      state.mindMap.edges = action.payload;
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
-    },
-    renewNodes: (state, action) => {
-      state.mindMap.nodes = action.payload;
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
-    },
-    changEdge: (state, action) => {
-      const changedEdgeIndex = state.mindMap.edges.findIndex(
-        (edge) => edge.id === action.payload.id
+    /** this action is used to elevate z-index of edge on hover */
+    elevateEdge: (state, action) => {
+      state.mindMap.edges = state.mindMap.edges.map((edge) =>
+        edge.id === action.payload.id ? action.payload : { ...edge, zIndex: 0 }
       );
-      state.mindMap.edges[changedEdgeIndex] = action.payload;
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
     },
+    /** this action is used to add a new node */
     addNode: (state, action) => {
       state.mindMap.nodes.push(action.payload);
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
+      state.mindMap.selected = [{ element: action.payload, type: EDIT_MODES.NODE_EDITING }];
+      pushHistory(state);
     },
+    /** this action is used to add a new edge */
     addEdge: (state, action) => {
       state.mindMap.edges.push(action.payload);
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
+
+      pushHistory(state);
     },
+    /** this action is triggered when user drag edge to another node */
     updateEdge: (state, action) => {
       const { oldEdge, newConnection } = action.payload;
       state.mindMap.edges = onUpdateEdge(oldEdge, newConnection, state.mindMap.edges);
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
+      pushHistory(state);
     },
+    /** this action is used to delete edges */
     deleteEdges: (state, action) => {
       state.mindMap.edges = action.payload;
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
+      pushHistory(state);
     },
+    /** this action is used to delete an edge */
     deleteEdge: (state, action) => {
       state.mindMap.edges = state.mindMap.edges.filter((edge) => edge.id !== action.payload.id);
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
+      pushHistory(state);
     },
+    /** this action is used to delete a node */
     deleteNode: (state, action) => {
       state.mindMap.nodes = state.mindMap.nodes.filter((node) => node.id !== action.payload.id);
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
+      pushHistory(state);
     },
+    /** this action is used to change background color */
     changeBgColor: (state, action) => {
       state.mindMap.bgcolor = action.payload;
-      state.history.push(state.mindMap);
-      state.currentIndex = state.history.length - 1;
+      pushHistory(state);
     },
+    /** this action is used to undo the most recent action */
     undo: (state) => {
       if (state.currentIndex > 0 && state.currentIndex <= state.history.length - 1) {
         state.currentIndex--;
         state.mindMap = state.history[state.currentIndex];
       }
     },
+    /** this action is used to redo a previously undone action */
     redo: (state) => {
       if (state.currentIndex >= 0 && state.currentIndex <= state.history.length - 1) {
         state.currentIndex++;
         state.mindMap = state.history[state.currentIndex];
       }
     },
+    /** this action is used to set selected elements */
+    setSelected: (state, action) => {
+      state.mindMap.selected = action.payload
+        ? [{ element: action.payload.element, type: action.payload.type }]
+        : [];
+    },
   },
 });
 
 export const {
-  restoreMindMap,
+  renewMindMap,
   changeNodes,
   changEdges,
-  renewNodes,
-  renewEdges,
-  changEdge,
+  elevateEdge,
   addNode,
   addEdge,
   updateEdge,
@@ -113,6 +111,7 @@ export const {
   changeBgColor,
   undo,
   redo,
+  setSelected,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

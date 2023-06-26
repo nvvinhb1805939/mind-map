@@ -1,12 +1,15 @@
 import { Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { EDIT_MODES } from 'src/config-global';
+import { EDIT_MODES, TYPES } from 'src/config-global';
+import { getEditingMode } from 'src/utils/mindMap';
 import { EdgeEditing } from './EdgeEditing';
 import { NodeEditing } from './NodeEditing';
 import { PaneEditing } from './PaneEditing';
 
 export const EditModeRendering = (props) => {
-  const { mode } = useSelector((state) => state.editMode);
+  const {
+    mindMap: { selected },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const renderEditMode = (mode) => {
     switch (mode) {
@@ -23,7 +26,7 @@ export const EditModeRendering = (props) => {
 
   return (
     <Stack direction="row" justifyContent="flex-start" alignItems="center">
-      {renderEditMode(mode)}
+      {renderEditMode(getEditingMode(selected))}
     </Stack>
   );
 };

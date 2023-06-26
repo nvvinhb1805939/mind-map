@@ -5,31 +5,28 @@ import { DeleteContextMenu } from 'src/components/mindMap';
 import {
   DEFAULT_MAX_ZOOM,
   EDIT_MODES,
+  INITIAL_MIND_MAP,
   NODE_SIZE,
   NODE_TYPES,
   STORAGE_KEYS,
   TYPES,
 } from 'src/config-global';
-import { switchMode } from 'src/redux/slices/editMode';
 import {
   addEdge,
   addNode,
-  changEdge,
   changEdges,
   changeNodes,
   deleteEdge,
-  renewEdges,
-  renewNodes,
-  restoreMindMap,
+  elevateEdge,
+  renewMindMap,
+  setSelected,
   updateEdge,
 } from 'src/redux/slices/mindMap';
 import { useDispatch, useSelector } from 'src/redux/store';
 import {
-  clearZIndexEdges,
   getDataFromLocalStorage,
+  getEditingMode,
   hasConnectBetweenTwoNode,
-  resetEdges,
-  updateSelectedNodes,
 } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { FlowToolbar } from './FlowToolbar';
@@ -44,11 +41,10 @@ export const Main = (props) => {
 
   const dispatch = useDispatch();
   const {
-    mindMap: { nodes, edges },
+    mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
-  const { mode } = useSelector((state) => state.editMode);
 
-  const [nodeSelected, setNodeSelected] = useState(null); // is used to store selected node anchor
+  const [selectedNode, setSelectedNode] = useState(null); // is used to store selected node
 
   const reactFlowWrapper = useRef(null); // access DOM
   const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to determine whether current event is onEdgeUpdate events or onConnect events ()
@@ -59,18 +55,22 @@ export const Main = (props) => {
   const isPaneClick = useRef(true); // determine whether pane is clickable or not
   const isEdgeClick = useRef(true); // determine whether edge is clickable or not
 
-  /** Connections */
+  /*********** Connections ***********/
+
+  /** this function is used to handle on user implement connect from source to target */
   const onConnectStart = (event, { nodeId }) => {
-    hasMovingEdge.current = true;
+    hasMovingEdge.current = true; // emit edge is moving
+
     if (isOnEdgeUpdateEvents.current) return; // check if current event is onEdgeUpdate then do nothing
 
-    isNodesConnected.current = false;
-    connectingNodeId.current = nodeId;
+    isNodesConnected.current = false; // emit source has not connected target yet
+    connectingNodeId.current = nodeId; // store source node id
   };
+  /** this function is used to add edge when user complete connect from source to target */
   const onConnect = ({ source, target }) => {
     if (isOnEdgeUpdateEvents.current) return; // check if current event is onEdgeUpdate then do nothing
 
-    if (hasConnectBetweenTwoNode(edges, source, target)) return;
+    if (hasConnectBetweenTwoNode(edges, source, target)) return; // check if source node has connected already target node then do nothing
 
     dispatch(
       addEdge({
@@ -78,11 +78,12 @@ export const Main = (props) => {
         source,
         target,
       })
-    );
-    isNodesConnected.current = true;
-    hasMovingEdge.current = false;
+    ); // add new edge of source and target
+
+    isNodesConnected.current = true; // emit source has connected target
+    hasMovingEdge.current = false; // emit finish moving edge
   };
-  // this method is used to add node on drop edge
+  /** this function is used to add node on drop edge */
   const onConnectEnd = (event) => {
     isPaneClick.current = false;
 
@@ -119,58 +120,56 @@ export const Main = (props) => {
     hasMovingEdge.current = false;
   };
 
-  /** Nodes */
+  /*********** Nodes ***********/
+
+  /** this function is used to handle on nodes change */
   const onNodesChange = (nodeChanges) => {
     dispatch(changeNodes(nodeChanges));
   };
-  /** this method is used to open delete menu contexts */
+  /** this function is used to open delete menu context */
   const onNodeContextMenu = (event, selectedNode) => {
-    setNodeSelected({
+    setSelectedNode({
       options: selectedNode,
       anchorEl: event.target,
-      setNodeSelected,
+      setSelectedNode,
     }); // open delete context menu
-
-    dispatch(renewNodes(updateSelectedNodes(nodes, selectedNode))); // apply changes
   };
-  /** this methos is used to switch to node editing mode */
+  /** this function is used to switch to node editing mode */
   const onNodeClick = (event, node) => {
     dispatch(
-      switchMode({
-        mode: EDIT_MODES.NODE_EDITING,
-        current: node,
+      setSelected({
+        element: node,
+        type: EDIT_MODES.NODE_EDITING,
       })
     );
   };
-  /** this method is used to set selected node on drag */
+  /** this function is used to set selected node on drag */
   const onNodeDrag = (event, node, nodes) => {
     dispatch(
-      switchMode({
-        mode: EDIT_MODES.NODE_EDITING,
-        current: node,
+      setSelected({
+        element: node,
+        type: EDIT_MODES.NODE_EDITING,
       })
     );
   };
-  /** this method is used to clear node editing mode when selected nodes are deleted */
+  /** this function is used to clear node editing mode when selected nodes are deleted */
   const onNodesDelete = () => {
-    dispatch(
-      switchMode({
-        mode: null,
-        current: null,
-      })
-    );
+    dispatch(setSelected(null));
   };
 
-  /** Edges */
+  /*********** Edges ***********/
+
+  /** this function is used to handle on edges change */
   const onEdgesChange = (edgeChanges) => {
     dispatch(changEdges(edgeChanges));
   };
+  /** this function is used to handle on edge start to update */
   const onEdgeUpdateStart = () => {
     hasMovingEdge.current = true;
     isEdgeUpdated.current = false;
     isOnEdgeUpdateEvents.current = true;
   };
-  /** this method is used to update source or target on drop */
+  /** this function is used to update source or target on drop */
   const onEdgeUpdate = (oldEdge, newConnection) => {
     if (hasConnectBetweenTwoNode(edges, newConnection.source, newConnection.target)) {
       isEdgeUpdated.current = true;
@@ -185,135 +184,124 @@ export const Main = (props) => {
     isOnEdgeUpdateEvents.current = false;
     hasMovingEdge.current = false;
   };
-  /** this method is used to delete edge on drop */
+  /** this function is used to delete edge on drop */
   const onEdgeUpdateEnd = (event, edge) => {
     if (!isEdgeUpdated.current) {
       dispatch(deleteEdge(edge));
-      mode === EDIT_MODES.EDGE_EDITING &&
-        dispatch(
-          switchMode({
-            mode: null,
-            current: null,
-          })
-        );
+      getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
     }
 
     isEdgeUpdated.current = true;
     isOnEdgeUpdateEvents.current = false;
     hasMovingEdge.current = false;
   };
-  /** this method is used to delete edge on double click */
+  /** this function is used to delete edge on double click */
   const onEdgeDoubleClick = (event, edge) => {
     dispatch(deleteEdge(edge));
-    mode === EDIT_MODES.EDGE_EDITING &&
-      dispatch(
-        switchMode({
-          mode: null,
-          current: null,
-        })
-      );
+    getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
   };
-  /** this method is used to elevate zIndex of selectedEdge */
+  /** this function is used to elevate zIndex of selectedEdge */
   const onEdgeMouseEnter = (event, selectedEdge) => {
     if (hasMovingEdge.current) return;
 
     if (selectedEdge.zIndex) return;
 
-    dispatch(renewEdges(clearZIndexEdges(edges))); // apply changes
-
     /** elevate zIndex of selectedEdge */
     selectedEdge.zIndex = 100;
-    dispatch(changEdge(selectedEdge));
+    dispatch(elevateEdge(selectedEdge));
   };
-  /** this method is used to switch to edge editing mode */
+  /** this function is used to switch to edge editing mode */
   const onEdgeClick = (event, edge) => {
     isEdgeClick.current &&
       dispatch(
-        switchMode({
-          mode: EDIT_MODES.EDGE_EDITING,
-          current: edge,
+        setSelected({
+          element: edge,
+          type: EDIT_MODES.EDGE_EDITING,
         })
       );
 
     isEdgeClick.current = true;
   };
+  /** this function is used to clear editing mode on selected edges deleted */
   const onEdgesDelete = () => {
-    mode === EDIT_MODES.EDGE_EDITING &&
-      dispatch(
-        switchMode({
-          mode: null,
-          current: null,
-        })
-      );
+    getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
   };
 
-  /** Pane */
-  /** this method is used to switch to pane editing mode */
+  /*********** Pane ***********/
+
+  /** this function is used to switch to pane editing mode */
   const onPaneClick = (event) => {
     if (isPaneClick.current) {
-      dispatch(switchMode({ mode: EDIT_MODES.PANE_EDITING }));
+      dispatch(
+        setSelected({
+          element: null,
+          type: EDIT_MODES.PANE_EDITING,
+        })
+      );
       reactFlowWrapper.current.classList.add('selected');
     }
-
     isPaneClick.current = true;
   };
 
-  /** clear editing mode and selected*/
+  /** clear editing mode and selected pane*/
   const onClickAway = () => {
-    dispatch(
-      switchMode({
-        mode: null,
-        current: null,
-      })
-    ); // clear editing mode
-    dispatch(renewNodes(nodes.map((node) => ({ ...node, selected: false })))); // clear selected nodes
-    dispatch(renewEdges(resetEdges(edges))); // clear selected edges
+    dispatch(setSelected(null)); // clear editing mode
 
     reactFlowWrapper.current.classList.remove('selected'); // clear pane selected
   };
 
+  /*********** Side effects ***********/
+
   /** Toggle pane selected  */
   useEffect(() => {
-    mode === EDIT_MODES.PANE_EDITING
+    getEditingMode(selected) === EDIT_MODES.PANE_EDITING
       ? reactFlowWrapper.current.classList.add('selected')
       : reactFlowWrapper.current.classList.remove('selected');
   });
 
-  /** Get mindMap from localStorage */
+  /** Init mind map */
   useEffect(() => {
-    const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
-    mindMap && dispatch(restoreMindMap(mindMap));
+    const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP); // get mind map from localStorage
+    mindMap ? dispatch(renewMindMap(mindMap)) : dispatch(renewMindMap(INITIAL_MIND_MAP)); // if browser has saved mind map in localStorage then init them otherwise init the inital mind map
   }, [dispatch]);
 
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <Box ref={reactFlowWrapper} sx={styles}>
-        {!!nodeSelected?.anchorEl && <DeleteContextMenu node={nodeSelected} />}
+        {!!selectedNode?.anchorEl && <DeleteContextMenu node={selectedNode} />}
         <ReactFlow
+          /*********** Basic props ***********/
           nodes={nodes}
           edges={edges}
           nodeTypes={NODE_TYPES}
+          /*********** Node event handlers ***********/
           onNodesChange={onNodesChange}
+          onNodesDelete={onNodesDelete}
           onNodeContextMenu={onNodeContextMenu}
           onNodeDrag={onNodeDrag}
+          onNodeClick={onNodeClick}
+          /*********** Edge event handlers ***********/
           onEdgesChange={onEdgesChange}
+          onEdgesDelete={onEdgesDelete}
           onEdgeUpdateStart={onEdgeUpdateStart}
           onEdgeUpdate={onEdgeUpdate}
           onEdgeUpdateEnd={onEdgeUpdateEnd}
           onEdgeDoubleClick={onEdgeDoubleClick}
           onEdgeMouseEnter={onEdgeMouseEnter}
+          onEdgeClick={onEdgeClick}
+          /*********** Connection event handlers ***********/
           onConnect={onConnect}
           onConnectStart={onConnectStart}
           onConnectEnd={onConnectEnd}
+          /*********** Pane event handlers ***********/
           onPaneClick={onPaneClick}
-          onNodeClick={onNodeClick}
-          onEdgeClick={onEdgeClick}
-          onNodesDelete={onNodesDelete}
-          onEdgesDelete={onEdgesDelete}
+          /*********** Flow view ***********/
           fitView={true}
           maxZoom={DEFAULT_MAX_ZOOM}
+          /*********** Keys ***********/
           selectionKeyCode={null}
           deleteKeyCode="Delete"
+          multiSelectionKeyCode="Control"
         >
           <FlowToolbar />
           <Controls showInteractive={false} />

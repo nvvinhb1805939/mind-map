@@ -11,7 +11,7 @@ import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { STORAGE_KEYS } from 'src/config-global';
-import { restoreMindMap } from 'src/redux/slices/mindMap';
+import { renewMindMap } from 'src/redux/slices/mindMap';
 import { getDataFromLocalStorage } from 'src/utils/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
 
@@ -33,7 +33,7 @@ export const RestoreToolbarButton = () => {
     const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
 
     if (mindMap) {
-      dispatch(restoreMindMap(mindMap));
+      dispatch(renewMindMap(mindMap));
       enqueueSnackbar('Khôi phục dữ liệu thành công!');
     } else {
       enqueueSnackbar('Không tìm thấy dữ liệu đã lưu!', {

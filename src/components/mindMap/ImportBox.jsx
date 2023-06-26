@@ -1,6 +1,6 @@
 import { Box, Button, Input } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { restoreMindMap } from 'src/redux/slices/mindMap';
+import { renewMindMap } from 'src/redux/slices/mindMap';
 import { importTextFile } from 'src/utils/mindMap';
 
 export const ImportBox = (props) => {
@@ -19,7 +19,7 @@ export const ImportBox = (props) => {
 
       const mindMap = importTextFile(text);
 
-      dispatch(restoreMindMap(mindMap));
+      dispatch(renewMindMap(mindMap));
     };
 
     reader.readAsText(event.target.files[0]); // read content of file

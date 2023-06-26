@@ -4,7 +4,6 @@ import storage from 'redux-persist/lib/storage';
 // slices
 import calendarReducer from './slices/calendar';
 import chatReducer from './slices/chat';
-import editModeReducer from './slices/editMode';
 import kanbanReducer from './slices/kanban';
 import mailReducer from './slices/mail';
 import mindMapReducer from './slices/mindMap';
@@ -33,7 +32,6 @@ const rootReducer = combineReducers({
   kanban: kanbanReducer,
   product: persistReducer(productPersistConfig, productReducer),
   mindMap: mindMapReducer,
-  editMode: editModeReducer,
 });
 
 export default rootReducer;
