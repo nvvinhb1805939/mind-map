@@ -6,7 +6,7 @@ import { saveDataToLocalStorage } from 'src/utils/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
 
 export const SaveToolbarButton = () => {
-  const mindMap = useSelector((state) => state[TYPES.MIND_MAP]);
+  const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
 

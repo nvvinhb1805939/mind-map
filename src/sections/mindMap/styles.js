@@ -5,7 +5,9 @@ import { HANDLE_SIZE, TYPES } from 'src/config-global';
 
 export const useStyles = () => {
   const { themeMode } = useSettingsContext();
-  const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const {
+    mindMap: { bgcolor },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const style = useMemo(
     () => ({

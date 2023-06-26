@@ -19,7 +19,9 @@ export const DeleteContextMenu = (props) => {
   } = props;
 
   const dispatch = useDispatch();
-  const { nodes, edges } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const {
+    mindMap: { nodes, edges },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
   const { mode } = useSelector((state) => state.editMode);
 
   const closeMenuContext = () =>

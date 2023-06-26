@@ -9,7 +9,9 @@ import { BasePopover } from './BasePopover';
 export const ColorPicker = (props) => {
   const { onChangeComplete } = props;
 
-  const { bgcolor } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const {
+    mindMap: { bgcolor },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { themeMode } = useSettingsContext();
 

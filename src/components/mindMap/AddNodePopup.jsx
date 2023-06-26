@@ -11,7 +11,9 @@ import { BasePopover } from './BasePopover';
 
 export const AddNodePopup = () => {
   const dispatch = useDispatch();
-  const { nodes } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const {
+    mindMap: { nodes },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -41,9 +43,11 @@ export const AddNodePopup = () => {
     };
 
     /** clear selected nodes */
-    const clearSelectedNodes = nodes.map((node) => ({ ...node, selected: false }));
+    if (nodes.length > 0) {
+      const clearSelectedNodes = nodes.map((node) => ({ ...node, selected: false }));
 
-    dispatch(renewNodes(clearSelectedNodes)); // apply changes
+      dispatch(renewNodes(clearSelectedNodes)); // apply changes
+    }
 
     dispatch(addNode(newNode)); // add node
 

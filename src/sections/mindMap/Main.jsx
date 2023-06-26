@@ -43,7 +43,9 @@ export const Main = (props) => {
   const { project, getZoom } = useReactFlow();
 
   const dispatch = useDispatch();
-  const { nodes, edges } = useSelector((state) => state.mindMap);
+  const {
+    mindMap: { nodes, edges },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
   const { mode } = useSelector((state) => state.editMode);
 
   const [nodeSelected, setNodeSelected] = useState(null); // is used to store selected node anchor

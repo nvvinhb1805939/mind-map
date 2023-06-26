@@ -31,7 +31,10 @@ import { BasePopover } from './BasePopover';
 const DEFAULT_SLIDER_VALUE = 50;
 
 export const DownloadContextMenu = (props) => {
-  const { bgcolor, nodes, edges } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const {
+    mindMap,
+    mindMap: { bgcolor },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const [close, setClose] = useState(false);
   const [type, setType] = useState(DOWNLOAD_CONTEXT_MENU[0]);
@@ -71,7 +74,7 @@ export const DownloadContextMenu = (props) => {
   const handleDownloadClick = () => {
     type.id === DOWNLOAD_CONTEXT_MENU_TYPES.PNG
       ? htmlToImage(getNodes(), toPng, type.id, size, bgcolor) // download with type is image
-      : exportToTextFile(type.id, nodes, edges); // download with type is text
+      : exportToTextFile(type.id, mindMap); // download with type is text
 
     setClose(true);
   };

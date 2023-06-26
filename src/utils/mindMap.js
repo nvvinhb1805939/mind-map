@@ -66,9 +66,9 @@ export const htmlToImage = (nodes, callback, type, size, backgroundColor = '#fff
   }).then((dataUrl) => downloadImage(dataUrl, type));
 };
 
-export const exportToTextFile = (type, nodes, edges) => {
+export const exportToTextFile = (type, mindMap) => {
   const encryptedData = CryptoJS.AES.encrypt(
-    JSON.stringify({ nodes, edges }),
+    JSON.stringify(mindMap),
     process.env.REACT_APP_CRYPTO_SECRET_KEY
   ).toString(); // ecrypt data
 
