@@ -114,7 +114,13 @@ const mindMapSlice = createSlice({
         return;
       }
 
-      state.mindMap.selected = [{ element: action.payload.element, type: action.payload.type }];
+      state.mindMap.selected = [
+        {
+          element: action.payload.element,
+          type: action.payload.type,
+          anchorEl: action.payload.anchorEl,
+        },
+      ];
 
       switch (action.payload.type) {
         case EDIT_MODES.NODE_EDITING:

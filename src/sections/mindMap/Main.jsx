@@ -1,5 +1,5 @@
 import { Box, ClickAwayListener } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import { DeleteContextMenu } from 'src/components/mindMap';
 import {
@@ -44,8 +44,6 @@ export const Main = (props) => {
   const {
     mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
-
-  const [selectedNode, setSelectedNode] = useState(null); // is used to store selected node
 
   const reactFlowWrapper = useRef(null); // access DOM
   const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to determine whether current event is onEdgeUpdate events or onConnect events ()
@@ -142,11 +140,13 @@ export const Main = (props) => {
   };
   /** this function is used to open delete menu context */
   const onNodeContextMenu = (event, selectedNode) => {
-    setSelectedNode({
-      options: selectedNode,
-      anchorEl: event.target,
-      setSelectedNode,
-    }); // open delete context menu
+    dispatch(
+      setSelected({
+        element: selectedNode,
+        type: EDIT_MODES.NODE_EDITING,
+        anchorEl: event.target,
+      })
+    );
   };
   /** this function is used to switch to node editing mode */
   const onNodeClick = (event, node) => {
@@ -290,7 +290,7 @@ export const Main = (props) => {
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <Box ref={reactFlowWrapper} sx={styles}>
-        {!!selectedNode?.anchorEl && <DeleteContextMenu node={selectedNode} />}
+        {!!selected?.[0]?.anchorEl && <DeleteContextMenu />}
         <ReactFlow
           /*********** Basic props ***********/
           nodes={nodes}

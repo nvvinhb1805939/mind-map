@@ -13,20 +13,12 @@ import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 
 export const DeleteContextMenu = (props) => {
-  const {
-    node: { options, anchorEl, setSelectedNode },
-  } = props;
-
   const dispatch = useDispatch();
   const {
     mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
-  const closeMenuContext = () =>
-    setSelectedNode((previousState) => ({
-      ...previousState,
-      anchorEl: null,
-    }));
+  const closeMenuContext = () => dispatch(setSelected(null));
 
   const handleClose = () => {
     closeMenuContext();
@@ -37,10 +29,10 @@ export const DeleteContextMenu = (props) => {
 
     switch (type) {
       case DELETE_CONTEXT_MENU_TYPES.ONLY_NODE:
-        deleteOnlyNode(options);
+        deleteOnlyNode(selected[0].element);
         break;
       default:
-        clearNodeAndConnectedEdges(options);
+        clearNodeAndConnectedEdges(selected[0].element);
         break;
     }
 
@@ -98,8 +90,8 @@ export const DeleteContextMenu = (props) => {
   return (
     <Menu
       id="delete-context-menu"
-      open={!!anchorEl}
-      anchorEl={anchorEl}
+      open={!!selected[0].anchorEl}
+      anchorEl={selected[0].anchorEl}
       onClose={handleClose}
       transformOrigin={{
         vertical: 'top',
