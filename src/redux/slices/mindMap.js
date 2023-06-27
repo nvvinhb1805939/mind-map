@@ -38,7 +38,8 @@ const mindMapSlice = createSlice({
     },
     /** this action is used to add a new node */
     addNode: (state, action) => {
-      state.mindMap.nodes.push(action.payload);
+      state.mindMap.nodes = state.mindMap.nodes.map((node) => ({ ...node, selected: false }));
+      state.mindMap.nodes.push({ ...action.payload, selected: true });
       state.mindMap.selected = [{ element: action.payload, type: EDIT_MODES.NODE_EDITING }];
       pushHistory(state);
     },
@@ -90,9 +91,52 @@ const mindMapSlice = createSlice({
     },
     /** this action is used to set selected elements */
     setSelected: (state, action) => {
-      state.mindMap.selected = action.payload
-        ? [{ element: action.payload.element, type: action.payload.type }]
-        : [];
+      const clearSelectedNodes = () => {
+        state.mindMap.nodes = state.mindMap.nodes.map((node) => ({ ...node, selected: false }));
+      };
+      const clearSelectedEdges = () => {
+        state.mindMap.edges = state.mindMap.edges.map((edge) => ({ ...edge, selected: false }));
+      };
+      const updateNodeSelection = (node) =>
+        node.id === action.payload.element.id
+          ? { ...node, selected: true }
+          : { ...node, selected: false };
+      const updateEdgeSelection = (edge) =>
+        edge.id === action.payload.element.id
+          ? { ...edge, selected: true }
+          : { ...edge, selected: false };
+
+      // in this case, it's clear selected
+      if (!action.payload) {
+        state.mindMap.selected = [];
+        clearSelectedNodes();
+        clearSelectedEdges();
+        return;
+      }
+
+      state.mindMap.selected = [{ element: action.payload.element, type: action.payload.type }];
+
+      switch (action.payload.type) {
+        case EDIT_MODES.NODE_EDITING:
+          clearSelectedEdges();
+
+          state.mindMap.nodes = state.mindMap.nodes.map((node) => updateNodeSelection(node));
+          break;
+        case EDIT_MODES.EDGE_EDITING:
+          clearSelectedNodes();
+
+          state.mindMap.edges = state.mindMap.edges.map((edge) => updateEdgeSelection(edge));
+          break;
+
+        default:
+          clearSelectedNodes();
+          clearSelectedEdges();
+          break;
+      }
+    },
+    /** this action is used to push current state to history */
+    pushStateToHistory: (state) => {
+      pushHistory(state);
     },
   },
 });
@@ -112,6 +156,7 @@ export const {
   undo,
   redo,
   setSelected,
+  pushStateToHistory,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

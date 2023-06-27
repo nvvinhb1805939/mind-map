@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const DeleteContextMenu = (props) => {
   const {
-    node: { options, anchorEl, setNodeSelected },
+    node: { options, anchorEl, setSelectedNode },
   } = props;
 
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ export const DeleteContextMenu = (props) => {
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const closeMenuContext = () =>
-    setNodeSelected((previousState) => ({
+    setSelectedNode((previousState) => ({
       ...previousState,
       anchorEl: null,
     }));

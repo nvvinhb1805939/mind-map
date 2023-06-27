@@ -34,7 +34,6 @@ export const AddNodePopup = () => {
       type: TYPES.MIND_MAP,
       position: { x: 0, y: 0 },
       data: { label: label.trim() },
-      selected: true,
     };
 
     dispatch(addNode(newNode)); // add node

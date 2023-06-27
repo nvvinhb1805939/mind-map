@@ -25,25 +25,6 @@ export const getEditingMode = (elements = []) => {
   return elements.every((element) => element.type === firstElement.type) ? firstElement.type : null;
 };
 
-// export const setSelectedElements = (selectedElements, elements) => {};
-
-// export const clearZIndexEdges = (edges) =>
-//   edges.map((edge) => {
-//     const { zIndex, ...options } = edge;
-//     return options;
-//   });
-
-// export const resetEdges = (edges) =>
-//   edges.map((edge) => {
-//     const { zIndex, selected, ...options } = edge;
-//     return options;
-//   });
-
-// export const updateSelectedNodes = (nodes, selectedNode) =>
-//   nodes.map((node) =>
-//     node.id === selectedNode.id ? { ...node, selected: true } : { ...node, selected: false }
-//   );
-
 const downloadImage = (dataUrl, type) => {
   const a = document.createElement('a');
 

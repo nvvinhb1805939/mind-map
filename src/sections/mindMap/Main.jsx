@@ -18,6 +18,7 @@ import {
   changeNodes,
   deleteEdge,
   elevateEdge,
+  pushStateToHistory,
   renewMindMap,
   setSelected,
   updateEdge,
@@ -53,9 +54,10 @@ export const Main = (props) => {
   const connectingNodeId = useRef(null); // store id of source node
   const hasMovingEdge = useRef(false); // determine whether has moving edge or not
   const isPaneClick = useRef(true); // determine whether pane is clickable or not
+  const hasOnlyPaneClicked = useRef(false); // determine whether is only pane clicked or not
   const isEdgeClick = useRef(true); // determine whether edge is clickable or not
 
-  /*********** Connections ***********/
+  /*********** Connections *********** /
 
   /** this function is used to handle on user implement connect from source to target */
   const onConnectStart = (event, { nodeId }) => {
@@ -124,7 +126,19 @@ export const Main = (props) => {
 
   /** this function is used to handle on nodes change */
   const onNodesChange = (nodeChanges) => {
-    dispatch(changeNodes(nodeChanges));
+    // if pane clicked then do nothing
+    if (hasOnlyPaneClicked.current) {
+      hasOnlyPaneClicked.current = false;
+      return;
+    }
+
+    const selectedChanges = nodeChanges.map((node) =>
+      node.id === selected?.[0]?.element?.id
+        ? { ...node, selected: true }
+        : { ...node, selected: false }
+    );
+
+    dispatch(changeNodes(selectedChanges));
   };
   /** this function is used to open delete menu context */
   const onNodeContextMenu = (event, selectedNode) => {
@@ -136,21 +150,27 @@ export const Main = (props) => {
   };
   /** this function is used to switch to node editing mode */
   const onNodeClick = (event, node) => {
-    dispatch(
-      setSelected({
-        element: node,
-        type: EDIT_MODES.NODE_EDITING,
-      })
-    );
+    !(node?.id === selected?.[0]?.element?.id) &&
+      dispatch(
+        setSelected({
+          element: node,
+          type: EDIT_MODES.NODE_EDITING,
+        })
+      );
   };
   /** this function is used to set selected node on drag */
   const onNodeDrag = (event, node, nodes) => {
-    dispatch(
-      setSelected({
-        element: node,
-        type: EDIT_MODES.NODE_EDITING,
-      })
-    );
+    !(node?.id === selected?.[0]?.element?.id) &&
+      dispatch(
+        setSelected({
+          element: node,
+          type: EDIT_MODES.NODE_EDITING,
+        })
+      );
+  };
+  /** this function is used to push history on node stops drag */
+  const onNodeDragStop = (event, node, nodes) => {
+    node.dragging && dispatch(pushStateToHistory());
   };
   /** this function is used to clear node editing mode when selected nodes are deleted */
   const onNodesDelete = () => {
@@ -240,7 +260,9 @@ export const Main = (props) => {
       );
       reactFlowWrapper.current.classList.add('selected');
     }
+
     isPaneClick.current = true;
+    hasOnlyPaneClicked.current = true;
   };
 
   /** clear editing mode and selected pane*/
@@ -279,6 +301,7 @@ export const Main = (props) => {
           onNodesDelete={onNodesDelete}
           onNodeContextMenu={onNodeContextMenu}
           onNodeDrag={onNodeDrag}
+          onNodeDragStop={onNodeDragStop}
           onNodeClick={onNodeClick}
           /*********** Edge event handlers ***********/
           onEdgesChange={onEdgesChange}
