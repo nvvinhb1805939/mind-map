@@ -5,7 +5,7 @@ import {
   ClearOutlined as ClearOutlinedIcon,
   RemoveOutlined as RemoveOutlinedIcon,
 } from '@mui/icons-material';
-import { MindMapNode } from './components/mindMap';
+import { MindMapEdge, MindMapNode } from './components/mindMap';
 import { PATH_MINDMAP } from './routes/paths';
 
 // API
@@ -82,6 +82,9 @@ export const TYPES = {
 
 export const NODE_TYPES = {
   [TYPES.MIND_MAP]: MindMapNode,
+};
+export const EDGE_TYPES = {
+  [TYPES.MIND_MAP]: MindMapEdge,
 };
 
 export const DEFAULT_MAX_ZOOM = 2;

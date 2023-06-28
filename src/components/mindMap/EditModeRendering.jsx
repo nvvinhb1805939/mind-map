@@ -16,9 +16,9 @@ export const EditModeRendering = (props) => {
       case EDIT_MODES.PANE_EDITING:
         return <PaneEditing />;
       case EDIT_MODES.NODE_EDITING:
-        return <NodeEditing />;
+        return <NodeEditing selected={selected} />;
       case EDIT_MODES.EDGE_EDITING:
-        return <EdgeEditing />;
+        return <EdgeEditing selected={selected} />;
       default:
         break;
     }

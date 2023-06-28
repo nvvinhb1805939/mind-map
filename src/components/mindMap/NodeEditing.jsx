@@ -1,11 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { TYPES } from 'src/config-global';
+import { memo } from 'react';
 
-export const NodeEditing = (props) => {
-  const {
-    mindMap: { selected },
-  } = useSelector((state) => state[TYPES.MIND_MAP]);
+export const NodeEditing = memo(({ selected }) => {
+  console.log(selected[0].element);
+
   return <div>NodeEditing {selected[0].element.data.label}</div>;
-};
+});

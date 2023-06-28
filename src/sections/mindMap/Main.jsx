@@ -79,6 +79,9 @@ export const Main = (props) => {
         id: uuidv4(),
         source,
         target,
+        style: {
+          stroke: 'red',
+        },
       })
     ); // add new edge of source and target
 
@@ -115,6 +118,9 @@ export const Main = (props) => {
         id: uuidv4(),
         source: connectingNodeId.current,
         target: newNode.id,
+        style: {
+          stroke: 'red',
+        },
       })
     ); // add new edge
 
