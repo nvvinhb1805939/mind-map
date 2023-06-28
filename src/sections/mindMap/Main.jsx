@@ -59,6 +59,8 @@ export const Main = (props) => {
 
   /** this function is used to handle on user implement connect from source to target */
   const onConnectStart = (event, { nodeId }) => {
+    dispatch(setSelected(null)); // clear selected on start connect
+
     hasMovingEdge.current = true; // emit edge is moving
 
     if (isOnEdgeUpdateEvents.current) return; // check if current event is onEdgeUpdate then do nothing
@@ -193,7 +195,6 @@ export const Main = (props) => {
   const onEdgeUpdate = (oldEdge, newConnection) => {
     if (hasConnectBetweenTwoNode(edges, newConnection.source, newConnection.target)) {
       isEdgeUpdated.current = true;
-      isEdgeClick.current = false;
 
       return;
     }
