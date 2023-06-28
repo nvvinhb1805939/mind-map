@@ -1,10 +1,12 @@
 import { Stack, Typography } from '@mui/material';
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { MIND_MAP_CLASSES, NODE_SIZE } from 'src/config-global';
+import { DEFAULT_NODE_BG_COLOR, MIND_MAP_CLASSES, NODE_SIZE } from 'src/config-global';
 
 export const MindMapNode = memo((props) => {
   const { data } = props;
+
+  console.log(data?.styles);
 
   return (
     <Stack
@@ -16,9 +18,11 @@ export const MindMapNode = memo((props) => {
         width: NODE_SIZE.WIDTH,
         height: NODE_SIZE.HEIGHT,
 
-        bgcolor: 'background.paper',
+        bgcolor: DEFAULT_NODE_BG_COLOR,
         border: (theme) => `2px solid ${theme.palette.text.primary}`,
         borderRadius: 1,
+
+        ...data?.styles,
       }}
     >
       <Handle type="target" position={Position.Top} />

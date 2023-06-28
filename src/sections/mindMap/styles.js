@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useSettingsContext } from 'src/components/settings';
-import { HANDLE_SIZE, MIND_MAP_CLASSES, TYPES } from 'src/config-global';
+import { DEFAULT_NODE_BG_COLOR, HANDLE_SIZE, MIND_MAP_CLASSES, TYPES } from 'src/config-global';
 
 export const useStyles = () => {
   const { themeMode } = useSettingsContext();

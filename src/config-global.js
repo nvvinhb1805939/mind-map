@@ -162,3 +162,4 @@ export const INITIAL_MIND_MAP = {
 };
 
 export const DEFAULT_EDGE_COLOR = '#b1b1b7';
+export const DEFAULT_NODE_BG_COLOR = '#fff';

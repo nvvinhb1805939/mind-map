@@ -3,19 +3,18 @@ import { useDispatch } from 'react-redux';
 import { DEFAULT_EDGE_COLOR, EDIT_MODES } from 'src/config-global';
 import { changeEdgeColor, setSelected } from 'src/redux/slices/mindMap';
 import { ColorPicker } from '.';
-import { Tooltip } from '@mui/material';
 
 export const EdgeEditing = memo(({ selected }) => {
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
 
   const onChangeComplete = ({ hex }) => {
-    dispath(
+    dispatch(
       setSelected({
         element: { ...selected[0].element, style: { stroke: hex } },
         type: EDIT_MODES.EDGE_EDITING,
       })
     );
-    dispath(
+    dispatch(
       changeEdgeColor({
         id: selected[0].element.id,
         stroke: hex,

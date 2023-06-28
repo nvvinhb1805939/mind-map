@@ -64,6 +64,16 @@ const mindMapSlice = createSlice({
 
       pushHistory(state);
     },
+    /** this action is used to update node props */
+    updateNodeProps: (state, action) => {
+      const { id, data } = action.payload;
+
+      state.mindMap.nodes = state.mindMap.nodes.map((node) =>
+        node.id === id ? { ...node, data } : node
+      );
+
+      pushHistory(state);
+    },
     /** this action is used to delete edges */
     deleteEdges: (state, action) => {
       state.mindMap.edges = action.payload;
@@ -165,6 +175,7 @@ export const {
   addEdge,
   updateEdge,
   changeEdgeColor,
+  updateNodeProps,
   deleteEdge,
   deleteEdges,
   deleteNode,
