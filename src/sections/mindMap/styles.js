@@ -1,7 +1,13 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useSettingsContext } from 'src/components/settings';
-import { DEFAULT_NODE_BORDER_COLOR, HANDLE_SIZE, MIND_MAP_CLASSES, TYPES } from 'src/config-global';
+import {
+  DEFAULT_EDGE_COLOR,
+  DEFAULT_NODE_BORDER_COLOR,
+  HANDLE_SIZE,
+  MIND_MAP_CLASSES,
+  TYPES,
+} from 'src/config-global';
 
 export const useStyles = () => {
   const { themeMode } = useSettingsContext();
@@ -39,10 +45,12 @@ export const useStyles = () => {
         },
 
       /** Style for Edges */
-      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__connection-path, & .react-flow__edge.updating .react-flow__edge-path, & .react-flow__edge:focus .react-flow__edge-path, & .react-flow__edge:focus-visible .react-flow__edge-path':
-        {
-          stroke: (theme) => `${theme.palette.primary.main} !important`,
-        },
+      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__connection-path': {
+        stroke: (theme) => `${theme.palette.primary.main} !important`,
+      },
+      '& .react-flow__edge.selected .react-flow__edge-path': {
+        stroke: `${selected?.[0]?.element?.style?.stroke || DEFAULT_EDGE_COLOR} !important`,
+      },
 
       /** Style for Handles */
       '& .react-flow__handle': {
