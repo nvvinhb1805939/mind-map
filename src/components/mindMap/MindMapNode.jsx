@@ -1,12 +1,15 @@
 import { Stack, Typography } from '@mui/material';
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { DEFAULT_NODE_BG_COLOR, MIND_MAP_CLASSES, NODE_SIZE } from 'src/config-global';
+import {
+  DEFAULT_NODE_BG_COLOR,
+  DEFAULT_NODE_BORDER_COLOR,
+  MIND_MAP_CLASSES,
+  NODE_SIZE,
+} from 'src/config-global';
 
 export const MindMapNode = memo((props) => {
   const { data } = props;
-
-  console.log(data?.styles);
 
   return (
     <Stack
@@ -19,7 +22,7 @@ export const MindMapNode = memo((props) => {
         height: NODE_SIZE.HEIGHT,
 
         bgcolor: DEFAULT_NODE_BG_COLOR,
-        border: (theme) => `2px solid ${theme.palette.text.primary}`,
+        border: `2px solid ${DEFAULT_NODE_BORDER_COLOR}`,
         borderRadius: 1,
 
         ...data?.styles,

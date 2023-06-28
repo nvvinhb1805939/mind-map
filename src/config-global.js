@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import { MindMapEdge, MindMapNode } from './components/mindMap';
 import { PATH_MINDMAP } from './routes/paths';
+import palette from './theme/palette';
 
 // API
 // ----------------------------------------------------------------------
@@ -163,3 +164,4 @@ export const INITIAL_MIND_MAP = {
 
 export const DEFAULT_EDGE_COLOR = '#b1b1b7';
 export const DEFAULT_NODE_BG_COLOR = '#fff';
+export const DEFAULT_NODE_BORDER_COLOR = '#424242';
