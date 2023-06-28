@@ -87,6 +87,11 @@ export const EDGE_TYPES = {
   [TYPES.MIND_MAP]: MindMapEdge,
 };
 
+export const MIND_MAP_CLASSES = {
+  NODE: `${TYPES.MIND_MAP}__node`,
+  EDGE: `${TYPES.MIND_MAP}__edge`,
+};
+
 export const DEFAULT_MAX_ZOOM = 2;
 export const DEFAULT_MIN_ZOOM = 0.5;
 
@@ -155,3 +160,5 @@ export const INITIAL_MIND_MAP = {
   edges: [],
   selected: [],
 };
+
+export const DEFAULT_EDGE_COLOR = '#b1b1b7';

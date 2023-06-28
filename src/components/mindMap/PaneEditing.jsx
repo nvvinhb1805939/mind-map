@@ -11,5 +11,7 @@ export const PaneEditing = (props) => {
 
   const onChangeComplete = ({ hex }) => dispath(changeBgColor(hex));
 
-  return <ColorPicker onChangeComplete={onChangeComplete} initialColor={bgcolor} />;
+  return (
+    <ColorPicker onChangeComplete={onChangeComplete} initialColor={bgcolor} tooltip="Màu nền" />
+  );
 };

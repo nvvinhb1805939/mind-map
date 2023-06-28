@@ -1,4 +1,4 @@
-import { Button, Popover } from '@mui/material';
+import { Button, Popover, Tooltip } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -10,6 +10,7 @@ export const BasePopover = (props) => {
     hasDispatch = false,
     children,
     id,
+    tooltip = '',
     close = false,
     variant = 'contained',
     size = 'large',
@@ -42,16 +43,18 @@ export const BasePopover = (props) => {
 
   return (
     <>
-      <Button
-        onClick={handleClick}
-        variant={variant}
-        size={size}
-        color={color}
-        startIcon={icon}
-        sx={{ fontSize: '1rem', fontWeight: 400, textTransform: 'unset', ...buttonStyles }}
-      >
-        {label}
-      </Button>
+      <Tooltip title={tooltip} disableInteractive>
+        <Button
+          onClick={handleClick}
+          variant={variant}
+          size={size}
+          color={color}
+          startIcon={icon}
+          sx={{ fontSize: '1rem', fontWeight: 400, textTransform: 'unset', ...buttonStyles }}
+        >
+          {label}
+        </Button>
+      </Tooltip>
       {open && (
         <Popover
           id={id}

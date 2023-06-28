@@ -5,7 +5,7 @@ import { useSettingsContext } from '../settings';
 import { BasePopover } from './BasePopover';
 
 export const ColorPicker = (props) => {
-  const { onChangeComplete, initialColor = '#fff' } = props;
+  const { onChangeComplete, initialColor = '#fff', tooltip = '' } = props;
 
   const { themeMode } = useSettingsContext();
 
@@ -22,6 +22,7 @@ export const ColorPicker = (props) => {
       <BasePopover
         id="color-pikcer"
         hasDispatch={true}
+        tooltip={tooltip}
         close={close}
         buttonStyles={{
           p: 0,

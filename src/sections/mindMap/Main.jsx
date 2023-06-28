@@ -4,6 +4,7 @@ import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import { DeleteContextMenu } from 'src/components/mindMap';
 import {
   DEFAULT_MAX_ZOOM,
+  EDGE_TYPES,
   EDIT_MODES,
   INITIAL_MIND_MAP,
   NODE_SIZE,
@@ -79,9 +80,7 @@ export const Main = (props) => {
         id: uuidv4(),
         source,
         target,
-        style: {
-          stroke: 'red',
-        },
+        type: TYPES.MIND_MAP,
       })
     ); // add new edge of source and target
 
@@ -118,9 +117,7 @@ export const Main = (props) => {
         id: uuidv4(),
         source: connectingNodeId.current,
         target: newNode.id,
-        style: {
-          stroke: 'red',
-        },
+        type: TYPES.MIND_MAP,
       })
     ); // add new edge
 
@@ -303,6 +300,7 @@ export const Main = (props) => {
           nodes={nodes}
           edges={edges}
           nodeTypes={NODE_TYPES}
+          edgeTypes={EDGE_TYPES}
           /*********** Node event handlers ***********/
           onNodesChange={onNodesChange}
           onNodesDelete={onNodesDelete}

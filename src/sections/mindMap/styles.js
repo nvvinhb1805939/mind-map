@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useSettingsContext } from 'src/components/settings';
-import { HANDLE_SIZE, TYPES } from 'src/config-global';
+import { HANDLE_SIZE, MIND_MAP_CLASSES, TYPES } from 'src/config-global';
 
 export const useStyles = () => {
   const { themeMode } = useSettingsContext();
@@ -31,7 +31,7 @@ export const useStyles = () => {
       },
 
       /** Style for Nodes */
-      [`& .react-flow__node.selected .${TYPES.MIND_MAP}, & .react-flow__node.dragging .${TYPES.MIND_MAP}`]:
+      [`& .react-flow__node.selected .${MIND_MAP_CLASSES.NODE}, & .react-flow__node.dragging .${MIND_MAP_CLASSES.NODE}`]:
         {
           borderColor: 'primary.main',
           boxShadow: (theme) =>
@@ -42,9 +42,12 @@ export const useStyles = () => {
         },
 
       /** Style for Edges */
-      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__edge.selected .react-flow__edge-path, & .react-flow__connection-path, & .react-flow__edge.updating .react-flow__edge-path, & .react-flow__edge:focus .react-flow__edge-path, & .react-flow__edge:focus-visible .react-flow__edge-path':
+      // '& .react-flow__edge-path':{
+      //   stroke
+      // },
+      '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__connection-path, & .react-flow__edge.updating .react-flow__edge-path, & .react-flow__edge:focus .react-flow__edge-path, & .react-flow__edge:focus-visible .react-flow__edge-path':
         {
-          stroke: (theme) => `${theme.palette.primary.main}`,
+          stroke: (theme) => `${theme.palette.primary.main} !important`,
         },
 
       /** Style for Handles */

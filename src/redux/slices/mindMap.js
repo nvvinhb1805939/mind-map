@@ -58,10 +58,11 @@ const mindMapSlice = createSlice({
     /** this action is used to change edge color */
     changeEdgeColor: (state, action) => {
       const { id, stroke } = action.payload;
-
       state.mindMap.edges = state.mindMap.edges.map((edge) =>
-        edge.id === id ? { ...edge, data: { stroke } } : edge
+        edge.id === id ? { ...edge, style: { stroke } } : edge
       );
+
+      pushHistory(state);
     },
     /** this action is used to delete edges */
     deleteEdges: (state, action) => {
