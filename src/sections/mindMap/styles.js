@@ -39,9 +39,11 @@ export const useStyles = () => {
       /** Style for Nodes */
       [`& .react-flow__node.selected .${MIND_MAP_CLASSES.NODE}, & .react-flow__node.dragging .${MIND_MAP_CLASSES.NODE}`]:
         {
-          boxShadow: `0 0 2px 2px ${
+          filter: `drop-shadow(0 0 20px ${
             selected?.[0]?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
-          }`,
+          }) drop-shadow(0 0 50px ${
+            selected?.[0]?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
+          })`,
         },
 
       /** Style for Edges */

@@ -1,4 +1,4 @@
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { TYPES } from 'src/config-global';
@@ -6,6 +6,7 @@ import { addNode } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { BasePopover } from './BasePopover';
+import { InputField } from './InputField';
 
 export const AddNodePopup = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,6 @@ export const AddNodePopup = () => {
   });
 
   const handleOnSubmit = (event) => {
-    setError('');
     event.preventDefault();
 
     if (label.trim().length === 0) {
@@ -64,18 +64,13 @@ export const AddNodePopup = () => {
           alignItems="flex-start"
           gap={2}
         >
-          <TextField
+          <InputField
             id="label"
             name="label"
             label="Nhập tên nút"
-            variant="outlined"
-            error={!!error}
-            helperText={error}
-            autoComplete="off"
-            autoFocus
-            fullWidth
-            size="small"
-            onChange={(event) => setLabel(event.target.value)}
+            parentError={error}
+            onChange={setLabel}
+            autoFocus={true}
           />
           <Button type="submit" variant="contained" sx={{ py: 1, px: 4 }}>
             Thêm
