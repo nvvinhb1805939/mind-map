@@ -33,7 +33,14 @@ const downloadImage = (dataUrl, type) => {
   a.click();
 };
 
-export const htmlToImage = (nodes, callback, type, size, backgroundColor = '#fff', style = {}) => {
+export const htmlToImage = (
+  nodes,
+  callback,
+  type,
+  size,
+  backgroundColor = '#ffffff',
+  style = {}
+) => {
   const nodesBounds = getRectOfNodes(nodes);
   const [x, y, zoom] = getTransformForBounds(
     nodesBounds,

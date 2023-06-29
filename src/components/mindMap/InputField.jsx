@@ -1,8 +1,6 @@
 import { Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-const WIDTH = 300;
-
 export const InputField = (props) => {
   const {
     id,
@@ -13,6 +11,7 @@ export const InputField = (props) => {
     onChange,
     autoFocus = false,
     floatHelperText = false,
+    width = '100%',
   } = props;
 
   const [value, setValue] = useState(defaultValue);
@@ -44,7 +43,7 @@ export const InputField = (props) => {
     <Box
       sx={{
         position: 'relative',
-        width: WIDTH,
+        width,
         ...(floatHelperText && {
           '& .MuiFormHelperText-root': {
             position: 'absolute',
@@ -65,7 +64,7 @@ export const InputField = (props) => {
               display: 'block',
               position: 'absolute',
               top: 0,
-              right: `calc((${WIDTH}px / 2) - (10px / 2))`,
+              right: `calc((${width}px / 2) - (10px / 2))`,
 
               width: 10,
               height: 10,

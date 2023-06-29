@@ -7,7 +7,7 @@ import { BasePopover } from './BasePopover';
 export const ColorPicker = (props) => {
   const {
     onChangeComplete,
-    initialColor = '#fff',
+    initialColor = '#ffffff',
     tooltip = '',
     icon = null,
     buttonStyles = {},
@@ -22,6 +22,20 @@ export const ColorPicker = (props) => {
   useEffect(() => {
     return () => setClose(false);
   });
+
+  useEffect(() => {
+    if (color.hex === initialColor) return;
+
+    const delayTimer = setTimeout(() => {
+      onChangeComplete(color);
+    }, 250);
+
+    return () => clearTimeout(delayTimer);
+  }, [color]);
+
+  const handleColorChange = (color) => {
+    setColor(color);
+  };
 
   return (
     <Box onClick={(event) => event.stopPropagation()}>
@@ -54,8 +68,7 @@ export const ColorPicker = (props) => {
             width={456}
             height={228}
             color={color}
-            onChange={setColor}
-            onChangeComplete={onChangeComplete}
+            onChange={handleColorChange}
             hideHSV
             dark={themeMode === 'dark'}
           />

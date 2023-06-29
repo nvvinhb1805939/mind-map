@@ -23,7 +23,6 @@ export const NodeEditing = memo(({ selected }) => {
       ...otherProps,
       styles: {
         ...selected[0].element.data.styles,
-        // ...(color && prop & { [prop]: color }),
         ...styleProps,
       },
     };
@@ -74,6 +73,7 @@ export const NodeEditing = memo(({ selected }) => {
         defaultValue={selected[0].element?.data?.label || ''}
         onChange={setNodeLabel}
         floatHelperText={true}
+        width={300}
       />
       <ColorPicker
         onChangeComplete={({ hex }) => onNodePropsChangeComplete({ color: hex })}
