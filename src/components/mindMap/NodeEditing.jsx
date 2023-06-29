@@ -1,7 +1,12 @@
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { DEFAULT_NODE_BG_COLOR, DEFAULT_NODE_BORDER_COLOR, EDIT_MODES } from 'src/config-global';
+import {
+  DEFAULT_NODE_BG_COLOR,
+  DEFAULT_NODE_BORDER_COLOR,
+  DEFAULT_TEXT_COLOR,
+  EDIT_MODES,
+} from 'src/config-global';
 import { setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
 import { ColorPicker } from '.';
 import { InputField } from './InputField';
@@ -40,7 +45,8 @@ export const NodeEditing = memo(({ selected }) => {
   };
 
   useEffect(() => {
-    if (nodeLabel.trim().length === 0) return;
+    if (nodeLabel.trim().length === 0 || nodeLabel.trim() === selected[0].element?.data?.label)
+      return;
 
     const delayTimer = setTimeout(() => {
       onNodePropsChangeComplete({}, { label: nodeLabel.trim() });
@@ -67,6 +73,15 @@ export const NodeEditing = memo(({ selected }) => {
         defaultValue={selected[0].element?.data?.label || ''}
         onChange={setNodeLabel}
         floatHelperText={true}
+      />
+      <ColorPicker
+        onChangeComplete={({ hex }) => onNodePropsChangeComplete({ color: hex })}
+        icon={
+          <Typography sx={{ color: 'background.paper', textShadow: '0 0 10px #000' }}>A</Typography>
+        }
+        initialColor={selected[0].element?.data?.styles?.color || DEFAULT_TEXT_COLOR}
+        tooltip="Màu chữ"
+        buttonStyles={{ '& .MuiButton-startIcon': { m: 0 } }}
       />
     </Stack>
   );

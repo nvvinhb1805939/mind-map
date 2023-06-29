@@ -5,7 +5,13 @@ import { useSettingsContext } from '../settings';
 import { BasePopover } from './BasePopover';
 
 export const ColorPicker = (props) => {
-  const { onChangeComplete, initialColor = '#fff', tooltip = '', icon = null } = props;
+  const {
+    onChangeComplete,
+    initialColor = '#fff',
+    tooltip = '',
+    icon = null,
+    buttonStyles = {},
+  } = props;
 
   const { themeMode } = useSettingsContext();
 
@@ -36,6 +42,8 @@ export const ColorPicker = (props) => {
           bgcolor: initialColor,
           borderRadius: 1,
           boxShadow: 11,
+
+          ...buttonStyles,
         }}
       >
         <Box
