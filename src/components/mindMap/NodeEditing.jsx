@@ -2,6 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
+  DEFAULT_HANDLE_COLOR,
   DEFAULT_NODE_BG_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   DEFAULT_TEXT_COLOR,
@@ -82,6 +83,16 @@ export const NodeEditing = memo(({ selected }) => {
         initialColor={selected[0].element?.data?.styles?.color || DEFAULT_TEXT_COLOR}
         tooltip="Màu chữ"
         buttonStyles={{ '& .MuiButton-startIcon': { m: 0 } }}
+      />
+      <ColorPicker
+        onChangeComplete={({ hex }) =>
+          onNodePropsChangeComplete({ '& .react-flow__handle': { bgcolor: hex } })
+        }
+        initialColor={
+          selected[0].element?.data?.styles?.['& .react-flow__handle']?.bgcolor ||
+          DEFAULT_HANDLE_COLOR
+        }
+        tooltip="Màu cổng"
       />
     </Stack>
   );

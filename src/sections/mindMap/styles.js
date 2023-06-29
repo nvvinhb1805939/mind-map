@@ -59,7 +59,6 @@ export const useStyles = () => {
         width: HANDLE_SIZE.WIDTH,
         height: HANDLE_SIZE.HEIGHT,
         borderRadius: 0.5,
-        bgcolor: 'primary.main',
       },
       '& .react-flow__handle-top': {
         top: -HANDLE_SIZE.HEIGHT / 2,

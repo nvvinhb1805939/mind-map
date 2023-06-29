@@ -2,6 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import {
+  DEFAULT_HANDLE_COLOR,
   DEFAULT_NODE_BG_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   MIND_MAP_CLASSES,
@@ -24,6 +25,10 @@ export const MindMapNode = memo((props) => {
         bgcolor: DEFAULT_NODE_BG_COLOR,
         border: `2px solid ${DEFAULT_NODE_BORDER_COLOR}`,
         borderRadius: 1,
+
+        '& .react-flow__handle': {
+          bgcolor: data?.styles?.['.react-flow__handle']?.bgcolor || DEFAULT_HANDLE_COLOR,
+        },
 
         ...data?.styles,
       }}

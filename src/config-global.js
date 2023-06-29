@@ -165,3 +165,4 @@ export const DEFAULT_EDGE_COLOR = '#b1b1b7';
 export const DEFAULT_TEXT_COLOR = '#212B36';
 export const DEFAULT_NODE_BG_COLOR = '#fff';
 export const DEFAULT_NODE_BORDER_COLOR = '#424242';
+export const DEFAULT_HANDLE_COLOR = 'primary.main';
