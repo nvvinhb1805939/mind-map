@@ -1,5 +1,5 @@
 // routes
-import { PATH_MINDMAP, PATH_PAGE } from '../../../routes/paths';
+import { PATH_MINDMAP } from '../../../routes/paths';
 // components
 import SvgColor from '../../../components/svg-color';
 

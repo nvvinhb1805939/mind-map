@@ -1,11 +1,15 @@
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
-import { HEADER } from 'src/config-global';
+import { useSelector } from 'react-redux';
+import { HEADER, STORAGE_KEYS, TYPES } from 'src/config-global';
 import { Header, Main } from 'src/sections/mindMap';
+import { saveDataToLocalStorage } from 'src/utils/mindMap';
 
 const PADDING = 4;
 
 const MindMapPage = (props) => {
+  const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
+
   /** disable default right click event of browser  */
   useEffect(() => {
     const handleContextmenu = (e) => {
@@ -16,6 +20,19 @@ const MindMapPage = (props) => {
 
     return () => document.removeEventListener('contextmenu', handleContextmenu);
   }, []);
+
+  useEffect(() => {
+    const onBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', onBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload);
+    };
+  }, [mindMap]);
 
   return (
     <>

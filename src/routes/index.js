@@ -126,7 +126,7 @@ import {
   UserProfilePage,
   VerifyCodePage,
 } from './elements';
-import { PATH_MINDMAP, PATH_PAGE } from './paths';
+import { PATH_MINDMAP } from './paths';
 
 // ----------------------------------------------------------------------
 
