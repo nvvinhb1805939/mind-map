@@ -6,6 +6,7 @@ import {
   DEFAULT_NODE_BORDER_COLOR,
   HANDLE_SIZE,
   MIND_MAP_CLASSES,
+  NODE_SIZE,
   TYPES,
 } from 'src/config-global';
 
@@ -19,8 +20,8 @@ export const useStyles = () => {
     () => ({
       /** style for react-flow wrapper */
       position: 'relative',
-      bgcolor,
       height: '100%',
+      bgcolor,
       borderRadius: 1,
 
       '&.selected': {
@@ -37,14 +38,17 @@ export const useStyles = () => {
       },
 
       /** Style for Nodes */
+      '& .react-flow__node': {
+        minWidth:NODE_SIZE.WIDTH,
+        height: 'max-content !important',
+      },
+
       [`& .react-flow__node.selected .${MIND_MAP_CLASSES.NODE}, & .react-flow__node.dragging .${MIND_MAP_CLASSES.NODE}`]:
-        {
-          filter: `drop-shadow(0 0 20px ${
-            selected?.[0]?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
-          }) drop-shadow(0 0 50px ${
-            selected?.[0]?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
+      {
+        filter: `drop-shadow(0 0 20px ${selected?.[0]?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
+          }) drop-shadow(0 0 50px ${selected?.[0]?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
           })`,
-        },
+      },
 
       /** Style for Edges */
       '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__connection-path': {

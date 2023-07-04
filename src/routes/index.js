@@ -256,9 +256,9 @@ export default function Router() {
     {
       path: PATH_MINDMAP.root,
       element: (
-        <AuthGuard>
+        // <AuthGuard>
           <DashboardLayout />
-        </AuthGuard>
+        // </AuthGuard>
       ),
       children: [
         { element: <MindMapPage />, index: true },

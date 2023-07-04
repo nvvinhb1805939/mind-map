@@ -1,6 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { memo } from 'react';
-import { Handle, Position } from 'reactflow';
+import { useDispatch } from 'react-redux';
+import { Handle, NodeResizer, Position } from 'reactflow';
 import {
   DEFAULT_HANDLE_COLOR,
   DEFAULT_NODE_BG_COLOR,
@@ -8,9 +9,12 @@ import {
   MIND_MAP_CLASSES,
   NODE_SIZE,
 } from 'src/config-global';
+import { pushStateToHistory } from 'src/redux/slices/mindMap';
 
 export const MindMapNode = memo((props) => {
-  const { data } = props;
+  const { data, selected } = props;
+
+  const dispatch = useDispatch();
 
   return (
     <Stack
@@ -19,8 +23,10 @@ export const MindMapNode = memo((props) => {
       justifyContent="center"
       sx={{
         p: 1.5,
-        width: NODE_SIZE.WIDTH,
-        height: NODE_SIZE.HEIGHT,
+        minWidth: NODE_SIZE.WIDTH,
+        minHeight: NODE_SIZE.HEIGHT,
+        width: '100%',
+        height: 'max-content',
 
         bgcolor: DEFAULT_NODE_BG_COLOR,
         border: `2px solid ${DEFAULT_NODE_BORDER_COLOR}`,
@@ -33,6 +39,9 @@ export const MindMapNode = memo((props) => {
         ...data?.styles,
       }}
     >
+      <NodeResizer color="#ff0071" isVisible={selected} minWidth={NODE_SIZE.WIDTH} minHeight={NODE_SIZE.HEIGHT} lineStyle={{ borderWidth: 1.25 }} onResizeEnd={
+        () => dispatch(pushStateToHistory())
+      }/>
       <Handle type="target" position={Position.Top} />
       {!!data?.label && (
         <Typography
