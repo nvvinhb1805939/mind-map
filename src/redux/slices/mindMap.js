@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from 'reactflow';
 import { EDIT_MODES } from 'src/config-global';
+import { v4 as uuidv4 } from 'uuid';
 
 export const initialState = {
   mindMap: {},
@@ -163,6 +164,33 @@ const mindMapSlice = createSlice({
     pushStateToHistory: (state) => {
       pushHistory(state);
     },
+    /** this action is used to insert node between two nodes */
+    insertNodeBetweenTwoEdges: (state, action) => {
+      const { edge, edge: { source, target }, node } = action.payload;
+
+      state.mindMap.edges = state.mindMap.edges.filter((e) => e.id !== edge.id); // delete edge
+
+      /** add node */
+      state.mindMap.nodes = state.mindMap.nodes.map((node) => ({ ...node, selected: false }));
+      state.mindMap.nodes.push({ ...node, selected: true });
+      state.mindMap.selected = [{ element: node, type: EDIT_MODES.NODE_EDITING }];
+
+      /** add two new edges */
+      const newEdge1 = {
+        id: uuidv4(),
+        source,
+        target: node.id
+      };
+      const newEdge2 = {
+        id: uuidv4(),
+        source: node.id,
+        target
+      };
+
+      state.mindMap.edges.push(newEdge1, newEdge2);
+
+      pushHistory(state);
+    }
   },
 });
 
@@ -184,6 +212,7 @@ export const {
   redo,
   setSelected,
   pushStateToHistory,
+  insertNodeBetweenTwoEdges
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

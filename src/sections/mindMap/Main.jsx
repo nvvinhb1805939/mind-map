@@ -1,7 +1,8 @@
 import { Box, ClickAwayListener } from '@mui/material';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import { DeleteContextMenu } from 'src/components/mindMap';
+import { InsertNodePopup } from 'src/components/mindMap/InsertNodePopup';
 import {
   DEFAULT_MAX_ZOOM,
   EDGE_TYPES,
@@ -45,6 +46,8 @@ export const Main = (props) => {
   const {
     mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+
+  const [edgeContext, setEdgeContext] = useState(null);
 
   const reactFlowWrapper = useRef(null); // access DOM
   const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to determine whether current event is onEdgeUpdate events or onConnect events ()
@@ -246,6 +249,19 @@ export const Main = (props) => {
 
     isEdgeClick.current = true;
   };
+  /** this function is used to open insert node popup */
+  const onEdgeContextMenu = (event, edge) => {
+    const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
+
+    setEdgeContext({
+      anchorEl: event.target.parentElement,
+      edge,
+      position: project({
+        x: event.clientX - left - NODE_SIZE.WIDTH * (getZoom() / DEFAULT_MAX_ZOOM), // responsive position relative to zoom
+        y: event.clientY - top,
+      }),
+    });
+  }
   /** this function is used to clear editing mode on selected edges deleted */
   const onEdgesDelete = () => {
     getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
@@ -294,6 +310,7 @@ export const Main = (props) => {
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <Box ref={reactFlowWrapper} sx={styles}>
+        {!!edgeContext?.anchorEl && <InsertNodePopup edgeContext={edgeContext} onClose={() => setEdgeContext(null)} />}
         {!!selected?.[0]?.anchorEl && <DeleteContextMenu />}
         <ReactFlow
           /*********** Basic props ***********/
@@ -317,6 +334,7 @@ export const Main = (props) => {
           onEdgeDoubleClick={onEdgeDoubleClick}
           onEdgeMouseEnter={onEdgeMouseEnter}
           onEdgeClick={onEdgeClick}
+          onEdgeContextMenu={onEdgeContextMenu}
           /*********** Connection event handlers ***********/
           onConnect={onConnect}
           onConnectStart={onConnectStart}

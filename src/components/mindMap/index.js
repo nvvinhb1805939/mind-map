@@ -1,4 +1,5 @@
 export * from './AddNodePopup';
+export * from './InsertNodePopup';
 export * from './DeleteContextMenu';
 export * from './DownloadContextMenu';
 export * from './MindMapNode';
