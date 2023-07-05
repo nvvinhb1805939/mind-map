@@ -1,11 +1,11 @@
 import { Box, Button, Popover, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { TYPES } from 'src/config-global';
+import { insertNodeBetweenTwoEdges } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { InputField } from './InputField';
-import { insertNodeBetweenTwoEdges } from 'src/redux/slices/mindMap';
 
 export const InsertNodePopup = (props) => {
   const { edgeContext, onClose } = props;
@@ -18,10 +18,6 @@ export const InsertNodePopup = (props) => {
 
   const [error, setError] = useState('');
   const [label, setLabel] = useState('');
-  const [rect, setRect] = useState(null);
-  console.log(rect);
-
-  const popupRef = useRef(null);
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
@@ -46,16 +42,8 @@ export const InsertNodePopup = (props) => {
     enqueueSnackbar('Thêm nút thành công!');
   };
 
-  useEffect(() => {
-    if(!open) return;
-
-    const rect = popupRef.current?.getBoundingClientRect();
-    setRect(rect)
-  }, [open]);
-
   return (
     <Popover
-      ref={popupRef}
       id='insert-node-popup'
       open={!!edgeContext.anchorEl}
       anchorEl={edgeContext.anchorEl}
