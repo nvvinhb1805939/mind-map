@@ -7,7 +7,6 @@ export const initialState = {
   mindMap: {},
   history: [],
   currentIndex: -1,
-  copied: null,
 };
 
 const pushHistory = (state) => {
@@ -196,10 +195,6 @@ const mindMapSlice = createSlice({
 
       pushHistory(state);
     },
-    /** this action is used to copy a node */
-    copyOneNode: (state, action) => {
-      state.copied = action.payload;
-    },
   },
 });
 
@@ -222,7 +217,6 @@ export const {
   setSelected,
   pushStateToHistory,
   insertNodeBetweenTwoEdges,
-  copyOneNode,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;
