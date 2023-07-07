@@ -261,7 +261,7 @@ export const Main = (props) => {
         y: event.clientY - top,
       }),
     });
-  }
+  };
   /** this function is used to clear editing mode on selected edges deleted */
   const onEdgesDelete = () => {
     getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
@@ -310,7 +310,9 @@ export const Main = (props) => {
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <Box ref={reactFlowWrapper} sx={styles}>
-        {!!edgeContext?.anchorEl && <InsertNodePopup edgeContext={edgeContext} onClose={() => setEdgeContext(null)} />}
+        {!!edgeContext?.anchorEl && (
+          <InsertNodePopup edgeContext={edgeContext} onClose={() => setEdgeContext(null)} />
+        )}
         {!!selected?.[0]?.anchorEl && <DeleteContextMenu />}
         <ReactFlow
           /*********** Basic props ***********/

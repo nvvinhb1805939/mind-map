@@ -7,6 +7,7 @@ export const initialState = {
   mindMap: {},
   history: [],
   currentIndex: -1,
+  copied: null,
 };
 
 const pushHistory = (state) => {
@@ -166,7 +167,11 @@ const mindMapSlice = createSlice({
     },
     /** this action is used to insert node between two nodes */
     insertNodeBetweenTwoEdges: (state, action) => {
-      const { edge, edge: { source, target }, node } = action.payload;
+      const {
+        edge,
+        edge: { source, target },
+        node,
+      } = action.payload;
 
       state.mindMap.edges = state.mindMap.edges.filter((e) => e.id !== edge.id); // delete edge
 
@@ -179,18 +184,22 @@ const mindMapSlice = createSlice({
       const newEdge1 = {
         id: uuidv4(),
         source,
-        target: node.id
+        target: node.id,
       };
       const newEdge2 = {
         id: uuidv4(),
         source: node.id,
-        target
+        target,
       };
 
       state.mindMap.edges.push(newEdge1, newEdge2);
 
       pushHistory(state);
-    }
+    },
+    /** this action is used to copy a node */
+    copyOneNode: (state, action) => {
+      state.copied = action.payload;
+    },
   },
 });
 
@@ -212,7 +221,8 @@ export const {
   redo,
   setSelected,
   pushStateToHistory,
-  insertNodeBetweenTwoEdges
+  insertNodeBetweenTwoEdges,
+  copyOneNode,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;
