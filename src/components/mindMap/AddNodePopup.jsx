@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { BasePopover } from './BasePopover';
 import { InputField } from './InputField';
 
+let quantityNewNode = 0;
+
 export const AddNodePopup = () => {
   const dispatch = useDispatch();
 
@@ -29,10 +31,12 @@ export const AddNodePopup = () => {
       return;
     }
 
+    const position = quantityNewNode <= 10 ? quantityNewNode++ * 10 : quantityNewNode * 10;
+
     const newNode = {
       id: uuidv4(),
       type: TYPES.MIND_MAP,
-      position: { x: 0, y: 0 },
+      position: { x: position, y: position },
       data: { label: label.trim() },
     };
 
