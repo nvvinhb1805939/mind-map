@@ -76,7 +76,9 @@ export const NodeEditing = memo(({ selected }) => {
         width={300}
       />
       <ColorPicker
-        onChangeComplete={({ hex }) => onNodePropsChangeComplete({ color: hex })}
+        onChangeComplete={({ hex }) =>
+          onNodePropsChangeComplete({ '& .MuiTypography-root': { color: hex } })
+        }
         icon={
           <Typography sx={{ color: 'background.paper', textShadow: '0 0 10px #000' }}>A</Typography>
         }

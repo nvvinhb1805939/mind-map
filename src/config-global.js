@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import { MindMapEdge, MindMapNode } from './components/mindMap';
 import { PATH_MINDMAP } from './routes/paths';
+import palette from './theme/palette';
 
 // API
 // ----------------------------------------------------------------------
