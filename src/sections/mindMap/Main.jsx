@@ -53,7 +53,7 @@ export const Main = (props) => {
   const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to determine whether current event is onEdgeUpdate events or onConnect events ()
   const isEdgeUpdated = useRef(true); // determine whether selected edge is updated or not
   const isNodesConnected = useRef(true); // determine whether source node is connected to target node or not
-  const connectingNodeId = useRef(null); // store id of source node
+  const connectingNodeId = useRef(null); // store data of source node
   const hasMovingEdge = useRef(false); // determine whether has moving edge or not
   const isPaneClick = useRef(true); // determine whether pane is clickable or not
   const hasOnlyPaneClicked = useRef(false); // determine whether is only pane clicked or not
@@ -62,7 +62,7 @@ export const Main = (props) => {
   /*********** Connections *********** /
 
   /** this function is used to handle on user implement connect from source to target */
-  const onConnectStart = (event, { nodeId }) => {
+  const onConnectStart = (event, { nodeId, handleType }) => {
     dispatch(setSelected(null)); // clear selected on start connect
 
     hasMovingEdge.current = true; // emit edge is moving
@@ -70,13 +70,19 @@ export const Main = (props) => {
     if (isOnEdgeUpdateEvents.current) return; // check if current event is onEdgeUpdate then do nothing
 
     isNodesConnected.current = false; // emit source has not connected target yet
-    connectingNodeId.current = nodeId; // store source node id
+    connectingNodeId.current = {
+      nodeId,
+      handleType,
+    }; // store source node id
   };
   /** this function is used to add edge when user complete connect from source to target */
   const onConnect = ({ source, target }) => {
     if (isOnEdgeUpdateEvents.current) return; // check if current event is onEdgeUpdate then do nothing
 
-    if (hasConnectBetweenTwoNode(edges, source, target)) return; // check if source node has connected already target node then do nothing
+    if (hasConnectBetweenTwoNode(edges, source, target)) {
+      isNodesConnected.current = true;
+      return;
+    } // check if source node has connected already target node then do nothing
 
     dispatch(
       addEdge({
@@ -109,7 +115,10 @@ export const Main = (props) => {
       type: TYPES.MIND_MAP,
       position: project({
         x: event.clientX - left - NODE_SIZE.WIDTH * (getZoom() / DEFAULT_MAX_ZOOM), // responsive position relative to zoom
-        y: event.clientY - top,
+        y:
+          connectingNodeId.current.handleType === 'target'
+            ? event.clientY - top - NODE_SIZE.HEIGHT * 2 * (getZoom() / DEFAULT_MAX_ZOOM)
+            : event.clientY - top,
       }),
       data: { label: `Nút ${++quantityNewNode}` },
     };
@@ -118,8 +127,9 @@ export const Main = (props) => {
     dispatch(
       addEdge({
         id: uuidv4(),
-        source: connectingNodeId.current,
-        target: newNode.id,
+        ...(connectingNodeId.current.handleType === 'source'
+          ? { source: connectingNodeId.current.nodeId, target: newNode.id }
+          : { source: newNode.id, target: connectingNodeId.current.nodeId }),
         type: TYPES.MIND_MAP,
       })
     ); // add new edge
