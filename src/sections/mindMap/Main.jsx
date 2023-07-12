@@ -178,7 +178,15 @@ export const Main = (props) => {
   };
   /** this function is used to push history on node stops drag */
   const onNodeDragStop = (event, node, nodes) => {
-    node.dragging && dispatch(pushStateToHistory());
+    if (!node.dragging) return;
+
+    dispatch(pushStateToHistory());
+    dispatch(
+      setSelected({
+        element: node,
+        type: EDIT_MODES.NODE_EDITING,
+      })
+    );
   };
   /** this function is used to clear node editing mode when selected nodes are deleted */
   const onNodesDelete = () => {
@@ -294,7 +302,7 @@ export const Main = (props) => {
 
   /*********** Side effects ***********/
 
-  /** Toggle pane selected  */
+  /** Toggle pane selected */
   useEffect(() => {
     getEditingMode(selected) === EDIT_MODES.PANE_EDITING
       ? reactFlowWrapper.current.classList.add('selected')
