@@ -257,13 +257,14 @@ export default function Router() {
       path: PATH_MINDMAP.root,
       element: (
         // <AuthGuard>
-          <DashboardLayout />
+        // <DashboardLayout />
+        <MindMapPage />
         // </AuthGuard>
       ),
-      children: [
-        { element: <MindMapPage />, index: true },
-        { path: PATH_MINDMAP.templates, element: <TemplatePage /> },
-      ],
+      // children: [
+      //   { element: <MindMapPage />, index: true },
+      //   { path: PATH_MINDMAP.templates, element: <TemplatePage /> },
+      // ],
     },
 
     // Main Routes

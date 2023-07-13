@@ -85,10 +85,10 @@ export default function SettingsDrawer() {
           sx={{ py: 2, pr: 1, pl: SPACING }}
         >
           <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
-            Settings
+            Thiết lập
           </Typography>
 
-          <Tooltip title="Reset">
+          <Tooltip title="Làm lại">
             <Box sx={{ position: 'relative' }}>
               {notDefault && <BadgeDot />}
               <IconButton onClick={onResetSetting}>
@@ -105,34 +105,38 @@ export default function SettingsDrawer() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Scrollbar sx={{ p: SPACING, pb: 0 }}>
-          <Block title="Mode">
+          <Block title="Chế độ tối">
             <ModeOptions />
           </Block>
 
-          <Block title="Contrast">
+          {/* <Block title="Contrast">
             <ContrastOptions />
-          </Block>
+          </Block> */}
 
-          <Block title="Direction">
+          {/* <Block title="Direction">
             <DirectionOptions />
-          </Block>
+          </Block> */}
 
-          <Block title="Layout">
+          {/* <Block title="Layout">
             <LayoutOptions />
-          </Block>
+          </Block> */}
 
-          <Block title="Stretch" tooltip="Only available at large resolutions > 1600px (xl)">
+          {/* <Block title="Stretch" tooltip="Only available at large resolutions > 1600px (xl)">
             <StretchOptions />
+          </Block> */}
+
+          <Block title="Màu sắc">
+            <ColorPresetsOptions />
           </Block>
 
-          <Block title="Presets">
-            <ColorPresetsOptions />
+          <Block>
+            <FullScreenOptions />
           </Block>
         </Scrollbar>
 
-        <Box sx={{ p: SPACING, pt: 0 }}>
+        {/* <Box sx={{ p: SPACING, pt: 0 }}>
           <FullScreenOptions />
-        </Box>
+        </Box> */}
       </Drawer>
     </>
   );
