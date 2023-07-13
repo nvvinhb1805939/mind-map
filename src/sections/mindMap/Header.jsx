@@ -1,5 +1,10 @@
-import { AppBar, Box, Toolbar } from '@mui/material';
-import { AddNodePopup, DownloadContextMenu, EditModeRendering } from 'src/components/mindMap';
+import { AppBar, Box, Stack, Toolbar } from '@mui/material';
+import {
+  AddNodePopup,
+  DownloadContextMenu,
+  EditModeRendering,
+  ImportBox,
+} from 'src/components/mindMap';
 
 export const Header = () => {
   return (
@@ -14,9 +19,10 @@ export const Header = () => {
         <Toolbar sx={{ justifyContent: 'flex-start', gap: 4 }}>
           <AddNodePopup />
           <EditModeRendering />
-          <Box sx={{ ml: 'auto' }}>
+          <Stack direction="row" gap={1} sx={{ ml: 'auto' }}>
+            <ImportBox />
             <DownloadContextMenu />
-          </Box>
+          </Stack>
         </Toolbar>
       </AppBar>
     </Box>
