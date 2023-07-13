@@ -22,7 +22,7 @@ export const NodeContextMenu = (props) => {
     mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
-  const [insertType, setInsertType] = useState(null);
+  const [insertNode, setInsertNode] = useState(null);
 
   const closeMenuContext = () => dispatch(setSelected(null));
 
@@ -52,15 +52,15 @@ export const NodeContextMenu = (props) => {
   };
 
   const addIncomer = (selectedNode, type) => {
-    setInsertType(type);
-
     const incomers = getIncomers(selectedNode, nodes, edges);
+    const connectedEdges = getConnectedEdges([selectedNode], edges);
+    setInsertNode({ type, incomers, connectedEdges });
   };
 
   const addOutgoer = (selectedNode, type) => {
-    setInsertType(type);
-
     const outgoers = getOutgoers(selectedNode, nodes, edges);
+    const connectedEdges = getConnectedEdges([selectedNode], edges);
+    setInsertNode({ type, outgoers, connectedEdges });
   };
 
   const deleteOnlyNode = (node) => {
@@ -111,8 +111,12 @@ export const NodeContextMenu = (props) => {
     dispatch(deleteEdges(remainingEdges)); // apply changes
   };
 
-  return !!insertType ? (
-    <InsertIncomerAndOutgoerPopup nodeContext={nodeContext} type={insertType} onClose={onClose} />
+  return !!insertNode?.type ? (
+    <InsertIncomerAndOutgoerPopup
+      nodeContext={nodeContext}
+      insertNode={insertNode}
+      onClose={onClose}
+    />
   ) : (
     <Menu
       id="delete-context-menu"

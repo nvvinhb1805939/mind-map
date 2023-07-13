@@ -107,13 +107,13 @@ export const NODE_CONTEXT_MENU_TYPES = {
 export const NODE_CONTEXT_MENU = [
   {
     id: 1,
-    title: 'Thêm nút trước',
+    title: 'Chèn nút trước',
     type: NODE_CONTEXT_MENU_TYPES.ADD_INCOMER,
     icon: <NorthIcon />,
   },
   {
     id: 2,
-    title: 'Thêm nút sau',
+    title: 'Chèn nút sau',
     type: NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER,
     icon: <SouthIcon />,
   },

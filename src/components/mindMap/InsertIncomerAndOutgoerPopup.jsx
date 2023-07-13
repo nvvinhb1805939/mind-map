@@ -1,14 +1,14 @@
 import { Box, Button, Popover, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
-import { TYPES } from 'src/config-global';
-import { insertNodeBetweenTwoEdges } from 'src/redux/slices/mindMap';
+import { NODE_CONTEXT_MENU_TYPES, NODE_SIZE, TYPES } from 'src/config-global';
+import { addEdge, addNode, updateIncomerEdges } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { InputField } from './InputField';
 
 export const InsertIncomerAndOutgoerPopup = (props) => {
-  const { nodeContext, onClose, type } = props;
+  const { nodeContext, insertNode, onClose } = props;
 
   const dispatch = useDispatch();
 
@@ -16,6 +16,57 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
 
   const [error, setError] = useState('');
   const [label, setLabel] = useState('');
+
+  const insertBeforeNode = (insertedNode, selectedNode, incomers, connectedEdges) => {
+    dispatch(addNode(insertedNode));
+
+    const newEdge = {
+      id: uuidv4(),
+      source: insertedNode.id,
+      target: selectedNode.id,
+    };
+
+    dispatch(addEdge(newEdge));
+
+    if (incomers.length === 0) return;
+
+    const incomerIds = incomers.map((incomer) => incomer.id);
+
+    const newEdges = connectedEdges.map((connectedEdge) =>
+      incomerIds.includes(connectedEdge.source)
+        ? { ...connectedEdge, target: newEdge.source }
+        : connectedEdge
+    );
+
+    console.log(connectedEdges);
+
+    dispatch(updateIncomerEdges(newEdges));
+  };
+
+  const insertAfterNode = (insertedNode, selectedNode, outgoers, connectedEdges) => {};
+
+  const insertNodeMode = (insertedNode, type) => {
+    switch (type) {
+      case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
+        insertBeforeNode(
+          insertedNode,
+          nodeContext.node,
+          insertNode.incomers,
+          insertNode.connectedEdges
+        );
+        break;
+      case NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER:
+        insertAfterNode(
+          insertedNode,
+          nodeContext.node,
+          insertNode.outgoers,
+          insertNode.connectedEdges
+        );
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
@@ -28,11 +79,14 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
     const newNode = {
       id: uuidv4(),
       type: TYPES.MIND_MAP,
-      position: nodeContext.position,
+      position: {
+        x: nodeContext.node.position.x,
+        y: nodeContext.node.position.y - NODE_SIZE.HEIGHT * 2,
+      },
       data: { label: label.trim() },
     };
 
-    dispatch(insertNodeBetweenTwoEdges({ edge: nodeContext.edge, node: newNode }));
+    insertNodeMode(newNode, insertNode.type);
 
     onClose(); // close add node form
     setLabel(''); // clear form data
@@ -42,7 +96,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
 
   return (
     <Popover
-      id="insert-node-popup"
+      id="insert-incomer-and-outgoer-popup"
       open={!!nodeContext.anchorEl}
       anchorEl={nodeContext.anchorEl}
       onClose={onClose}

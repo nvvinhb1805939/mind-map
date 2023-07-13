@@ -56,6 +56,13 @@ const mindMapSlice = createSlice({
       state.mindMap.edges = onUpdateEdge(oldEdge, newConnection, state.mindMap.edges);
       pushHistory(state);
     },
+    updateIncomerEdges: (state, action) => {
+      state.mindMap.edges = state.mindMap.edges.map((edge) => {
+        const newIndex = action.payload.findIndex((newEdge) => newEdge.id === edge.id);
+
+        return newIndex !== -1 ? action.payload[newIndex] : edge;
+      });
+    },
     /** this action is used to change edge color */
     changeEdgeColor: (state, action) => {
       const { id, stroke } = action.payload;
@@ -205,6 +212,7 @@ export const {
   elevateEdge,
   addNode,
   addEdge,
+  updateIncomerEdges,
   updateEdge,
   changeEdgeColor,
   updateNodeProps,

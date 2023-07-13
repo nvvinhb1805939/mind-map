@@ -167,15 +167,9 @@ export const Main = (props) => {
       })
     );
 
-    const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
-
     setNodeContext({
       anchorEl: event.target,
       node: selectedNode,
-      position: project({
-        x: event.clientX - left - NODE_SIZE.WIDTH * (getZoom() / DEFAULT_MAX_ZOOM), // responsive position relative to zoom
-        y: event.clientY - top,
-      }),
     });
   };
   /** this function is used to switch to node editing mode */
