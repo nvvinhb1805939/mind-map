@@ -38,12 +38,32 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
         : connectedEdge
     );
 
-    console.log(connectedEdges);
-
     dispatch(updateIncomerEdges(newEdges));
   };
 
-  const insertAfterNode = (insertedNode, selectedNode, outgoers, connectedEdges) => {};
+  const insertAfterNode = (insertedNode, selectedNode, outgoers, connectedEdges) => {
+    dispatch(addNode(insertedNode));
+
+    const newEdge = {
+      id: uuidv4(),
+      source: selectedNode.id,
+      target: insertedNode.id,
+    };
+
+    dispatch(addEdge(newEdge));
+
+    if (outgoers.length === 0) return;
+
+    const outgoerIds = outgoers.map((outgoer) => outgoer.id);
+
+    const newEdges = connectedEdges.map((connectedEdge) =>
+      outgoerIds.includes(connectedEdge.target)
+        ? { ...connectedEdge, source: newEdge.target }
+        : connectedEdge
+    );
+
+    dispatch(updateIncomerEdges(newEdges));
+  };
 
   const insertNodeMode = (insertedNode, type) => {
     switch (type) {
@@ -81,7 +101,10 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
       type: TYPES.MIND_MAP,
       position: {
         x: nodeContext.node.position.x,
-        y: nodeContext.node.position.y - NODE_SIZE.HEIGHT * 2,
+        y:
+          insertNode.type === NODE_CONTEXT_MENU_TYPES.ADD_INCOMER
+            ? nodeContext.node.position.y - NODE_SIZE.HEIGHT * 2
+            : nodeContext.node.position.y + NODE_SIZE.HEIGHT * 2,
       },
       data: { label: label.trim() },
     };
