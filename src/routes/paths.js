@@ -37,7 +37,6 @@ export const PATH_PAGE = {
 
 export const PATH_MINDMAP = {
   root: ROOTS_MINDMAP,
-  templates: path(ROOTS_MINDMAP, '/templates'),
 };
 
 export const PATH_DASHBOARD = {

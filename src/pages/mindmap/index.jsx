@@ -1,9 +1,8 @@
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { HEADER, STORAGE_KEYS, TYPES } from 'src/config-global';
+import { HEADER, TYPES } from 'src/config-global';
 import { Header, Main } from 'src/sections/mindMap';
-import { saveDataToLocalStorage } from 'src/utils/mindMap';
 
 const PADDING = 4;
 

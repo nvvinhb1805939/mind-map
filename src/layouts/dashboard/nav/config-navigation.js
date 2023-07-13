@@ -39,10 +39,7 @@ const navConfig = [
   // Mind Map
   {
     subheader: 'Sơ đồ tư duy',
-    items: [
-      { title: 'Thiết kế', path: PATH_MINDMAP.root, icon: ICONS.mindMap },
-      { title: 'Mẫu', path: PATH_MINDMAP.templates, icon: ICONS.template },
-    ],
+    items: [{ title: 'Thiết kế', path: PATH_MINDMAP.root, icon: ICONS.mindMap }],
   },
 
   // GENERAL
