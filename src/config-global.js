@@ -4,10 +4,11 @@ import {
   BrokenImageOutlined as BrokenImageOutlinedIcon,
   ClearOutlined as ClearOutlinedIcon,
   RemoveOutlined as RemoveOutlinedIcon,
+  North as NorthIcon,
+  South as SouthIcon,
 } from '@mui/icons-material';
 import { MindMapEdge, MindMapNode } from './components/mindMap';
 import { PATH_MINDMAP } from './routes/paths';
-import palette from './theme/palette';
 
 // API
 // ----------------------------------------------------------------------
@@ -96,22 +97,36 @@ export const MIND_MAP_CLASSES = {
 export const DEFAULT_MAX_ZOOM = 2;
 export const DEFAULT_MIN_ZOOM = 0.5;
 
-export const DELETE_CONTEXT_MENU_TYPES = {
+export const NODE_CONTEXT_MENU_TYPES = {
+  ADD_INCOMER: 'add-incomer',
+  ADD_OUTGOER: 'add-outgoer',
   CLEAR_ALL: 'clear-all',
   ONLY_NODE: 'only-node',
 };
 
-export const DELETE_CONTEXT_MENU = [
+export const NODE_CONTEXT_MENU = [
   {
     id: 1,
-    title: 'Chỉ xóa nút',
-    type: DELETE_CONTEXT_MENU_TYPES.ONLY_NODE,
-    icon: <RemoveOutlinedIcon />,
+    title: 'Thêm nút trước',
+    type: NODE_CONTEXT_MENU_TYPES.ADD_INCOMER,
+    icon: <NorthIcon />,
   },
   {
     id: 2,
+    title: 'Thêm nút sau',
+    type: NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER,
+    icon: <SouthIcon />,
+  },
+  {
+    id: 3,
+    title: 'Chỉ xóa nút',
+    type: NODE_CONTEXT_MENU_TYPES.ONLY_NODE,
+    icon: <RemoveOutlinedIcon />,
+  },
+  {
+    id: 4,
     title: 'Xóa nút và các liên kết',
-    type: DELETE_CONTEXT_MENU_TYPES.CLEAR_ALL,
+    type: NODE_CONTEXT_MENU_TYPES.CLEAR_ALL,
     icon: <ClearOutlinedIcon />,
   },
 ];

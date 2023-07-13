@@ -1,7 +1,7 @@
 import { Box, ClickAwayListener } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
-import { DeleteContextMenu } from 'src/components/mindMap';
+import { NodeContextMenu } from 'src/components/mindMap';
 import { InsertNodePopup } from 'src/components/mindMap/InsertNodePopup';
 import {
   DEFAULT_MAX_ZOOM,
@@ -48,6 +48,7 @@ export const Main = (props) => {
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const [edgeContext, setEdgeContext] = useState(null);
+  const [nodeContext, setNodeContext] = useState(null);
 
   const reactFlowWrapper = useRef(null); // access DOM
   const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to determine whether current event is onEdgeUpdate events or onConnect events ()
@@ -165,6 +166,17 @@ export const Main = (props) => {
         anchorEl: event.target,
       })
     );
+
+    const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
+
+    setNodeContext({
+      anchorEl: event.target,
+      node: selectedNode,
+      position: project({
+        x: event.clientX - left - NODE_SIZE.WIDTH * (getZoom() / DEFAULT_MAX_ZOOM), // responsive position relative to zoom
+        y: event.clientY - top,
+      }),
+    });
   };
   /** this function is used to switch to node editing mode */
   const onNodeClick = (event, node) => {
@@ -331,7 +343,9 @@ export const Main = (props) => {
         {!!edgeContext?.anchorEl && (
           <InsertNodePopup edgeContext={edgeContext} onClose={() => setEdgeContext(null)} />
         )}
-        {!!selected?.[0]?.anchorEl && <DeleteContextMenu />}
+        {!!nodeContext?.anchorEl && (
+          <NodeContextMenu nodeContext={nodeContext} onClose={() => setNodeContext(null)} />
+        )}
         <ReactFlow
           /*********** Basic props ***********/
           nodes={nodes}

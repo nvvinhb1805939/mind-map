@@ -1,22 +1,28 @@
 import { Menu, MenuItem, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getConnectedEdges, getIncomers, getOutgoers } from 'reactflow';
+import { getConnectedEdges, getIncomers, getOutgoers, useReactFlow } from 'reactflow';
 import {
-  DELETE_CONTEXT_MENU,
-  DELETE_CONTEXT_MENU_TYPES,
+  NODE_CONTEXT_MENU_TYPES,
   EDIT_MODES,
+  NODE_CONTEXT_MENU,
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
 import { deleteEdges, deleteNode, setSelected } from 'src/redux/slices/mindMap';
 import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
+import { InsertIncomerAndOutgoerPopup } from '.';
 
-export const DeleteContextMenu = (props) => {
+export const NodeContextMenu = (props) => {
+  const { nodeContext, onClose } = props;
+
   const dispatch = useDispatch();
   const {
     mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+
+  const [insertType, setInsertType] = useState(null);
 
   const closeMenuContext = () => dispatch(setSelected(null));
 
@@ -24,12 +30,18 @@ export const DeleteContextMenu = (props) => {
     closeMenuContext();
   };
 
-  const onDeleteClick = (type) => {
+  const onContextItemClick = (type) => {
     getEditingMode(selected) === EDIT_MODES.NODE_EDITING && dispatch(setSelected(null)); // clear node mode
 
     switch (type) {
-      case DELETE_CONTEXT_MENU_TYPES.ONLY_NODE:
+      case NODE_CONTEXT_MENU_TYPES.ONLY_NODE:
         deleteOnlyNode(selected[0].element);
+        break;
+      case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
+        addIncomer(selected[0].element, type);
+        break;
+      case NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER:
+        addOutgoer(selected[0].element, type);
         break;
       default:
         clearNodeAndConnectedEdges(selected[0].element);
@@ -37,6 +49,18 @@ export const DeleteContextMenu = (props) => {
     }
 
     closeMenuContext();
+  };
+
+  const addIncomer = (selectedNode, type) => {
+    setInsertType(type);
+
+    const incomers = getIncomers(selectedNode, nodes, edges);
+  };
+
+  const addOutgoer = (selectedNode, type) => {
+    setInsertType(type);
+
+    const outgoers = getOutgoers(selectedNode, nodes, edges);
   };
 
   const deleteOnlyNode = (node) => {
@@ -87,11 +111,13 @@ export const DeleteContextMenu = (props) => {
     dispatch(deleteEdges(remainingEdges)); // apply changes
   };
 
-  return (
+  return !!insertType ? (
+    <InsertIncomerAndOutgoerPopup nodeContext={nodeContext} type={insertType} onClose={onClose} />
+  ) : (
     <Menu
       id="delete-context-menu"
-      open={!!selected[0].anchorEl}
-      anchorEl={selected[0].anchorEl}
+      open={!!selected?.[0]?.anchorEl}
+      anchorEl={selected?.[0]?.anchorEl}
       onClose={handleClose}
       transformOrigin={{
         vertical: 'top',
@@ -108,8 +134,8 @@ export const DeleteContextMenu = (props) => {
         },
       }}
     >
-      {DELETE_CONTEXT_MENU.map((item) => (
-        <MenuItem key={item.id} onClick={() => onDeleteClick(item.type)} sx={{ gap: 2 }}>
+      {NODE_CONTEXT_MENU.map((item) => (
+        <MenuItem key={item.id} onClick={() => onContextItemClick(item.type)} sx={{ gap: 2 }}>
           {item.icon}
           <Typography>{item.title}</Typography>
         </MenuItem>

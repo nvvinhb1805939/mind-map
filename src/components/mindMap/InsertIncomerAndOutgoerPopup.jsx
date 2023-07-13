@@ -7,8 +7,8 @@ import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { InputField } from './InputField';
 
-export const InsertNodePopup = (props) => {
-  const { edgeContext, onClose } = props;
+export const InsertIncomerAndOutgoerPopup = (props) => {
+  const { nodeContext, onClose, type } = props;
 
   const dispatch = useDispatch();
 
@@ -28,11 +28,11 @@ export const InsertNodePopup = (props) => {
     const newNode = {
       id: uuidv4(),
       type: TYPES.MIND_MAP,
-      position: edgeContext.position,
+      position: nodeContext.position,
       data: { label: label.trim() },
     };
 
-    dispatch(insertNodeBetweenTwoEdges({ edge: edgeContext.edge, node: newNode }));
+    dispatch(insertNodeBetweenTwoEdges({ edge: nodeContext.edge, node: newNode }));
 
     onClose(); // close add node form
     setLabel(''); // clear form data
@@ -43,8 +43,8 @@ export const InsertNodePopup = (props) => {
   return (
     <Popover
       id="insert-node-popup"
-      open={!!edgeContext.anchorEl}
-      anchorEl={edgeContext.anchorEl}
+      open={!!nodeContext.anchorEl}
+      anchorEl={nodeContext.anchorEl}
       onClose={onClose}
       anchorOrigin={{
         horizontal: 'center',
