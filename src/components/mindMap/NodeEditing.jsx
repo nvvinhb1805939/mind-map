@@ -1,12 +1,13 @@
 import { Stack, Typography } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   DEFAULT_HANDLE_COLOR,
   DEFAULT_NODE_BG_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   DEFAULT_TEXT_COLOR,
   EDIT_MODES,
+  TYPES,
 } from 'src/config-global';
 import { setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
 import { ColorPicker } from '.';
@@ -79,12 +80,21 @@ export const NodeEditing = memo(({ selected }) => {
         onChangeComplete={({ hex }) =>
           onNodePropsChangeComplete({ '& .MuiTypography-root': { color: hex } })
         }
-        icon={
-          <Typography sx={{ color: 'background.paper', textShadow: '0 0 10px #000' }}>A</Typography>
-        }
+        icon={<Typography>A</Typography>}
         initialColor={selected[0].element?.data?.styles?.color || DEFAULT_TEXT_COLOR}
         tooltip="Màu chữ"
-        buttonStyles={{ '& .MuiButton-startIcon': { m: 0 } }}
+        buttonStyles={{
+          bgcolor: DEFAULT_NODE_BG_COLOR,
+          color: DEFAULT_TEXT_COLOR,
+
+          '& .MuiButton-startIcon': { m: 0 },
+
+          ...selected[0].element?.data?.styles,
+
+          '&:hover': {
+            ...selected[0].element?.data?.styles,
+          },
+        }}
       />
       <ColorPicker
         onChangeComplete={({ hex }) =>
