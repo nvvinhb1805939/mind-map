@@ -4,6 +4,7 @@ import {
   ClearToolbarButton,
   DuplicateToolbarButton,
   RedoToolbarButton,
+  ResetToolbarButton,
   RestoreToolbarButton,
   SaveToolbarButton,
   UndoToolbarButton,
@@ -32,6 +33,7 @@ export const FlowToolbar = (props) => {
         <RestoreToolbarButton />
         <UndoToolbarButton />
         <RedoToolbarButton />
+        <ResetToolbarButton />
         <ClearToolbarButton />
       </Panel>
     </Box>

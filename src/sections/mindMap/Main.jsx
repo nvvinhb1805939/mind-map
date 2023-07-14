@@ -30,6 +30,7 @@ import {
   getDataFromLocalStorage,
   getEditingMode,
   hasConnectBetweenTwoNode,
+  initMindMap,
 } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { FlowToolbar } from './FlowToolbar';
@@ -334,8 +335,7 @@ export const Main = (props) => {
 
   /** Init mind map */
   useEffect(() => {
-    const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP); // get mind map from localStorage
-    mindMap ? dispatch(renewMindMap(mindMap)) : dispatch(renewMindMap(INITIAL_MIND_MAP)); // if browser has saved mind map in localStorage then init them otherwise init the inital mind map
+    initMindMap();
   }, [dispatch]);
 
   return (

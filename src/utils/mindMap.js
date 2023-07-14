@@ -5,9 +5,13 @@ import {
   DEFAULT_MIN_ZOOM,
   DOWNLOAD_CONTEXT_MENU_TYPES,
   DOWNLOAD_FILE_NAME,
+  INITIAL_MIND_MAP,
   MIND_MAP_SELECTOR,
+  STORAGE_KEYS,
   TYPES,
 } from 'src/config-global';
+import { renewMindMap } from 'src/redux/slices/mindMap';
+import { dispatch } from 'src/redux/store';
 
 export const hasConnectBetweenTwoNode = (edges, node1, node2) =>
   node1 === node2 /* check wheater if source and target are same node or not */ ||
@@ -94,3 +98,8 @@ export const clearDataFromLocalStorage = (storageKey) => {
 };
 
 export const getDataFromLocalStorage = (storageKey) => JSON.parse(localStorage.getItem(storageKey));
+
+export const initMindMap = () => {
+  const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP); // get mind map from localStorage
+  mindMap ? dispatch(renewMindMap(mindMap)) : dispatch(renewMindMap(INITIAL_MIND_MAP)); // if browser has saved mind map in localStorage then init them otherwise init the inital mind map
+};

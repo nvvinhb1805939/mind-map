@@ -14,3 +14,4 @@ export * from './RedoToolbarButton';
 export * from './RestoreToolbarButton';
 export * from './SaveToolbarButton';
 export * from './UndoToolbarButton';
+export * from './ResetToolbarButton';

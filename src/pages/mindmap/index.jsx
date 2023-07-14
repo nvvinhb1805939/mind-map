@@ -1,13 +1,16 @@
 import { Box } from '@mui/material';
+import { isEqual } from 'lodash';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { HEADER, TYPES } from 'src/config-global';
+import { HEADER, INITIAL_MIND_MAP, STORAGE_KEYS, TYPES } from 'src/config-global';
 import { Header, Main } from 'src/sections/mindMap';
+import { getDataFromLocalStorage } from 'src/utils/mindMap';
 
 const PADDING = 4;
 
 const MindMapPage = (props) => {
-  const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
+  // const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
+  // const savedData = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
 
   /** disable default right click event of browser  */
   useEffect(() => {
@@ -20,18 +23,26 @@ const MindMapPage = (props) => {
     return () => document.removeEventListener('contextmenu', handleContextmenu);
   }, []);
 
-  useEffect(() => {
-    const onBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = '';
-    };
+  // useEffect(() => {
+  //   console.log(savedData, mindMap, isEqual(savedData, mindMap));
 
-    window.addEventListener('beforeunload', onBeforeUnload);
+  //   const isNotChange = savedData
+  //     ? isEqual(savedData, mindMap)
+  //     : isEqual(INITIAL_MIND_MAP, mindMap);
 
-    return () => {
-      window.removeEventListener('beforeunload', onBeforeUnload);
-    };
-  }, [mindMap]);
+  //   if (isNotChange) return;
+
+  //   const onBeforeUnload = (event) => {
+  //     event.preventDefault();
+  //     event.returnValue = '';
+  //   };
+
+  //   window.addEventListener('beforeunload', onBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener('beforeunload', onBeforeUnload);
+  //   };
+  // }, [mindMap, savedData]);
 
   return (
     <>

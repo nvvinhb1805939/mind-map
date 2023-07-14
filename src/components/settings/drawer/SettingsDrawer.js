@@ -88,7 +88,7 @@ export default function SettingsDrawer() {
             Thiết lập
           </Typography>
 
-          <Tooltip title="Làm lại">
+          <Tooltip title="Đặt lại">
             <Box sx={{ position: 'relative' }}>
               {notDefault && <BadgeDot />}
               <IconButton onClick={onResetSetting}>

@@ -9,14 +9,11 @@ import {
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { STORAGE_KEYS } from 'src/config-global';
-import { renewMindMap } from 'src/redux/slices/mindMap';
-import { getDataFromLocalStorage } from 'src/utils/mindMap';
+import { getDataFromLocalStorage, initMindMap } from 'src/utils/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
 
 export const RestoreToolbarButton = () => {
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -33,7 +30,7 @@ export const RestoreToolbarButton = () => {
     const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
 
     if (mindMap) {
-      dispatch(renewMindMap(mindMap));
+      initMindMap();
       enqueueSnackbar('Khôi phục dữ liệu thành công!');
     } else {
       enqueueSnackbar('Không tìm thấy dữ liệu đã lưu!', {
