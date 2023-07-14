@@ -242,6 +242,7 @@ export const Main = (props) => {
     if (!isEdgeUpdated.current) {
       dispatch(deleteEdge(edge));
       getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
+      dispatch(pushStateToHistory());
     }
 
     isEdgeUpdated.current = true;
@@ -252,6 +253,7 @@ export const Main = (props) => {
   const onEdgeDoubleClick = (event, edge) => {
     dispatch(deleteEdge(edge));
     getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
+    dispatch(pushStateToHistory());
   };
   /** this function is used to elevate zIndex of selectedEdge */
   const onEdgeMouseEnter = (event, selectedEdge) => {

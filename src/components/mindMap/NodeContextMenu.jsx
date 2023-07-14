@@ -68,7 +68,10 @@ export const NodeContextMenu = (props) => {
 
     const connectedEdges = getConnectedEdges([node], edges); // get all connected edges of node
 
-    if (connectedEdges.length <= 0) return; // in this case, node has no connected edges so only delete node
+    if (connectedEdges.length <= 0) {
+      dispatch(pushStateToHistory()); // push to history
+      return;
+    } // in this case, node has no connected edges so only delete node
 
     const incomers = getIncomers(node, nodes, edges); // get all incommers of node (all input nodes)
     const outgoers = getOutgoers(node, nodes, edges); // get all outgoers of node (all output nodes)

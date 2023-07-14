@@ -86,7 +86,6 @@ const mindMapSlice = createSlice({
     /** this action is used to delete an edge */
     deleteEdge: (state, action) => {
       state.mindMap.edges = state.mindMap.edges.filter((edge) => edge.id !== action.payload.id);
-      pushHistory(state);
     },
     /** this action is used to delete a node */
     deleteNode: (state, action) => {
