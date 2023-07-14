@@ -1,8 +1,9 @@
 import { Box, Button, Input } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { renewMindMap } from 'src/redux/slices/mindMap';
+import { renewMindMap, setSelected } from 'src/redux/slices/mindMap';
 import { importTextFile } from 'src/utils/mindMap';
 import { PublishOutlined as PublishOutlinedIcon } from '@mui/icons-material';
+import { updateOpenId } from 'src/redux/slices/popper';
 
 export const ImportBox = (props) => {
   const dispatch = useDispatch();
@@ -29,6 +30,10 @@ export const ImportBox = (props) => {
   return (
     <Box>
       <Button
+        onClick={() => {
+          dispatch(updateOpenId(null));
+          dispatch(setSelected(null));
+        }}
         component="label"
         htmlFor="import"
         variant="outlined"

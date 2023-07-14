@@ -1,15 +1,15 @@
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   DEFAULT_HANDLE_COLOR,
   DEFAULT_NODE_BG_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   DEFAULT_TEXT_COLOR,
   EDIT_MODES,
-  TYPES,
 } from 'src/config-global';
 import { setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
+import { updateOpenId } from 'src/redux/slices/popper';
 import { ColorPicker } from '.';
 import { InputField } from './InputField';
 
@@ -59,26 +59,31 @@ export const NodeEditing = memo(({ selected }) => {
   return (
     <Stack direction="row" justifyContent="space-between" gap={1}>
       <ColorPicker
+        id="color-picker-bgcolor"
         onChangeComplete={({ hex }) => onNodePropsChangeComplete({ bgcolor: hex })}
         initialColor={selected[0].element?.data?.styles?.bgcolor || DEFAULT_NODE_BG_COLOR}
         tooltip="Màu nền"
       />
       <ColorPicker
+        id="color-picker-border-color"
         onChangeComplete={({ hex }) => onNodePropsChangeComplete({ borderColor: hex })}
         initialColor={selected[0].element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR}
         tooltip="Màu viền"
       />
-      <InputField
-        id={selected[0].element.id}
-        name="label"
-        defaultValue={selected[0].element?.data?.label || ''}
-        onChange={setNodeLabel}
-        floatHelperText={true}
-        width={300}
-      />
+      <Box onFocus={() => dispatch(updateOpenId(null))}>
+        <InputField
+          id={selected[0].element.id}
+          name="label"
+          defaultValue={selected[0].element?.data?.label || ''}
+          onChange={setNodeLabel}
+          floatHelperText={true}
+          width={300}
+        />
+      </Box>
       <ColorPicker
+        id="color-picker-text-color"
         onChangeComplete={({ hex }) =>
-          onNodePropsChangeComplete({ '& .MuiTypography-root': { color: hex } })
+          onNodePropsChangeComplete({ color: hex, '& .MuiTypography-root': { color: hex } })
         }
         icon={<Typography>A</Typography>}
         initialColor={selected[0].element?.data?.styles?.color || DEFAULT_TEXT_COLOR}
@@ -92,11 +97,14 @@ export const NodeEditing = memo(({ selected }) => {
           ...selected[0].element?.data?.styles,
 
           '&:hover': {
+            bgcolor: DEFAULT_NODE_BG_COLOR,
+            color: DEFAULT_TEXT_COLOR,
             ...selected[0].element?.data?.styles,
           },
         }}
       />
       <ColorPicker
+        id="color-picker-handle-color"
         onChangeComplete={({ hex }) =>
           onNodePropsChangeComplete({ '& .react-flow__handle': { bgcolor: hex } })
         }

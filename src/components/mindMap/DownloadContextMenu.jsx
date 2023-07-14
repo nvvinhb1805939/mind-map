@@ -16,8 +16,8 @@ import {
   Typography,
 } from '@mui/material';
 import { toPng } from 'html-to-image';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useReactFlow } from 'reactflow';
 import {
   DOWNLOAD_CANVAS_SIZE,
@@ -25,28 +25,25 @@ import {
   DOWNLOAD_CONTEXT_MENU_TYPES,
   TYPES,
 } from 'src/config-global';
+import { updateOpenId } from 'src/redux/slices/popper';
 import { exportToTextFile, htmlToImage } from 'src/utils/mindMap';
-import { BasePopover } from './BasePopover';
+import { BasePopper } from './BasePopper';
 
 const DEFAULT_SLIDER_VALUE = 50;
 
 export const DownloadContextMenu = (props) => {
+  const dispatch = useDispatch();
   const {
     mindMap,
     mindMap: { bgcolor },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
-  const [close, setClose] = useState(false);
   const [type, setType] = useState(DOWNLOAD_CONTEXT_MENU[0]);
   const [downloadTypeAnchorEl, setDownloadTypeAnchorEl] = useState(null);
   const [size, setSize] = useState(DOWNLOAD_CANVAS_SIZE);
   const [sliderValue, setSliderValue] = useState(DEFAULT_SLIDER_VALUE);
 
   const { getNodes } = useReactFlow();
-
-  useEffect(() => {
-    return () => setClose(false);
-  });
 
   const handleTypeClick = (type) => {
     setType(type);
@@ -76,18 +73,16 @@ export const DownloadContextMenu = (props) => {
       ? htmlToImage(getNodes(), toPng, type.id, size, bgcolor) // download with type is image
       : exportToTextFile(type.id, mindMap); // download with type is text
 
-    setClose(true);
+    dispatch(updateOpenId(null)); // close popper
   };
 
   return (
-    <BasePopover
+    <BasePopper
       id="download-context-menu"
-      close={close}
+      hasDispatch={true}
       label="Tải xuống"
       variant="outlined"
       icon={<DownloadOutlinedIcon />}
-      anchorHorizontal="right"
-      transformHorizontal="right"
     >
       <Box sx={{ p: 2 }}>
         <Box sx={{ width: 300, mb: 2 }}>
@@ -167,6 +162,6 @@ export const DownloadContextMenu = (props) => {
           Tải xuống
         </Button>
       </Box>
-    </BasePopover>
+    </BasePopper>
   );
 };

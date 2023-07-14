@@ -1,11 +1,12 @@
 import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ColorPicker as ColorPickerPalette, useColor } from 'react-color-palette';
 import { useSettingsContext } from '../settings';
-import { BasePopover } from './BasePopover';
+import { BasePopper } from './BasePopper';
 
 export const ColorPicker = (props) => {
   const {
+    id = '',
     onChangeComplete,
     initialColor = '#ffffff',
     tooltip = '',
@@ -16,12 +17,6 @@ export const ColorPicker = (props) => {
   const { themeMode } = useSettingsContext();
 
   const [color, setColor] = useColor('hex', initialColor);
-
-  const [close, setClose] = useState(false);
-
-  useEffect(() => {
-    return () => setClose(false);
-  });
 
   useEffect(() => {
     if (color.hex === initialColor) return;
@@ -39,12 +34,10 @@ export const ColorPicker = (props) => {
 
   return (
     <Box onClick={(event) => event.stopPropagation()}>
-      <BasePopover
-        id="color-pikcer"
-        hasDispatch={true}
+      <BasePopper
+        id={id}
         tooltip={tooltip}
         icon={icon}
-        close={close}
         buttonStyles={{
           p: 0,
           minWidth: 'unset',
@@ -73,7 +66,7 @@ export const ColorPicker = (props) => {
             dark={themeMode === 'dark'}
           />
         </Box>
-      </BasePopover>
+      </BasePopper>
     </Box>
   );
 };

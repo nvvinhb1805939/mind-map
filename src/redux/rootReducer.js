@@ -7,6 +7,7 @@ import chatReducer from './slices/chat';
 import kanbanReducer from './slices/kanban';
 import mailReducer from './slices/mail';
 import mindMapReducer from './slices/mindMap';
+import popperReducer from './slices/popper';
 import productReducer from './slices/product';
 
 // ----------------------------------------------------------------------
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   kanban: kanbanReducer,
   product: persistReducer(productPersistConfig, productReducer),
   mindMap: mindMapReducer,
+  popper: popperReducer,
 });
 
 export default rootReducer;

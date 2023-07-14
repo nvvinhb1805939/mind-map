@@ -3,9 +3,10 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { TYPES } from 'src/config-global';
 import { addNode } from 'src/redux/slices/mindMap';
+import { updateOpenId } from 'src/redux/slices/popper';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
-import { BasePopover } from './BasePopover';
+import { BasePopper } from './BasePopper';
 import { InputField } from './InputField';
 
 let quantityNewNode = 0;
@@ -17,11 +18,6 @@ export const AddNodePopup = () => {
 
   const [label, setLabel] = useState('');
   const [error, setError] = useState('');
-  const [close, setClose] = useState(false);
-
-  useEffect(() => {
-    return () => setClose(false);
-  });
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
@@ -41,15 +37,16 @@ export const AddNodePopup = () => {
     };
 
     dispatch(addNode(newNode)); // add node
+    dispatch(updateOpenId(null)); // close popper
 
-    setClose(true); // close add node form
     setLabel(''); // clear form data
+    setError('');
 
     enqueueSnackbar('Thêm nút thành công!');
   };
 
   return (
-    <BasePopover id="add-node-popup" close={close} label="Thêm nút">
+    <BasePopper id="add-node-popup" label="Thêm nút" hasDispatch={true}>
       <Box
         sx={{
           p: 4,
@@ -81,6 +78,6 @@ export const AddNodePopup = () => {
           </Button>
         </Stack>
       </Box>
-    </BasePopover>
+    </BasePopper>
   );
 };

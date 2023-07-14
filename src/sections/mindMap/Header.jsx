@@ -15,7 +15,12 @@ export const Header = () => {
         zIndex: 'fab',
       }}
     >
-      <AppBar position="absolute" color="transparent" sx={{ px: 1, bgcolor: 'background.paper' }}>
+      <AppBar
+        onClick={(event) => event.stopPropagation()}
+        position="absolute"
+        color="transparent"
+        sx={{ px: 1, bgcolor: 'background.paper' }}
+      >
         <Toolbar sx={{ justifyContent: 'flex-start', gap: 4 }}>
           <AddNodePopup />
           <EditModeRendering />

@@ -34,6 +34,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { FlowToolbar } from './FlowToolbar';
 import { useStyles } from './styles';
+import { updateOpenId } from 'src/redux/slices/popper';
 
 let quantityNewNode = 0;
 
@@ -64,6 +65,7 @@ export const Main = (props) => {
 
   /** this function is used to handle on user implement connect from source to target */
   const onConnectStart = (event, { nodeId, handleType }) => {
+    dispatch(updateOpenId(null)); // hide poppover
     dispatch(setSelected(null)); // clear selected on start connect
 
     hasMovingEdge.current = true; // emit edge is moving
@@ -184,6 +186,7 @@ export const Main = (props) => {
   };
   /** this function is used to set selected node on drag */
   const onNodeDrag = (event, node, nodes) => {
+    // set selected node
     !(node?.id === selected?.[0]?.element?.id) &&
       dispatch(
         setSelected({
@@ -191,6 +194,8 @@ export const Main = (props) => {
           type: EDIT_MODES.NODE_EDITING,
         })
       );
+
+    dispatch(updateOpenId(null)); // hide popper
   };
   /** this function is used to push history on node stops drag */
   const onNodeDragStop = (event, node, nodes) => {
@@ -220,6 +225,8 @@ export const Main = (props) => {
     hasMovingEdge.current = true;
     isEdgeUpdated.current = false;
     isOnEdgeUpdateEvents.current = true;
+
+    dispatch(updateOpenId(null)); // hide poppover
   };
   /** this function is used to update source or target on drop */
   const onEdgeUpdate = (oldEdge, newConnection) => {
