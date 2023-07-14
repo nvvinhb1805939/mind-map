@@ -7,10 +7,8 @@ import {
   DEFAULT_MAX_ZOOM,
   EDGE_TYPES,
   EDIT_MODES,
-  INITIAL_MIND_MAP,
   NODE_SIZE,
   NODE_TYPES,
-  STORAGE_KEYS,
   TYPES,
 } from 'src/config-global';
 import {
@@ -21,21 +19,15 @@ import {
   deleteEdge,
   elevateEdge,
   pushStateToHistory,
-  renewMindMap,
   setSelected,
   updateEdge,
 } from 'src/redux/slices/mindMap';
+import { updateOpenId } from 'src/redux/slices/popper';
 import { useDispatch, useSelector } from 'src/redux/store';
-import {
-  getDataFromLocalStorage,
-  getEditingMode,
-  hasConnectBetweenTwoNode,
-  initMindMap,
-} from 'src/utils/mindMap';
+import { getEditingMode, hasConnectBetweenTwoNode, initMindMap } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { FlowToolbar } from './FlowToolbar';
 import { useStyles } from './styles';
-import { updateOpenId } from 'src/redux/slices/popper';
 
 let quantityNewNode = 0;
 
@@ -96,6 +88,7 @@ export const Main = (props) => {
         type: TYPES.MIND_MAP,
       })
     ); // add new edge of source and target
+    dispatch(pushStateToHistory()); // push to history
 
     isNodesConnected.current = true; // emit source has connected target
     hasMovingEdge.current = false; // emit finish moving edge
@@ -137,6 +130,7 @@ export const Main = (props) => {
         type: TYPES.MIND_MAP,
       })
     ); // add new edge
+    dispatch(pushStateToHistory()); // push to history
 
     isNodesConnected.current = true;
     hasMovingEdge.current = false;

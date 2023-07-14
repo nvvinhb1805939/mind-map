@@ -42,13 +42,10 @@ const mindMapSlice = createSlice({
       state.mindMap.nodes = state.mindMap.nodes.map((node) => ({ ...node, selected: false }));
       state.mindMap.nodes.push({ ...action.payload, selected: true });
       state.mindMap.selected = [{ element: action.payload, type: EDIT_MODES.NODE_EDITING }];
-      pushHistory(state);
     },
     /** this action is used to add a new edge */
     addEdge: (state, action) => {
       state.mindMap.edges.push(action.payload);
-
-      pushHistory(state);
     },
     /** this action is triggered when user drag edge to another node */
     updateEdge: (state, action) => {
@@ -85,7 +82,6 @@ const mindMapSlice = createSlice({
     /** this action is used to delete edges */
     deleteEdges: (state, action) => {
       state.mindMap.edges = action.payload;
-      pushHistory(state);
     },
     /** this action is used to delete an edge */
     deleteEdge: (state, action) => {
@@ -95,7 +91,6 @@ const mindMapSlice = createSlice({
     /** this action is used to delete a node */
     deleteNode: (state, action) => {
       state.mindMap.nodes = state.mindMap.nodes.filter((node) => node.id !== action.payload.id);
-      pushHistory(state);
     },
     /** this action is used to change background color */
     changeBgColor: (state, action) => {

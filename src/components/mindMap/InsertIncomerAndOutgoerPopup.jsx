@@ -2,7 +2,7 @@ import { Box, Button, Popover, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { NODE_CONTEXT_MENU_TYPES, NODE_SIZE, TYPES } from 'src/config-global';
-import { addEdge, addNode, updateIncomerEdges } from 'src/redux/slices/mindMap';
+import { addEdge, addNode, pushStateToHistory, updateIncomerEdges } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { InputField } from './InputField';
@@ -28,7 +28,10 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
 
     dispatch(addEdge(newEdge));
 
-    if (incomers.length === 0) return;
+    if (incomers.length === 0) {
+      dispatch(pushStateToHistory()); // push to history
+      return;
+    }
 
     const incomerIds = incomers.map((incomer) => incomer.id);
 
@@ -39,6 +42,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
     );
 
     dispatch(updateIncomerEdges(newEdges));
+    dispatch(pushStateToHistory()); // push to history
   };
 
   const insertAfterNode = (insertedNode, selectedNode, outgoers, connectedEdges) => {
@@ -52,7 +56,10 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
 
     dispatch(addEdge(newEdge));
 
-    if (outgoers.length === 0) return;
+    if (outgoers.length === 0) {
+      dispatch(pushStateToHistory()); // push to history
+      return;
+    }
 
     const outgoerIds = outgoers.map((outgoer) => outgoer.id);
 
@@ -63,6 +70,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
     );
 
     dispatch(updateIncomerEdges(newEdges));
+    dispatch(pushStateToHistory()); // push to history
   };
 
   const insertNodeMode = (insertedNode, type) => {

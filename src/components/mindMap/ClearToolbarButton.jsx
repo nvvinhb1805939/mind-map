@@ -29,7 +29,7 @@ export const ClearToolbarButton = () => {
     setOpen(false);
   };
 
-  const onRestore = () => {
+  const onClear = () => {
     dispatch(renewMindMap(INITIAL_MIND_MAP));
 
     clearDataFromLocalStorage(STORAGE_KEYS.MIND_MAP);
@@ -64,7 +64,7 @@ export const ClearToolbarButton = () => {
           <Button onClick={handleClose} variant="outlined" sx={{ textTransform: 'unset' }}>
             Hủy bỏ
           </Button>
-          <Button onClick={onRestore} variant="contained" sx={{ textTransform: 'unset' }}>
+          <Button onClick={onClear} variant="contained" sx={{ textTransform: 'unset' }}>
             Làm mới
           </Button>
         </DialogActions>

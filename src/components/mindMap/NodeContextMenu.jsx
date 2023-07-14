@@ -1,15 +1,15 @@
 import { Menu, MenuItem, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getConnectedEdges, getIncomers, getOutgoers, useReactFlow } from 'reactflow';
+import { getConnectedEdges, getIncomers, getOutgoers } from 'reactflow';
 import {
-  NODE_CONTEXT_MENU_TYPES,
   EDIT_MODES,
   NODE_CONTEXT_MENU,
+  NODE_CONTEXT_MENU_TYPES,
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
-import { deleteEdges, deleteNode, setSelected } from 'src/redux/slices/mindMap';
+import { deleteEdges, deleteNode, pushStateToHistory, setSelected } from 'src/redux/slices/mindMap';
 import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { InsertIncomerAndOutgoerPopup } from '.';
@@ -78,6 +78,7 @@ export const NodeContextMenu = (props) => {
     /** in this case, node has either incommers or outgoers so only delete connected edges */
     if (incomers.length <= 0 || outgoers.length <= 0) {
       dispatch(deleteEdges(remainingEdges)); // apply changes
+      dispatch(pushStateToHistory()); // push to history
       return;
     }
 
@@ -98,6 +99,7 @@ export const NodeContextMenu = (props) => {
     );
 
     dispatch(deleteEdges(uniqueEdges)); // apply changes
+    dispatch(pushStateToHistory()); // push to history
   };
 
   const clearNodeAndConnectedEdges = (node) => {
@@ -105,10 +107,14 @@ export const NodeContextMenu = (props) => {
 
     const connectedEdges = getConnectedEdges([node], edges); // get connected edges of node
 
-    if (connectedEdges.length <= 0) return; // in this case, node has no connected edges so only delete node
+    if (connectedEdges.length <= 0) {
+      dispatch(pushStateToHistory()); // push to history
+      return;
+    } // in this case, node has no connected edges so only delete node
 
     const remainingEdges = edges.filter((edge) => !connectedEdges.includes(edge)); // remove connected edges from edges
     dispatch(deleteEdges(remainingEdges)); // apply changes
+    dispatch(pushStateToHistory()); // push to history
   };
 
   return !!insertNode?.type ? (

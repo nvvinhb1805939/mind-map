@@ -2,7 +2,7 @@ import { DifferenceOutlined as DifferenceOutlinedIcon } from '@mui/icons-materia
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import { EDIT_MODES, TYPES } from 'src/config-global';
-import { addNode } from 'src/redux/slices/mindMap';
+import { addNode, pushStateToHistory } from 'src/redux/slices/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { BaseToolbarButton } from './BaseToolbarButton';
 
@@ -15,6 +15,7 @@ export const DuplicateToolbarButton = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const onClick = (event) => {
+    // add node
     dispatch(
       addNode({
         ...selected[0].element,
@@ -25,6 +26,7 @@ export const DuplicateToolbarButton = () => {
         },
       })
     );
+    dispatch(pushStateToHistory()); // push to history
     enqueueSnackbar('Tạo bản sao thành công!');
   };
 
