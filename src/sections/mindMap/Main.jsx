@@ -160,12 +160,14 @@ export const Main = (props) => {
       setSelected({
         element: selectedNode,
         type: EDIT_MODES.NODE_EDITING,
-        anchorEl: event.target,
+        anchorEl: event.target.parentElement,
       })
     );
 
+    dispatch(updateOpenId('delete-node-context-menu'));
+
     setNodeContext({
-      anchorEl: event.target,
+      anchorEl: event.target.parentElement,
       node: selectedNode,
     });
   };
@@ -341,7 +343,11 @@ export const Main = (props) => {
           <InsertNodePopup edgeContext={edgeContext} onClose={() => setEdgeContext(null)} />
         )}
         {!!nodeContext?.anchorEl && (
-          <NodeContextMenu nodeContext={nodeContext} onClose={() => setNodeContext(null)} />
+          <NodeContextMenu
+            id="delete-node-context-menu"
+            nodeContext={nodeContext}
+            onClose={() => setNodeContext(null)}
+          />
         )}
         <ReactFlow
           /*********** Basic props ***********/

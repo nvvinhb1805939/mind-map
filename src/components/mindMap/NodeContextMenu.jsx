@@ -1,5 +1,5 @@
-import { Menu, MenuItem, Typography } from '@mui/material';
-import { useState } from 'react';
+import { MenuItem, Popper, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getConnectedEdges, getIncomers, getOutgoers } from 'reactflow';
 import {
@@ -13,14 +13,16 @@ import { deleteEdges, deleteNode, pushStateToHistory, setSelected } from 'src/re
 import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { InsertIncomerAndOutgoerPopup } from '.';
+import { updateOpenId } from 'src/redux/slices/popper';
 
 export const NodeContextMenu = (props) => {
-  const { nodeContext, onClose } = props;
+  const { id = '', nodeContext, onClose } = props;
 
   const dispatch = useDispatch();
   const {
     mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const { openId } = useSelector((state) => state.popper);
 
   const [insertNode, setInsertNode] = useState(null);
 
@@ -48,7 +50,7 @@ export const NodeContextMenu = (props) => {
         break;
     }
 
-    closeMenuContext();
+    handleClose();
   };
 
   const addIncomer = (selectedNode, type) => {
@@ -127,24 +129,17 @@ export const NodeContextMenu = (props) => {
       onClose={onClose}
     />
   ) : (
-    <Menu
-      id="delete-context-menu"
-      open={!!selected?.[0]?.anchorEl}
+    <Popper
+      id={id}
+      open={!!selected?.[0]?.anchorEl && openId === id}
       anchorEl={selected?.[0]?.anchorEl}
-      onClose={handleClose}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'left',
-      }}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
+      placement="bottom-start"
       sx={{
-        '& .MuiPaper-root': {
-          width: NODE_SIZE.WIDTH * 2, // 2 is default Max zoom of react flow
-          borderRadius: 0.5,
-        },
+        width: NODE_SIZE.WIDTH * 2, // 2 is default Max zoom of react flow
+        boxShadow: 11,
+        borderRadius: 0.5,
+        bgcolor: 'background.paper',
+        zIndex: 1100,
       }}
     >
       {NODE_CONTEXT_MENU.map((item) => (
@@ -153,6 +148,6 @@ export const NodeContextMenu = (props) => {
           <Typography>{item.title}</Typography>
         </MenuItem>
       ))}
-    </Menu>
+    </Popper>
   );
 };

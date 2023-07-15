@@ -34,7 +34,6 @@ export const BasePopper = (props) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-    // dispatch(updateOpenId(null));
   };
 
   return (
