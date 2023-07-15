@@ -1,12 +1,19 @@
 import { AppBar, Box, Stack, Toolbar } from '@mui/material';
+import { useSelector } from 'react-redux';
 import {
   AddNodePopup,
   DownloadContextMenu,
   EditModeRendering,
   ImportBox,
 } from 'src/components/mindMap';
+import { TYPES } from 'src/config-global';
 
 export const Header = () => {
+  const {
+    mindMap: { copied },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
+  console.log(copied);
+
   return (
     <Box
       sx={{

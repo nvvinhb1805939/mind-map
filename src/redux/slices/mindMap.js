@@ -195,6 +195,10 @@ const mindMapSlice = createSlice({
 
       pushHistory(state);
     },
+    /** this action is used to copy format of element */
+    copyFormat: (state, action) => {
+      state.mindMap.copied = action.payload;
+    },
   },
 });
 
@@ -218,6 +222,7 @@ export const {
   setSelected,
   pushStateToHistory,
   insertNodeBetweenTwoEdges,
+  copyFormat,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

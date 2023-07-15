@@ -231,12 +231,6 @@ export const Main = (props) => {
   };
   /** this function is used to delete edge on drop */
   const onEdgeUpdateEnd = (event, edge) => {
-    if (!isEdgeUpdated.current) {
-      dispatch(deleteEdge(edge));
-      getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
-      dispatch(pushStateToHistory());
-    }
-
     isEdgeUpdated.current = true;
     isOnEdgeUpdateEvents.current = false;
     hasMovingEdge.current = false;

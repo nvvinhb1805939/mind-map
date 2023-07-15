@@ -201,6 +201,7 @@ export const INITIAL_MIND_MAP = {
   nodes: [],
   edges: [],
   selected: [],
+  copied: null,
 };
 
 export const DEFAULT_EDGE_COLOR = '#b1b1b7';
