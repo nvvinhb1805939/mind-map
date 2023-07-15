@@ -154,8 +154,15 @@ export const Main = (props) => {
 
     dispatch(changeNodes(selectedChanges));
   };
-  /** this function is used to open delete menu context */
-  const onNodeContextMenu = (event, selectedNode) => {
+  /** this function is used to switch to node editing mode */
+  const onNodeClick = (event, selectedNode) => {
+    dispatch(updateOpenId('delete-node-context-menu'));
+
+    setNodeContext({
+      anchorEl: event.target.parentElement,
+      node: selectedNode,
+    });
+
     dispatch(
       setSelected({
         element: selectedNode,
@@ -163,23 +170,6 @@ export const Main = (props) => {
         anchorEl: event.target.parentElement,
       })
     );
-
-    dispatch(updateOpenId('delete-node-context-menu'));
-
-    setNodeContext({
-      anchorEl: event.target.parentElement,
-      node: selectedNode,
-    });
-  };
-  /** this function is used to switch to node editing mode */
-  const onNodeClick = (event, node) => {
-    !(node?.id === selected?.[0]?.element?.id) &&
-      dispatch(
-        setSelected({
-          element: node,
-          type: EDIT_MODES.NODE_EDITING,
-        })
-      );
   };
   /** this function is used to set selected node on drag */
   const onNodeDrag = (event, node, nodes) => {
@@ -360,7 +350,6 @@ export const Main = (props) => {
           /*********** Node event handlers ***********/
           onNodesChange={onNodesChange}
           onNodesDelete={onNodesDelete}
-          onNodeContextMenu={onNodeContextMenu}
           onNodeDrag={onNodeDrag}
           onNodeDragStop={onNodeDragStop}
           onNodeClick={onNodeClick}
@@ -384,9 +373,9 @@ export const Main = (props) => {
           fitView={true}
           maxZoom={DEFAULT_MAX_ZOOM}
           /*********** Keys ***********/
-          selectionKeyCode={null}
+          selectionKeyCode="Shift"
           deleteKeyCode="Delete"
-          multiSelectionKeyCode="Control"
+          multiSelectionKeyCode="Shift"
         >
           <FlowToolbar />
           <Controls showInteractive={false} />

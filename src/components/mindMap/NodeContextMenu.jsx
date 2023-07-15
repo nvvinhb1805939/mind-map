@@ -1,5 +1,6 @@
-import { MenuItem, Popper, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Divider, MenuItem, Popper, Typography } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getConnectedEdges, getIncomers, getOutgoers } from 'reactflow';
 import {
@@ -9,11 +10,16 @@ import {
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
-import { deleteEdges, deleteNode, pushStateToHistory, setSelected } from 'src/redux/slices/mindMap';
+import {
+  addNode,
+  deleteEdges,
+  deleteNode,
+  pushStateToHistory,
+  setSelected,
+} from 'src/redux/slices/mindMap';
 import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { InsertIncomerAndOutgoerPopup } from '.';
-import { updateOpenId } from 'src/redux/slices/popper';
 
 export const NodeContextMenu = (props) => {
   const { id = '', nodeContext, onClose } = props;
@@ -26,6 +32,8 @@ export const NodeContextMenu = (props) => {
 
   const [insertNode, setInsertNode] = useState(null);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const closeMenuContext = () => dispatch(setSelected(null));
 
   const handleClose = () => {
@@ -36,8 +44,15 @@ export const NodeContextMenu = (props) => {
     getEditingMode(selected) === EDIT_MODES.NODE_EDITING && dispatch(setSelected(null)); // clear node mode
 
     switch (type) {
+      case NODE_CONTEXT_MENU_TYPES.DUPLICATE:
+        duplicateNode(selected[0].element);
+        break;
+      case NODE_CONTEXT_MENU_TYPES.COPY_FORMAT:
+        copyFormat(selected[0].element);
+        break;
       case NODE_CONTEXT_MENU_TYPES.ONLY_NODE:
         deleteOnlyNode(selected[0].element);
+        handleClose();
         break;
       case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
         addIncomer(selected[0].element, type);
@@ -47,10 +62,28 @@ export const NodeContextMenu = (props) => {
         break;
       default:
         clearNodeAndConnectedEdges(selected[0].element);
+        handleClose();
         break;
     }
+  };
 
-    handleClose();
+  const duplicateNode = (selectedNode) => {
+    dispatch(
+      addNode({
+        ...selectedNode,
+        id: uuidv4(),
+        position: {
+          x: selectedNode.position.x + 10,
+          y: selectedNode.position.y + 10,
+        },
+      })
+    );
+    dispatch(pushStateToHistory()); // push to history
+    enqueueSnackbar('Tạo bản sao thành công!');
+  };
+
+  const copyFormat = (selectedNode) => {
+    enqueueSnackbar('Sao chép định dạng thành công!');
   };
 
   const addIncomer = (selectedNode, type) => {
@@ -135,19 +168,25 @@ export const NodeContextMenu = (props) => {
       anchorEl={selected?.[0]?.anchorEl}
       placement="bottom-start"
       sx={{
+        py: 2,
         width: NODE_SIZE.WIDTH * 2, // 2 is default Max zoom of react flow
+
         boxShadow: 11,
         borderRadius: 0.5,
         bgcolor: 'background.paper',
         zIndex: 1100,
       }}
     >
-      {NODE_CONTEXT_MENU.map((item) => (
-        <MenuItem key={item.id} onClick={() => onContextItemClick(item.type)} sx={{ gap: 2 }}>
-          {item.icon}
-          <Typography>{item.title}</Typography>
-        </MenuItem>
-      ))}
+      {NODE_CONTEXT_MENU.map((item) =>
+        item.type === NODE_CONTEXT_MENU_TYPES.GROUP_BY ? (
+          <Divider key={item.id} sx={{ width: '100%' }} />
+        ) : (
+          <MenuItem key={item.id} onClick={() => onContextItemClick(item.type)} sx={{ gap: 2 }}>
+            {item.icon}
+            <Typography>{item.title}</Typography>
+          </MenuItem>
+        )
+      )}
     </Popper>
   );
 };

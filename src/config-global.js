@@ -3,10 +3,13 @@ import {
   AccountTreeOutlined as AccountTreeOutlinedIcon,
   BrokenImageOutlined as BrokenImageOutlinedIcon,
   ClearOutlined as ClearOutlinedIcon,
-  RemoveOutlined as RemoveOutlinedIcon,
+  DifferenceOutlined as DifferenceOutlinedIcon,
+  ImagesearchRollerOutlined as ImagesearchRollerOutlinedIcon,
   North as NorthIcon,
+  RemoveOutlined as RemoveOutlinedIcon,
   South as SouthIcon,
 } from '@mui/icons-material';
+import { v4 as uuidv4 } from 'uuid';
 import { MindMapEdge, MindMapNode } from './components/mindMap';
 import { PATH_MINDMAP } from './routes/paths';
 
@@ -98,33 +101,56 @@ export const DEFAULT_MAX_ZOOM = 2;
 export const DEFAULT_MIN_ZOOM = 0.5;
 
 export const NODE_CONTEXT_MENU_TYPES = {
+  DUPLICATE: 'duplicate',
+  COPY_FORMAT: 'copy-format',
   ADD_INCOMER: 'add-incomer',
   ADD_OUTGOER: 'add-outgoer',
   CLEAR_ALL: 'clear-all',
   ONLY_NODE: 'only-node',
+  GROUP_BY: 'group-by',
 };
 
 export const NODE_CONTEXT_MENU = [
   {
-    id: 1,
+    id: uuidv4(),
+    title: 'Tạo bản sao',
+    type: NODE_CONTEXT_MENU_TYPES.DUPLICATE,
+    icon: <DifferenceOutlinedIcon />,
+  },
+  {
+    id: uuidv4(),
+    title: 'Sao chép định dạng',
+    type: NODE_CONTEXT_MENU_TYPES.COPY_FORMAT,
+    icon: <ImagesearchRollerOutlinedIcon />,
+  },
+  {
+    id: uuidv4(),
+    type: NODE_CONTEXT_MENU_TYPES.GROUP_BY,
+  },
+  {
+    id: uuidv4(),
     title: 'Chèn nút trước',
     type: NODE_CONTEXT_MENU_TYPES.ADD_INCOMER,
     icon: <NorthIcon />,
   },
   {
-    id: 2,
+    id: uuidv4(),
     title: 'Chèn nút sau',
     type: NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER,
     icon: <SouthIcon />,
   },
   {
-    id: 3,
+    id: uuidv4(),
+    type: NODE_CONTEXT_MENU_TYPES.GROUP_BY,
+  },
+  {
+    id: uuidv4(),
     title: 'Chỉ xóa nút',
     type: NODE_CONTEXT_MENU_TYPES.ONLY_NODE,
     icon: <RemoveOutlinedIcon />,
   },
   {
-    id: 4,
+    id: uuidv4(),
     title: 'Xóa nút và các liên kết',
     type: NODE_CONTEXT_MENU_TYPES.CLEAR_ALL,
     icon: <ClearOutlinedIcon />,

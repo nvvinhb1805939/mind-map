@@ -1,7 +1,6 @@
 export * from './AddNodePopup';
 export * from './ClearToolbarButton';
 export * from './ColorPicker';
-export * from './DuplicateToolbarButton';
 export * from './NodeContextMenu';
 export * from './DownloadContextMenu';
 export * from './EditModeRendering';

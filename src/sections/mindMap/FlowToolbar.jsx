@@ -2,7 +2,6 @@ import { Box } from '@mui/material';
 import { Panel } from 'reactflow';
 import {
   ClearToolbarButton,
-  DuplicateToolbarButton,
   RedoToolbarButton,
   ResetToolbarButton,
   RestoreToolbarButton,
@@ -28,7 +27,6 @@ export const FlowToolbar = (props) => {
       }}
     >
       <Panel position="top">
-        <DuplicateToolbarButton />
         <SaveToolbarButton />
         <RestoreToolbarButton />
         <UndoToolbarButton />
