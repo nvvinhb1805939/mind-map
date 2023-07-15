@@ -291,6 +291,8 @@ export const Main = (props) => {
         y: event.clientY - top,
       }),
     });
+
+    dispatch(setSelected(null));
   };
   /** this function is used to clear editing mode on selected edges deleted */
   const onEdgesDelete = () => {
