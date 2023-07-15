@@ -10,8 +10,7 @@ export const initialState = {
 };
 
 const pushHistory = (state) => {
-  state.history.push(state.mindMap);
-  state.currentIndex = state.history.length - 1;
+  state.history.splice(++state.currentIndex, 0, state.mindMap);
 };
 
 const mindMapSlice = createSlice({
