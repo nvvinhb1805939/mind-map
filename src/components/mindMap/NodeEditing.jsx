@@ -21,7 +21,6 @@ export const NodeEditing = memo(({ selected, copied }) => {
   const pasteFormat = () => {
     const { copy_type, ...copiedNode } = copied;
 
-    console.log(copiedNode);
     dispatch(
       pasteNodeFormat({
         ...selected[0].element,

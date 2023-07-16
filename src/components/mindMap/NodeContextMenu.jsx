@@ -49,7 +49,6 @@ export const NodeContextMenu = (props) => {
     switch (type) {
       case NODE_CONTEXT_MENU_TYPES.DUPLICATE:
         duplicateNode(selected[0].element);
-        clearMode();
         break;
       case NODE_CONTEXT_MENU_TYPES.COPY_FORMAT:
         copyFormat(selected[0].element);
