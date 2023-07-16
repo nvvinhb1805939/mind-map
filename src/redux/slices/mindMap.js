@@ -199,6 +199,17 @@ const mindMapSlice = createSlice({
     copyFormat: (state, action) => {
       state.mindMap.copied = action.payload;
     },
+    pasteNodeFormat: (state, action) => {
+      console.log(action.payload);
+      state.mindMap.nodes = state.mindMap.nodes.map((node) =>
+        action.payload.id === node.id ? action.payload : node
+      );
+    },
+    pasteEdgeFormat: (state, action) => {
+      state.mindMap.edges = state.mindMap.edges.map((edge) =>
+        action.payload.id === edge.id ? { ...edge, ...action.payload } : edge
+      );
+    },
   },
 });
 
@@ -223,6 +234,8 @@ export const {
   pushStateToHistory,
   insertNodeBetweenTwoEdges,
   copyFormat,
+  pasteNodeFormat,
+  pasteEdgeFormat,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

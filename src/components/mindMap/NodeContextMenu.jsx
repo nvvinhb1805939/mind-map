@@ -41,28 +41,35 @@ export const NodeContextMenu = (props) => {
     closeMenuContext();
   };
 
-  const onContextItemClick = (type) => {
+  const clearMode = () => {
     getEditingMode(selected) === EDIT_MODES.NODE_EDITING && dispatch(setSelected(null)); // clear node mode
+  };
 
+  const onContextItemClick = (type) => {
     switch (type) {
       case NODE_CONTEXT_MENU_TYPES.DUPLICATE:
         duplicateNode(selected[0].element);
+        clearMode();
         break;
       case NODE_CONTEXT_MENU_TYPES.COPY_FORMAT:
         copyFormat(selected[0].element);
         break;
       case NODE_CONTEXT_MENU_TYPES.ONLY_NODE:
         deleteOnlyNode(selected[0].element);
+        clearMode();
         handleClose();
         break;
       case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
         addIncomer(selected[0].element, type);
+        clearMode();
         break;
       case NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER:
         addOutgoer(selected[0].element, type);
+        clearMode();
         break;
       default:
         clearNodeAndConnectedEdges(selected[0].element);
+        clearMode();
         handleClose();
         break;
     }
@@ -84,7 +91,7 @@ export const NodeContextMenu = (props) => {
   };
 
   const copyFormat = (selectedNode) => {
-    const { id, position, positionAbsolute, ...copied } = selectedNode;
+    const { id, position, positionAbsolute, selected, ...copied } = selectedNode;
     dispatch(copyFormatAction({ ...copied, copy_type: EDIT_MODES.NODE_EDITING }));
     enqueueSnackbar('Sao chép định dạng thành công!');
   };

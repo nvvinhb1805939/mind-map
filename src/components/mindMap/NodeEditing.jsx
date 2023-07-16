@@ -8,7 +8,7 @@ import {
   DEFAULT_TEXT_COLOR,
   EDIT_MODES,
 } from 'src/config-global';
-import { setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
+import { pasteNodeFormat, setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
 import { ColorPicker, PasteFormat } from '.';
 import { InputField } from './InputField';
@@ -17,6 +17,22 @@ export const NodeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
 
   const [nodeLabel, setNodeLabel] = useState(selected[0].element?.data?.label || '');
+
+  const pasteFormat = () => {
+    const { copy_type, ...copiedNode } = copied;
+
+    console.log(copiedNode);
+    dispatch(
+      pasteNodeFormat({
+        ...selected[0].element,
+        ...copiedNode,
+        data: {
+          ...copiedNode.data,
+          label: selected[0].element.data.label,
+        },
+      })
+    );
+  };
 
   const onNodePropsChangeComplete = (styleProps = {}, otherProps = {}) => {
     const data = {
@@ -114,7 +130,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
         }
         tooltip="Màu cổng"
       />
-      {!!selected && <PasteFormat selected={selected} copied={copied} />}
+      {!!selected && <PasteFormat selected={selected} copied={copied} action={pasteFormat} />}
     </Stack>
   );
 });
