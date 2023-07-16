@@ -1,13 +1,16 @@
 import { ImagesearchRollerOutlined as ImagesearchRollerOutlinedIcon } from '@mui/icons-material';
 import { Button, Stack, Tooltip } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import { memo } from 'react';
 import { useDispatch } from 'react-redux';
-import { DEFAULT_EDGE_COLOR, EDIT_MODES, MIND_MAP_CLASSES } from 'src/config-global';
+import { DEFAULT_EDGE_COLOR, EDIT_MODES } from 'src/config-global';
 import { changeEdgeColor, copyFormat, setSelected } from 'src/redux/slices/mindMap';
-import { ColorPicker } from '.';
+import { ColorPicker, PasteFormat } from '.';
 
-export const EdgeEditing = memo(({ selected }) => {
+export const EdgeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const onChangeComplete = ({ hex }) => {
     dispatch(
@@ -27,10 +30,12 @@ export const EdgeEditing = memo(({ selected }) => {
   const copyEdgeFormat = () => {
     dispatch(
       copyFormat({
-        copy_type: MIND_MAP_CLASSES.EDGE,
+        copy_type: EDIT_MODES.EDGE_EDITING,
         style: { stroke: DEFAULT_EDGE_COLOR, ...selected[0].element?.style },
       })
     );
+
+    enqueueSnackbar('Sao chép định dạng thành công!');
   };
 
   return (
@@ -50,6 +55,7 @@ export const EdgeEditing = memo(({ selected }) => {
           <ImagesearchRollerOutlinedIcon />
         </Button>
       </Tooltip>
+      {!!selected && <PasteFormat selected={selected} copied={copied} />}
     </Stack>
   );
 });

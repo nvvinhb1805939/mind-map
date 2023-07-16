@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getConnectedEdges, getIncomers, getOutgoers } from 'reactflow';
 import {
   EDIT_MODES,
-  MIND_MAP_CLASSES,
   NODE_CONTEXT_MENU,
   NODE_CONTEXT_MENU_TYPES,
   NODE_SIZE,
@@ -13,11 +12,11 @@ import {
 } from 'src/config-global';
 import {
   addNode,
+  copyFormat as copyFormatAction,
   deleteEdges,
   deleteNode,
   pushStateToHistory,
   setSelected,
-  copyFormat as copyFormatAction,
 } from 'src/redux/slices/mindMap';
 import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
@@ -86,7 +85,7 @@ export const NodeContextMenu = (props) => {
 
   const copyFormat = (selectedNode) => {
     const { id, position, positionAbsolute, ...copied } = selectedNode;
-    dispatch(copyFormatAction({ ...copied, copy_type: MIND_MAP_CLASSES.NODE }));
+    dispatch(copyFormatAction({ ...copied, copy_type: EDIT_MODES.NODE_EDITING }));
     enqueueSnackbar('Sao chép định dạng thành công!');
   };
 

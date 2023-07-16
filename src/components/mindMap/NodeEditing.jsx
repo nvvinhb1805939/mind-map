@@ -10,10 +10,10 @@ import {
 } from 'src/config-global';
 import { setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
-import { ColorPicker } from '.';
+import { ColorPicker, PasteFormat } from '.';
 import { InputField } from './InputField';
 
-export const NodeEditing = memo(({ selected }) => {
+export const NodeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
 
   const [nodeLabel, setNodeLabel] = useState(selected[0].element?.data?.label || '');
@@ -114,6 +114,7 @@ export const NodeEditing = memo(({ selected }) => {
         }
         tooltip="Màu cổng"
       />
+      {!!selected && <PasteFormat selected={selected} copied={copied} />}
     </Stack>
   );
 });

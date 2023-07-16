@@ -8,7 +8,7 @@ import { PaneEditing } from './PaneEditing';
 
 export const EditModeRendering = (props) => {
   const {
-    mindMap: { selected },
+    mindMap: { copied, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const renderEditMode = (mode) => {
@@ -16,9 +16,9 @@ export const EditModeRendering = (props) => {
       case EDIT_MODES.PANE_EDITING:
         return <PaneEditing />;
       case EDIT_MODES.NODE_EDITING:
-        return <NodeEditing selected={selected} />;
+        return <NodeEditing selected={selected} copied={copied} />;
       case EDIT_MODES.EDGE_EDITING:
-        return <EdgeEditing selected={selected} />;
+        return <EdgeEditing selected={selected} copied={copied} />;
       default:
         break;
     }
