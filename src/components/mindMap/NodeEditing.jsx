@@ -8,7 +8,12 @@ import {
   DEFAULT_TEXT_COLOR,
   EDIT_MODES,
 } from 'src/config-global';
-import { pasteNodeFormat, setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
+import {
+  pasteNodeFormat,
+  pushStateToHistory,
+  setSelected,
+  updateNodeProps,
+} from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
 import { ColorPicker, PasteFormat } from '.';
 import { InputField } from './InputField';
@@ -21,16 +26,17 @@ export const NodeEditing = memo(({ selected, copied }) => {
   const pasteFormat = () => {
     const { copy_type, ...copiedNode } = copied;
 
-    dispatch(
-      pasteNodeFormat({
-        ...selected[0].element,
-        ...copiedNode,
-        data: {
-          ...copiedNode.data,
-          label: selected[0].element.data.label,
-        },
-      })
-    );
+    const pastedNode = {
+      ...selected[0].element,
+      ...copiedNode,
+      data: {
+        ...copiedNode.data,
+        label: selected[0].element.data.label,
+      },
+    };
+
+    dispatch(pasteNodeFormat(pastedNode));
+    dispatch(setSelected({ ...selected[0], element: pastedNode }));
   };
 
   const onNodePropsChangeComplete = (styleProps = {}, otherProps = {}) => {
