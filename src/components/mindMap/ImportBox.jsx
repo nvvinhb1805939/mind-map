@@ -4,9 +4,12 @@ import { renewMindMap, setSelected } from 'src/redux/slices/mindMap';
 import { importTextFile } from 'src/utils/mindMap';
 import { PublishOutlined as PublishOutlinedIcon } from '@mui/icons-material';
 import { updateOpenId } from 'src/redux/slices/popper';
+import { useSnackbar } from 'notistack';
 
 export const ImportBox = (props) => {
   const dispatch = useDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const onFileChange = (event) => {
     if (!event.target.files[0]) return;
@@ -15,11 +18,17 @@ export const ImportBox = (props) => {
 
     // this event is triggered after method readAsText is called
     reader.onload = async (event) => {
-      const text = event.target.result;
+      try {
+        const text = event.target.result;
 
-      const mindMap = importTextFile(text);
+        const mindMap = importTextFile(text);
 
-      dispatch(renewMindMap(mindMap));
+        dispatch(renewMindMap(mindMap));
+      } catch (error) {
+        enqueueSnackbar('Tập tin không hợp lệ!', {
+          variant: 'error',
+        });
+      }
     };
 
     reader.readAsText(event.target.files[0]); // read content of file
