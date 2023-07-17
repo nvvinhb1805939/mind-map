@@ -7,6 +7,7 @@ import {
   DEFAULT_MAX_ZOOM,
   EDGE_TYPES,
   EDIT_MODES,
+  NODE_CONTEXT_MENU_ID,
   NODE_SIZE,
   NODE_TYPES,
   TYPES,
@@ -156,7 +157,7 @@ export const Main = (props) => {
   };
   /** this function is used to switch to node editing mode */
   const onNodeClick = (event, selectedNode) => {
-    dispatch(updateOpenId('delete-node-context-menu'));
+    dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
 
     setNodeContext({
       anchorEl: event.target.parentElement,
@@ -179,20 +180,29 @@ export const Main = (props) => {
         setSelected({
           element: node,
           type: EDIT_MODES.NODE_EDITING,
+          anchorEl: event.target.parentElement,
         })
       );
 
     dispatch(updateOpenId(null)); // hide popper
   };
   /** this function is used to push history on node stops drag */
-  const onNodeDragStop = (event, node, nodes) => {
-    if (!node.dragging) return;
+  const onNodeDragStop = (event, selectedNode, nodes) => {
+    if (!selectedNode.dragging) return;
 
     dispatch(pushStateToHistory());
+    dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
+
+    setNodeContext({
+      anchorEl: event.target.parentElement,
+      node: selectedNode,
+    });
+
     dispatch(
       setSelected({
-        element: node,
+        element: selectedNode,
         type: EDIT_MODES.NODE_EDITING,
+        anchorEl: event.target.parentElement,
       })
     );
   };
@@ -330,7 +340,7 @@ export const Main = (props) => {
         )}
         {!!nodeContext?.anchorEl && (
           <NodeContextMenu
-            id="delete-node-context-menu"
+            id={NODE_CONTEXT_MENU_ID}
             nodeContext={nodeContext}
             onClose={() => setNodeContext(null)}
           />

@@ -29,6 +29,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
     const pastedNode = {
       ...selected[0].element,
       ...copiedNode,
+      style: { width: copiedNode.width, height: copiedNode.height },
       data: {
         ...copiedNode.data,
         label: selected[0].element.data.label,
@@ -51,11 +52,11 @@ export const NodeEditing = memo(({ selected, copied }) => {
 
     dispatch(
       setSelected({
+        ...selected[0],
         element: {
           ...selected[0].element,
           data,
         },
-        type: EDIT_MODES.NODE_EDITING,
       })
     );
     dispatch(

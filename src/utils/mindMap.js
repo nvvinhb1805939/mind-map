@@ -10,7 +10,7 @@ import {
   STORAGE_KEYS,
   TYPES,
 } from 'src/config-global';
-import { renewMindMap } from 'src/redux/slices/mindMap';
+import { renewMindMap, setSelected } from 'src/redux/slices/mindMap';
 import { dispatch } from 'src/redux/store';
 
 export const hasConnectBetweenTwoNode = (edges, node1, node2) =>
@@ -101,5 +101,9 @@ export const getDataFromLocalStorage = (storageKey) => JSON.parse(localStorage.g
 
 export const initMindMap = () => {
   const mindMap = getDataFromLocalStorage(STORAGE_KEYS.MIND_MAP); // get mind map from localStorage
-  mindMap ? dispatch(renewMindMap(mindMap)) : dispatch(renewMindMap(INITIAL_MIND_MAP)); // if browser has saved mind map in localStorage then init them otherwise init the inital mind map
+
+  if (mindMap) {
+    dispatch(renewMindMap(mindMap));
+    dispatch(setSelected(null));
+  } else dispatch(renewMindMap(INITIAL_MIND_MAP));
 };

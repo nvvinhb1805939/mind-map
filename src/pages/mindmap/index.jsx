@@ -9,7 +9,9 @@ import { saveDataToLocalStorage } from 'src/utils/mindMap';
 const PADDING = 4;
 
 const MindMapPage = (props) => {
-  const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const {
+    mindMap: { nodes, bgcolor, edges },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   /** disable default right click event of browser  */
   useEffect(() => {
@@ -23,8 +25,8 @@ const MindMapPage = (props) => {
   }, []);
 
   useBeforeUnload(
-    useCallback(() => saveDataToLocalStorage(mindMap, STORAGE_KEYS.MIND_MAP)),
-    [mindMap]
+    useCallback(() => saveDataToLocalStorage({ nodes, bgcolor, edges }, STORAGE_KEYS.MIND_MAP)),
+    [nodes, bgcolor, edges]
   );
 
   return (

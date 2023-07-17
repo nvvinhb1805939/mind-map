@@ -6,12 +6,14 @@ import { saveDataToLocalStorage } from 'src/utils/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
 
 export const SaveToolbarButton = () => {
-  const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const {
+    mindMap: { nodes, bgcolor, edges },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
 
   const onClick = () => {
-    saveDataToLocalStorage(mindMap, STORAGE_KEYS.MIND_MAP);
+    saveDataToLocalStorage({ nodes, bgcolor, edges }, STORAGE_KEYS.MIND_MAP);
     enqueueSnackbar('Lưu dữ liệu thành công!');
   };
 
