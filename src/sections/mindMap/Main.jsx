@@ -168,9 +168,13 @@ export const Main = (props) => {
       setSelected({
         element: selectedNode,
         type: EDIT_MODES.NODE_EDITING,
-        anchorEl: event.target.parentElement,
+        anchorEl: event.target,
       })
     );
+    setNodeContext({
+      anchorEl: event.target,
+      node: selectedNode,
+    });
   };
   /** this function is used to set selected node on drag */
   const onNodeDrag = (event, node, nodes) => {
@@ -209,6 +213,7 @@ export const Main = (props) => {
   /** this function is used to clear node editing mode when selected nodes are deleted */
   const onNodesDelete = () => {
     dispatch(setSelected(null));
+    dispatch(pushStateToHistory());
   };
 
   /*********** Edges ***********/
@@ -291,6 +296,7 @@ export const Main = (props) => {
   /** this function is used to clear editing mode on selected edges deleted */
   const onEdgesDelete = () => {
     getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
+    dispatch(pushStateToHistory());
   };
 
   /*********** Pane ***********/

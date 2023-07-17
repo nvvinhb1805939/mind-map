@@ -68,7 +68,7 @@ export const htmlToImage = (
   }).then((dataUrl) => downloadImage(dataUrl, type));
 };
 
-export const exportToTextFile = (type, mindMap) => {
+export const exportToTextFile = (mindMap) => {
   const encryptedData = CryptoJS.AES.encrypt(
     JSON.stringify(mindMap),
     process.env.REACT_APP_CRYPTO_SECRET_KEY

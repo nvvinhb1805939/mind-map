@@ -4,12 +4,7 @@ import { useSnackbar } from 'notistack';
 import { memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { DEFAULT_EDGE_COLOR, EDIT_MODES } from 'src/config-global';
-import {
-  changeEdgeColor,
-  copyFormat,
-  pasteEdgeFormat,
-  setSelected,
-} from 'src/redux/slices/mindMap';
+import { changeEdgeColor, copyFormat, setSelected } from 'src/redux/slices/mindMap';
 import { ColorPicker, PasteFormat } from '.';
 
 export const EdgeEditing = memo(({ selected, copied }) => {
@@ -43,18 +38,6 @@ export const EdgeEditing = memo(({ selected, copied }) => {
     enqueueSnackbar('Sao chép định dạng thành công!');
   };
 
-  const pasteFormat = () => {
-    const { copy_type, ...copiedEdge } = copied;
-
-    const pastedEdge = {
-      ...selected[0].element,
-      ...copiedEdge,
-    };
-
-    dispatch(pasteEdgeFormat(pastedEdge));
-    dispatch(setSelected({ ...selected[0], element: pastedEdge }));
-  };
-
   return (
     <Stack direction="row" justifyContent="space-between" gap={1}>
       <ColorPicker
@@ -72,7 +55,7 @@ export const EdgeEditing = memo(({ selected, copied }) => {
           <ImagesearchRollerOutlinedIcon />
         </Button>
       </Tooltip>
-      {!!selected && <PasteFormat selected={selected} copied={copied} action={pasteFormat} />}
+      {!!selected && <PasteFormat selected={selected} copied={copied} />}
     </Stack>
   );
 });
