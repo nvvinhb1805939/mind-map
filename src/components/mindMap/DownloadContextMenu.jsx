@@ -71,7 +71,7 @@ export const DownloadContextMenu = (props) => {
   const handleDownloadClick = () => {
     type.id === DOWNLOAD_CONTEXT_MENU_TYPES.PNG
       ? htmlToImage(getNodes(), toPng, type.id, size, bgcolor) // download with type is image
-      : exportToTextFile(type.id, mindMap); // download with type is text
+      : exportToTextFile(mindMap); // download with type is text
 
     dispatch(updateOpenId(null)); // close popper
   };
