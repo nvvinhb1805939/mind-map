@@ -156,20 +156,27 @@ export const Main = (props) => {
   };
   /** this function is used to switch to node editing mode */
   const onNodeClick = (event, selectedNode) => {
+    !(selectedNode?.id === selected?.[0]?.element?.id) &&
+      dispatch(
+        setSelected({
+          element: selectedNode,
+          type: EDIT_MODES.NODE_EDITING,
+        })
+      );
+  };
+  const onNodeContextMenu = (event, selectedNode) => {
     dispatch(updateOpenId('delete-node-context-menu'));
-
-    setNodeContext({
-      anchorEl: event.target.parentElement,
-      node: selectedNode,
-    });
-
     dispatch(
       setSelected({
         element: selectedNode,
         type: EDIT_MODES.NODE_EDITING,
-        anchorEl: event.target.parentElement,
+        anchorEl: event.target,
       })
     );
+    setNodeContext({
+      anchorEl: event.target,
+      node: selectedNode,
+    });
   };
   /** this function is used to set selected node on drag */
   const onNodeDrag = (event, node, nodes) => {
@@ -179,6 +186,7 @@ export const Main = (props) => {
         setSelected({
           element: node,
           type: EDIT_MODES.NODE_EDITING,
+          anchorEl: event.target.parentElement,
         })
       );
 
@@ -193,12 +201,14 @@ export const Main = (props) => {
       setSelected({
         element: node,
         type: EDIT_MODES.NODE_EDITING,
+        anchorEl: event.target.parentElement,
       })
     );
   };
   /** this function is used to clear node editing mode when selected nodes are deleted */
   const onNodesDelete = () => {
     dispatch(setSelected(null));
+    dispatch(pushStateToHistory());
   };
 
   /*********** Edges ***********/
@@ -281,6 +291,7 @@ export const Main = (props) => {
   /** this function is used to clear editing mode on selected edges deleted */
   const onEdgesDelete = () => {
     getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
+    dispatch(pushStateToHistory());
   };
 
   /*********** Pane ***********/
@@ -347,6 +358,7 @@ export const Main = (props) => {
           onNodeDrag={onNodeDrag}
           onNodeDragStop={onNodeDragStop}
           onNodeClick={onNodeClick}
+          onNodeContextMenu={onNodeContextMenu}
           /*********** Edge event handlers ***********/
           onEdgesChange={onEdgesChange}
           onEdgesDelete={onEdgesDelete}

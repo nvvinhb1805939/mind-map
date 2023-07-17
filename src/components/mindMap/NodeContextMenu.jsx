@@ -21,6 +21,7 @@ import {
 import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { InsertIncomerAndOutgoerPopup } from '.';
+import { updateOpenId } from 'src/redux/slices/popper';
 
 export const NodeContextMenu = (props) => {
   const { id = '', nodeContext, onClose } = props;
@@ -72,6 +73,8 @@ export const NodeContextMenu = (props) => {
         handleClose();
         break;
     }
+
+    dispatch(updateOpenId(null));
   };
 
   const duplicateNode = (selectedNode) => {
