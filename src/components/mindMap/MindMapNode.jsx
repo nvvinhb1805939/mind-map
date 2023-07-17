@@ -1,5 +1,5 @@
 import { Stack, Typography, useTheme } from '@mui/material';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Handle, NodeResizer, Position } from 'reactflow';
 import {
@@ -18,27 +18,35 @@ import { updateOpenId } from 'src/redux/slices/popper';
 export const MindMapNode = memo((props) => {
   const theme = useTheme();
 
-  const { data, selected } = props;
+  const { id, data, selected } = props;
 
   const dispatch = useDispatch();
   const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
+
+  const [width, setWidth] = useState(NODE_SIZE.WIDTH);
 
   const onResizeStart = () => {
     dispatch(updateOpenId(null));
   };
 
-  const onResizeEnd = (event, { width, height }) => {
-    // dispatch(
-    //   setSelected({
-    //     ...mindMap.selected[0],
-    //     element: {
-    //       ...mindMap.selected[0].element,
-    //       width,
-    //       height,
-    //       style: { width, height },
-    //     },
-    //   })
-    // );
+  useEffect(() => {
+    if (mindMap.selected[0]?.element.id !== id || width === NODE_SIZE.WIDTH) return;
+
+    dispatch(
+      setSelected({
+        ...mindMap.selected[0],
+        element: {
+          ...mindMap.selected[0].element,
+          width,
+          height: NODE_SIZE.HEIGHT,
+          style: { width, height: NODE_SIZE.HEIGHT },
+        },
+      })
+    );
+  }, [width]);
+
+  const onResizeEnd = (event, { width }) => {
+    setWidth(width);
 
     dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
     dispatch(pushStateToHistory());

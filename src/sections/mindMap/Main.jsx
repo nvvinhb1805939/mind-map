@@ -171,10 +171,6 @@ export const Main = (props) => {
         anchorEl: event.target,
       })
     );
-    setNodeContext({
-      anchorEl: event.target,
-      node: selectedNode,
-    });
   };
   /** this function is used to set selected node on drag */
   const onNodeDrag = (event, node, nodes) => {
@@ -300,7 +296,9 @@ export const Main = (props) => {
   };
 
   /*********** Pane ***********/
-
+  const onMove = () => {
+    dispatch(updateOpenId(null));
+  };
   /** this function is used to switch to pane editing mode */
   const onPaneClick = (event) => {
     if (isPaneClick.current) {
@@ -378,6 +376,7 @@ export const Main = (props) => {
           onConnectStart={onConnectStart}
           onConnectEnd={onConnectEnd}
           /*********** Pane event handlers ***********/
+          onMove={onMove}
           onPaneClick={onPaneClick}
           /*********** Flow view ***********/
           fitView={true}

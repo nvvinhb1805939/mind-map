@@ -208,7 +208,7 @@ const mindMapSlice = createSlice({
     },
     pasteEdgeFormat: (state, action) => {
       state.mindMap.edges = state.mindMap.edges.map((edge) =>
-        action.payload.id === edge.id ? { ...edge, ...action.payload } : edge
+        action.payload.id === edge.id ? action.payload : edge
       );
 
       pushHistory(state);
