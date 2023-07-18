@@ -12,7 +12,7 @@ import {
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
-import { copyFormat, pushStateToHistory, setSelected } from 'src/redux/slices/mindMap';
+import { pushStateToHistory, setSelected } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
 
 export const MindMapNode = memo((props) => {
@@ -23,20 +23,22 @@ export const MindMapNode = memo((props) => {
   const dispatch = useDispatch();
   const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
 
-  const [width, setWidth] = useState(NODE_SIZE.WIDTH);
+  const selectedNode = mindMap.selected?.[0];
+
+  const [width, setWidth] = useState(selectedNode?.element?.width || NODE_SIZE.WIDTH);
 
   const onResizeStart = () => {
     dispatch(updateOpenId(null));
   };
 
   useEffect(() => {
-    if (mindMap.selected[0]?.element.id !== id || width === NODE_SIZE.WIDTH) return;
+    if (selectedNode?.element?.id !== id || width === selectedNode?.element?.width) return;
 
     dispatch(
       setSelected({
-        ...mindMap.selected[0],
+        ...selectedNode,
         element: {
-          ...mindMap.selected[0].element,
+          ...selectedNode?.element,
           width,
           height: NODE_SIZE.HEIGHT,
           style: { width, height: NODE_SIZE.HEIGHT },

@@ -309,6 +309,7 @@ export const Main = (props) => {
         })
       );
       reactFlowWrapper.current.classList.add('selected');
+      dispatch(updateOpenId(null));
     }
 
     isPaneClick.current = true;
