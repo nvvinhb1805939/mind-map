@@ -51,8 +51,8 @@ export const EdgeEditing = memo(({ selected, copied }) => {
       ...copiedEdge,
     };
 
-    dispatch(pasteEdgeFormat(pastedEdge));
     dispatch(setSelected({ ...selected[0], element: pastedEdge }));
+    dispatch(pasteEdgeFormat(pastedEdge));
   };
 
   return (

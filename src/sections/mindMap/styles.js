@@ -1,3 +1,4 @@
+import { alpha } from '@mui/system';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useSettingsContext } from 'src/components/settings';
@@ -54,11 +55,20 @@ export const useStyles = () => {
         },
 
       /** Style for Edges */
+      '& .react-flow__edge .react-flow__edge-path': {
+        filter: (theme) =>
+          `drop-shadow(0px 0px 1px ${theme.palette.grey[300]}) drop-shadow(0px 0px 1px ${theme.palette.grey[300]})`,
+      },
       '& .react-flow__edge:hover .react-flow__edge-path, & .react-flow__connection-path': {
-        stroke: (theme) => `${theme.palette.primary.main} !important`,
+        filter: (theme) =>
+          `drop-shadow(0px 0px 4px ${theme.palette.grey[300]}) drop-shadow(0px 0px 4px ${theme.palette.grey[300]})`,
+        strokeWidth: 4,
       },
       '& .react-flow__edge.selected .react-flow__edge-path': {
         stroke: `${selected?.[0]?.element?.style?.stroke || DEFAULT_EDGE_COLOR} !important`,
+        filter: (theme) =>
+          `drop-shadow(0px 0px 4px ${theme.palette.grey[300]}) drop-shadow(0px 0px 4px ${theme.palette.grey[300]})`,
+        strokeWidth: 4,
       },
 
       /** Style for Handles */
