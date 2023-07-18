@@ -40,7 +40,12 @@ export const Main = (props) => {
   const dispatch = useDispatch();
   const {
     mindMap: { nodes, edges, selected },
+    history,
+    currentIndex,
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+  useEffect(() => {
+    console.log(history[currentIndex]);
+  }, [currentIndex]);
 
   const [edgeContext, setEdgeContext] = useState(null);
   const [nodeContext, setNodeContext] = useState(null);
@@ -172,21 +177,14 @@ export const Main = (props) => {
       })
     );
   };
-  /** this function is used to set selected node on drag */
+  /** this function is used to close popper and clear selected */
   const onNodeDrag = (event, node, nodes) => {
-    // set selected node
-    !(node?.id === selected?.[0]?.element?.id) &&
-      dispatch(
-        setSelected({
-          element: node,
-          type: EDIT_MODES.NODE_EDITING,
-          anchorEl: event.target.parentElement,
-        })
-      );
+    if (node.dragging) return; // prevent dispatch constantly
 
-    dispatch(updateOpenId(null)); // hide popper
+    dispatch(updateOpenId(null)); // close popper
+    dispatch(setSelected(null)); // clear selected
   };
-  /** this function is used to push history on node stops drag */
+  /** this function is used to set selected node and push history on node stops drag */
   const onNodeDragStop = (event, selectedNode, nodes) => {
     if (!selectedNode.dragging) return;
 
