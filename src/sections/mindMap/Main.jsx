@@ -43,9 +43,6 @@ export const Main = (props) => {
     history,
     currentIndex,
   } = useSelector((state) => state[TYPES.MIND_MAP]);
-  useEffect(() => {
-    console.log(history[currentIndex]);
-  }, [currentIndex]);
 
   const [edgeContext, setEdgeContext] = useState(null);
   const [nodeContext, setNodeContext] = useState(null);
@@ -204,11 +201,6 @@ export const Main = (props) => {
       })
     );
   };
-  /** this function is used to clear node editing mode when selected nodes are deleted */
-  const onNodesDelete = () => {
-    dispatch(setSelected(null));
-    dispatch(pushStateToHistory());
-  };
 
   /*********** Edges ***********/
 
@@ -287,11 +279,6 @@ export const Main = (props) => {
 
     dispatch(setSelected(null));
   };
-  /** this function is used to clear editing mode on selected edges deleted */
-  const onEdgesDelete = () => {
-    getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
-    dispatch(pushStateToHistory());
-  };
 
   /*********** Pane ***********/
   const onMove = () => {
@@ -356,13 +343,11 @@ export const Main = (props) => {
           edgeTypes={EDGE_TYPES}
           /*********** Node event handlers ***********/
           onNodesChange={onNodesChange}
-          onNodesDelete={onNodesDelete}
           onNodeDrag={onNodeDrag}
           onNodeDragStop={onNodeDragStop}
           onNodeClick={onNodeClick}
           /*********** Edge event handlers ***********/
           onEdgesChange={onEdgesChange}
-          onEdgesDelete={onEdgesDelete}
           onEdgeUpdateStart={onEdgeUpdateStart}
           onEdgeUpdate={onEdgeUpdate}
           onEdgeUpdateEnd={onEdgeUpdateEnd}
@@ -382,7 +367,7 @@ export const Main = (props) => {
           maxZoom={DEFAULT_MAX_ZOOM}
           /*********** Keys ***********/
           selectionKeyCode="Shift"
-          deleteKeyCode="Delete"
+          deleteKeyCode={null}
           multiSelectionKeyCode="Shift"
         >
           <FlowToolbar />
