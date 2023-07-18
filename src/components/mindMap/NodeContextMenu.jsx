@@ -18,10 +18,10 @@ import {
   pushStateToHistory,
   setSelected,
 } from 'src/redux/slices/mindMap';
+import { updateOpenId } from 'src/redux/slices/popper';
 import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { InsertIncomerAndOutgoerPopup } from '.';
-import { updateOpenId } from 'src/redux/slices/popper';
 
 export const NodeContextMenu = (props) => {
   const { id = '', nodeContext, onClose } = props;
@@ -36,12 +36,6 @@ export const NodeContextMenu = (props) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const closeMenuContext = () => dispatch(setSelected(null));
-
-  const handleClose = () => {
-    closeMenuContext();
-  };
-
   const clearMode = () => {
     getEditingMode(selected) === EDIT_MODES.NODE_EDITING && dispatch(setSelected(null)); // clear node mode
   };
@@ -55,9 +49,8 @@ export const NodeContextMenu = (props) => {
         copyFormat(selected[0].element);
         break;
       case NODE_CONTEXT_MENU_TYPES.ONLY_NODE:
-        deleteOnlyNode(selected[0].element);
         clearMode();
-        handleClose();
+        deleteOnlyNode(selected[0].element);
         break;
       case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
         addIncomer(selected[0].element, type);
@@ -68,9 +61,8 @@ export const NodeContextMenu = (props) => {
         clearMode();
         break;
       default:
-        clearNodeAndConnectedEdges(selected[0].element);
         clearMode();
-        handleClose();
+        clearNodeAndConnectedEdges(selected[0].element);
         break;
     }
 
