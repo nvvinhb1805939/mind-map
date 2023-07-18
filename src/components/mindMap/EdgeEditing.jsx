@@ -58,6 +58,7 @@ export const EdgeEditing = memo(({ selected, copied }) => {
   return (
     <Stack direction="row" justifyContent="space-between" gap={1}>
       <ColorPicker
+        id={`color-picker-edge-${selected[0].element.id}`}
         onChangeComplete={onChangeComplete}
         initialColor={selected[0].element?.style?.stroke || DEFAULT_EDGE_COLOR}
         tooltip="Màu đường kẻ"

@@ -168,7 +168,7 @@ export const Main = (props) => {
       setSelected({
         element: selectedNode,
         type: EDIT_MODES.NODE_EDITING,
-        anchorEl: event.target,
+        anchorEl: event.target.parentElement,
       })
     );
   };

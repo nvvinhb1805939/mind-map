@@ -6,20 +6,17 @@ import {
   DEFAULT_NODE_BG_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   DEFAULT_TEXT_COLOR,
-  EDIT_MODES,
 } from 'src/config-global';
-import {
-  pasteNodeFormat,
-  pushStateToHistory,
-  setSelected,
-  updateNodeProps,
-} from 'src/redux/slices/mindMap';
+import { pasteNodeFormat, setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
+import { v4 as uuidv4 } from 'uuid';
 import { ColorPicker, PasteFormat } from '.';
 import { InputField } from './InputField';
 
 export const NodeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
+
+  const selectedNodeId = selected[0].element?.id || uuidv4();
 
   const [nodeLabel, setNodeLabel] = useState(selected[0].element?.data?.label || '');
 
@@ -81,13 +78,13 @@ export const NodeEditing = memo(({ selected, copied }) => {
   return (
     <Stack direction="row" justifyContent="space-between" gap={1}>
       <ColorPicker
-        id="color-picker-bgcolor"
+        id={`color-picker-bgcolor-${selectedNodeId}`}
         onChangeComplete={({ hex }) => onNodePropsChangeComplete({ bgcolor: hex })}
         initialColor={selected[0].element?.data?.styles?.bgcolor || DEFAULT_NODE_BG_COLOR}
         tooltip="Màu nền"
       />
       <ColorPicker
-        id="color-picker-border-color"
+        id={`color-picker-border-color-${selectedNodeId}`}
         onChangeComplete={({ hex }) => onNodePropsChangeComplete({ borderColor: hex })}
         initialColor={selected[0].element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR}
         tooltip="Màu viền"
@@ -103,7 +100,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
         />
       </Box>
       <ColorPicker
-        id="color-picker-text-color"
+        id={`color-picker-text-color-${selectedNodeId}`}
         onChangeComplete={({ hex }) =>
           onNodePropsChangeComplete({ color: hex, '& .MuiTypography-root': { color: hex } })
         }
@@ -126,7 +123,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
         }}
       />
       <ColorPicker
-        id="color-picker-handle-color"
+        id={`color-picker-handle-color-${selectedNodeId}`}
         onChangeComplete={({ hex }) =>
           onNodePropsChangeComplete({ '& .react-flow__handle': { bgcolor: hex } })
         }
