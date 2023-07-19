@@ -56,6 +56,7 @@ export const MindMapNode = memo((props) => {
 
   return (
     <Stack
+      id={id}
       className={MIND_MAP_CLASSES.NODE}
       alignItems="center"
       justifyContent="center"

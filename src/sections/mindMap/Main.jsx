@@ -30,6 +30,7 @@ import { getEditingMode, hasConnectBetweenTwoNode, initMindMap } from 'src/utils
 import { v4 as uuidv4 } from 'uuid';
 import { FlowToolbar } from './FlowToolbar';
 import { useStyles } from './styles';
+import { MultiSelectToolbar } from './MultiSelectToolbar';
 
 let quantityNewNode = 0;
 
@@ -383,6 +384,7 @@ export const Main = (props) => {
           multiSelectionKeyCode={null}
         >
           <FlowToolbar />
+          {isMultiSelection && <MultiSelectToolbar />}
           <Controls showInteractive={false} />
           <MiniMap ariaLabel="Sơ đồ tư duy" />
         </ReactFlow>

@@ -2,17 +2,20 @@
 import {
   AccountTreeOutlined as AccountTreeOutlinedIcon,
   BrokenImageOutlined as BrokenImageOutlinedIcon,
+  Clear as ClearIcon,
   ClearOutlined as ClearOutlinedIcon,
+  Crop169Rounded as Crop169RoundedIcon,
   DifferenceOutlined as DifferenceOutlinedIcon,
   ImagesearchRollerOutlined as ImagesearchRollerOutlinedIcon,
   North as NorthIcon,
+  PlaylistAddCheckOutlined as PlaylistAddCheckOutlinedIcon,
   RemoveOutlined as RemoveOutlinedIcon,
+  ShowChartOutlined as ShowChartOutlinedIcon,
   South as SouthIcon,
 } from '@mui/icons-material';
 import { v4 as uuidv4 } from 'uuid';
 import { MindMapEdge, MindMapNode } from './components/mindMap';
 import { PATH_MINDMAP } from './routes/paths';
-
 // API
 // ----------------------------------------------------------------------
 
@@ -190,6 +193,8 @@ export const EDIT_MODES = {
   PANE_EDITING: 'pane-editing',
   NODE_EDITING: 'node-editing',
   EDGE_EDITING: 'edge-editing',
+  ALL: 'node-and-edge-editing',
+  CLEAR: 'clear-all-node-and-edge-editing',
 };
 
 export const STORAGE_KEYS = {
@@ -203,3 +208,26 @@ export const DEFAULT_NODE_BORDER_COLOR = '#424242';
 export const DEFAULT_HANDLE_COLOR = DEFAULT_NODE_BORDER_COLOR;
 
 export const NODE_CONTEXT_MENU_ID = 'node-context-menu';
+
+export const MULTI_SELECTION_RADIO = [
+  {
+    id: uuidv4(),
+    label: 'Chọn tất cả nút',
+    value: EDIT_MODES.NODE_EDITING,
+  },
+  {
+    id: uuidv4(),
+    label: 'Chọn tất cả đường kẻ',
+    value: EDIT_MODES.EDGE_EDITING,
+  },
+  {
+    id: uuidv4(),
+    label: 'Chọn tất cả',
+    value: EDIT_MODES.ALL,
+  },
+  {
+    id: uuidv4(),
+    label: 'Bỏ chọn tất cả',
+    value: EDIT_MODES.CLEAR,
+  },
+];

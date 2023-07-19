@@ -15,3 +15,5 @@ export * from './SaveToolbarButton';
 export * from './UndoToolbarButton';
 export * from './ResetToolbarButton';
 export * from './PasteFormat';
+export * from './MultiSelectToolbarButton';
+export * from './BaseToolbar';
