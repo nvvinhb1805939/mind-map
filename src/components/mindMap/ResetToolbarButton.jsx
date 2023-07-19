@@ -1,8 +1,7 @@
 import { RefreshOutlined as RefreshOutlinedIcon } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
-import { INITIAL_MIND_MAP } from 'src/config-global';
-import { renewMindMap } from 'src/redux/slices/mindMap';
+import { INITIAL_MIND_MAP, renewMindMap } from 'src/redux/slices/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
 
 export const ResetToolbarButton = () => {

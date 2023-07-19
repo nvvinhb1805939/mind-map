@@ -5,12 +5,11 @@ import {
   DEFAULT_MIN_ZOOM,
   DOWNLOAD_CONTEXT_MENU_TYPES,
   DOWNLOAD_FILE_NAME,
-  INITIAL_MIND_MAP,
   MIND_MAP_SELECTOR,
   STORAGE_KEYS,
   TYPES,
 } from 'src/config-global';
-import { renewMindMap, setSelected } from 'src/redux/slices/mindMap';
+import { INITIAL_MIND_MAP, renewMindMap, setSelected } from 'src/redux/slices/mindMap';
 import { dispatch } from 'src/redux/store';
 
 export const hasConnectBetweenTwoNode = (edges, node1, node2) =>

@@ -1,4 +1,3 @@
-import { alpha } from '@mui/system';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useSettingsContext } from 'src/components/settings';
@@ -6,11 +5,11 @@ import {
   DEFAULT_EDGE_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   HANDLE_SIZE,
-  INITIAL_MIND_MAP,
   MIND_MAP_CLASSES,
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
+import { INITIAL_MIND_MAP } from 'src/redux/slices/mindMap';
 
 export const useStyles = () => {
   const { themeMode } = useSettingsContext();

@@ -8,6 +8,7 @@ import {
   SaveToolbarButton,
   UndoToolbarButton,
 } from 'src/components/mindMap';
+import { MultiSelectToolbarButton } from 'src/components/mindMap/MultiSelectToolbarButton';
 
 export const FlowToolbar = (props) => {
   return (
@@ -27,6 +28,7 @@ export const FlowToolbar = (props) => {
       }}
     >
       <Panel position="top">
+        <MultiSelectToolbarButton />
         <SaveToolbarButton />
         <RestoreToolbarButton />
         <UndoToolbarButton />

@@ -196,14 +196,6 @@ export const STORAGE_KEYS = {
   MIND_MAP: 'mindMap',
 };
 
-export const INITIAL_MIND_MAP = {
-  bgcolor: '#ffffff',
-  nodes: [],
-  edges: [],
-  selected: [],
-  copied: null,
-};
-
 export const DEFAULT_EDGE_COLOR = '#b1b1b7';
 export const DEFAULT_TEXT_COLOR = '#212B36';
 export const DEFAULT_NODE_BG_COLOR = '#ffffff';

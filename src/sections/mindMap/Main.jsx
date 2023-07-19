@@ -20,6 +20,7 @@ import {
   deleteEdge,
   elevateEdge,
   pushStateToHistory,
+  renewMindMap,
   setSelected,
   updateEdge,
 } from 'src/redux/slices/mindMap';
@@ -39,9 +40,8 @@ export const Main = (props) => {
 
   const dispatch = useDispatch();
   const {
-    mindMap: { nodes, edges, selected },
-    history,
-    currentIndex,
+    mindMap,
+    mindMap: { nodes, edges, selected, isMultiSelection },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const [edgeContext, setEdgeContext] = useState(null);
@@ -322,6 +322,18 @@ export const Main = (props) => {
     initMindMap();
   }, [dispatch]);
 
+  /** Toggle node drag on multi select */
+  useEffect(() => {
+    nodes?.length > 0 &&
+      dispatch(
+        renewMindMap({
+          ...mindMap,
+          nodes: nodes.map((node) => ({ ...node, draggable: !isMultiSelection })),
+          edges: edges.map((edge) => ({ ...edge, updatable: !isMultiSelection })),
+        })
+      );
+  }, [isMultiSelection]);
+
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <Box ref={reactFlowWrapper} sx={styles}>
@@ -366,9 +378,9 @@ export const Main = (props) => {
           fitView={true}
           maxZoom={DEFAULT_MAX_ZOOM}
           /*********** Keys ***********/
-          selectionKeyCode="Shift"
+          selectionKeyCode={null}
           deleteKeyCode={null}
-          multiSelectionKeyCode="Shift"
+          multiSelectionKeyCode={null}
         >
           <FlowToolbar />
           <Controls showInteractive={false} />

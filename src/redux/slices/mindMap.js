@@ -3,8 +3,17 @@ import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from '
 import { EDIT_MODES } from 'src/config-global';
 import { v4 as uuidv4 } from 'uuid';
 
+export const INITIAL_MIND_MAP = {
+  bgcolor: '#ffffff',
+  nodes: [],
+  edges: [],
+  selected: [],
+  copied: null,
+  isMultiSelection: false,
+};
+
 export const initialState = {
-  mindMap: {},
+  mindMap: INITIAL_MIND_MAP,
   history: [],
   currentIndex: -1,
 };
@@ -160,6 +169,10 @@ const mindMapSlice = createSlice({
           break;
       }
     },
+    /** this action is used to set multiple selected elements */
+    setMultipleSelected: (state, action) => {
+      console.log(action.payload);
+    },
     /** this action is used to push current state to history */
     pushStateToHistory: (state) => {
       pushHistory(state);
@@ -199,6 +212,7 @@ const mindMapSlice = createSlice({
     copyFormat: (state, action) => {
       state.mindMap.copied = action.payload;
     },
+    /** this action is used to paste format of node */
     pasteNodeFormat: (state, action) => {
       state.mindMap.nodes = state.mindMap.nodes.map((node) =>
         action.payload.id === node.id ? action.payload : node
@@ -206,12 +220,17 @@ const mindMapSlice = createSlice({
 
       pushHistory(state);
     },
+    /** this action is used to paste format of edge */
     pasteEdgeFormat: (state, action) => {
       state.mindMap.edges = state.mindMap.edges.map((edge) =>
         action.payload.id === edge.id ? action.payload : edge
       );
 
       pushHistory(state);
+    },
+    /** this action is used to toggle multi selection mode */
+    toggleMultiSelection: (state, action) => {
+      state.mindMap.isMultiSelection = action.payload;
     },
   },
 });
@@ -234,11 +253,13 @@ export const {
   undo,
   redo,
   setSelected,
+  setMultiSelected,
   pushStateToHistory,
   insertNodeBetweenTwoEdges,
   copyFormat,
   pasteNodeFormat,
   pasteEdgeFormat,
+  toggleMultiSelection,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

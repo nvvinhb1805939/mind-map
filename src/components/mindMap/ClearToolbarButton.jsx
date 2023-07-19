@@ -10,8 +10,8 @@ import {
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { INITIAL_MIND_MAP, STORAGE_KEYS } from 'src/config-global';
-import { renewMindMap } from 'src/redux/slices/mindMap';
+import { STORAGE_KEYS } from 'src/config-global';
+import { INITIAL_MIND_MAP, renewMindMap } from 'src/redux/slices/mindMap';
 import { clearDataFromLocalStorage } from 'src/utils/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
 

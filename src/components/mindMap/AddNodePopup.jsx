@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TYPES } from 'src/config-global';
 import { addNode, pushStateToHistory } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
