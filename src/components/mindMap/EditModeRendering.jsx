@@ -19,6 +19,13 @@ export const EditModeRendering = (props) => {
         return <NodeEditing selected={selected} copied={copied} />;
       case EDIT_MODES.EDGE_EDITING:
         return <EdgeEditing selected={selected} copied={copied} />;
+      case EDIT_MODES.ALL:
+        return (
+          <Stack direction="row" gap={1}>
+            <EdgeEditing selected={selected} copied={copied} />
+            <NodeEditing selected={selected} copied={copied} />
+          </Stack>
+        );
       default:
         break;
     }

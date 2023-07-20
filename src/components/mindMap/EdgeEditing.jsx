@@ -2,8 +2,8 @@ import { ImagesearchRollerOutlined as ImagesearchRollerOutlinedIcon } from '@mui
 import { Button, Stack, Tooltip } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { memo } from 'react';
-import { useDispatch } from 'react-redux';
-import { DEFAULT_EDGE_COLOR, EDIT_MODES } from 'src/config-global';
+import { useDispatch, useSelector } from 'react-redux';
+import { DEFAULT_EDGE_COLOR, EDIT_MODES, TYPES } from 'src/config-global';
 import {
   changeEdgeColor,
   copyFormat,
@@ -14,6 +14,9 @@ import { ColorPicker, PasteFormat } from '.';
 
 export const EdgeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
+  const {
+    mindMap: { isMultiSelection },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -63,17 +66,24 @@ export const EdgeEditing = memo(({ selected, copied }) => {
         initialColor={selected[0].element?.style?.stroke || DEFAULT_EDGE_COLOR}
         tooltip="Màu đường kẻ"
       />
-      <Tooltip title="Sao chép định dạng" disableInteractive>
-        <Button
-          onClick={copyEdgeFormat}
-          sx={{ minWidth: 'unset', width: '40px !important', height: '40px !important' }}
-          variant="outlined"
-          color="inherit"
-        >
-          <ImagesearchRollerOutlinedIcon />
-        </Button>
-      </Tooltip>
-      {!!selected && <PasteFormat selected={selected} copied={copied} action={pasteFormat} />}
+
+      {!isMultiSelection && (
+        <Tooltip title="Sao chép định dạng" disableInteractive>
+          <Button
+            onClick={copyEdgeFormat}
+            sx={{ minWidth: 'unset', width: '40px !important', height: '40px !important' }}
+            variant="outlined"
+            color="inherit"
+          >
+            <ImagesearchRollerOutlinedIcon />
+          </Button>
+        </Tooltip>
+      )}
+
+      {/** if is multi select mode or not selected edge then not render */}
+      {!isMultiSelection && !!selected && (
+        <PasteFormat selected={selected} copied={copied} action={pasteFormat} />
+      )}
     </Stack>
   );
 });

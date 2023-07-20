@@ -5,6 +5,7 @@ import {
   DEFAULT_MIN_ZOOM,
   DOWNLOAD_CONTEXT_MENU_TYPES,
   DOWNLOAD_FILE_NAME,
+  EDIT_MODES,
   MIND_MAP_SELECTOR,
   STORAGE_KEYS,
   TYPES,
@@ -21,11 +22,15 @@ export const hasConnectBetweenTwoNode = (edges, node1, node2) =>
   );
 
 export const getEditingMode = (elements = []) => {
-  if (elements.length <= 0) return null;
+  if (elements.length <= 0) return EDIT_MODES.CLEAR;
 
   const [firstElement] = elements;
 
-  return elements.every((element) => element.type === firstElement.type) ? firstElement.type : null;
+  if (firstElement.type === EDIT_MODES.PANE_EDITING) return EDIT_MODES.PANE_EDITING;
+
+  return elements.some((element) => element.type !== firstElement.type)
+    ? EDIT_MODES.ALL
+    : firstElement.type;
 };
 
 const downloadImage = (dataUrl, type) => {

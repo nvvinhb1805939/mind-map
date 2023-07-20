@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { el } from 'date-fns/locale';
 import { applyEdgeChanges, applyNodeChanges, updateEdge as onUpdateEdge } from 'reactflow';
 import { EDIT_MODES } from 'src/config-global';
 import { v4 as uuidv4 } from 'uuid';
@@ -188,12 +187,18 @@ const mindMapSlice = createSlice({
     },
     /** this action is used to set selected all */
     setSelectedAll: (state) => {
-      const selectedNodes = state.mindMap.nodes.map((node) => ({ ...node, selected: true }));
-      const selectedEdges = state.mindMap.edges.map((edge) => ({ ...edge, selected: true }));
+      const selectedNodes = state.mindMap.nodes.map((node) => ({
+        element: { ...node, selected: true },
+        type: EDIT_MODES.NODE_EDITING,
+      }));
+      const selectedEdges = state.mindMap.edges.map((edge) => ({
+        element: { ...edge, selected: true },
+        type: EDIT_MODES.EDGE_EDITING,
+      }));
 
-      state.mindMap.nodes = selectedNodes;
-      state.mindMap.edges = selectedEdges;
-      state.mindMap.selected.push(selectedNodes, selectedEdges);
+      state.mindMap.nodes = selectedNodes.map((node) => node.element);
+      state.mindMap.edges = selectedEdges.map((edge) => edge.element);
+      state.mindMap.selected = [...selectedNodes, ...selectedEdges];
 
       pushHistory(state);
     },

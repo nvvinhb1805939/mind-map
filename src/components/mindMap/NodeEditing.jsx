@@ -1,11 +1,12 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   DEFAULT_HANDLE_COLOR,
   DEFAULT_NODE_BG_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   DEFAULT_TEXT_COLOR,
+  TYPES,
 } from 'src/config-global';
 import { pasteNodeFormat, setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
@@ -15,6 +16,9 @@ import { InputField } from './InputField';
 
 export const NodeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
+  const {
+    mindMap: { isMultiSelection },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const selectedNodeId = selected[0].element?.id || uuidv4();
 
@@ -133,7 +137,10 @@ export const NodeEditing = memo(({ selected, copied }) => {
         }
         tooltip="Màu cổng"
       />
-      {!!selected && <PasteFormat selected={selected} copied={copied} action={pasteFormat} />}
+      {/** if is multi select mode or not selected node then not render */}
+      {!isMultiSelection && !!selected && (
+        <PasteFormat selected={selected} copied={copied} action={pasteFormat} />
+      )}
     </Stack>
   );
 });

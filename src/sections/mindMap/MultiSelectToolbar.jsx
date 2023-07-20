@@ -1,4 +1,5 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseToolbar } from 'src/components/mindMap';
 import { EDIT_MODES, MULTI_SELECTION_RADIO, TYPES } from 'src/config-global';
@@ -7,8 +8,17 @@ import { setMultiSelectedElements, setSelected, setSelectedAll } from 'src/redux
 export const MultiSelectToolbar = (props) => {
   const dispatch = useDispatch();
   const {
-    mindMap: { nodes, edges },
+    mindMap: { nodes, edges, selected },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+
+  const [value, setValue] = useState(EDIT_MODES.CLEAR);
+
+  useEffect(() => {
+    !(
+      selected?.[0]?.type === EDIT_MODES.NODE_EDITING ||
+      selected?.[0]?.type === EDIT_MODES.EDGE_EDITING
+    ) && setValue(EDIT_MODES.CLEAR);
+  }, [selected]);
 
   const selectAllNodes = (nodes) => {
     const selectedNodes = nodes.map((node) => ({
@@ -59,11 +69,17 @@ export const MultiSelectToolbar = (props) => {
         <RadioGroup
           onChange={onChange}
           aria-labelledby="multi-select-radio"
-          defaultValue={EDIT_MODES.CLEAR}
+          value={value}
           name="multi-select-radio"
         >
           {MULTI_SELECTION_RADIO.map(({ id, value, label, icon }) => (
-            <FormControlLabel key={id} value={value} control={<Radio />} label={label} />
+            <FormControlLabel
+              onChange={() => setValue(value)}
+              key={id}
+              value={value}
+              control={<Radio />}
+              label={label}
+            />
           ))}
         </RadioGroup>
       </FormControl>
