@@ -40,7 +40,7 @@ const setSelectedElements = (state, action) => {
   if (action.payload.type === 'nodes') clearSelectedEdges(state);
   else if (action.payload.type === 'edges') clearSelectedNodes(state);
 
-  state.mindMap[action.payload.type] = action.payload.elements;
+  state.mindMap[action.payload.type] = action.payload.elements.map((element) => element.element);
   state.mindMap.selected = action.payload.elements;
 };
 

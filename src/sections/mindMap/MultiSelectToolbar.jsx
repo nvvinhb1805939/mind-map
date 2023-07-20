@@ -2,13 +2,7 @@ import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseToolbar } from 'src/components/mindMap';
 import { EDIT_MODES, MULTI_SELECTION_RADIO, TYPES } from 'src/config-global';
-import {
-  setMultiSelectedEdges,
-  setMultiSelectedElements,
-  setMultiSelectedNodes,
-  setSelected,
-  setSelectedAll,
-} from 'src/redux/slices/mindMap';
+import { setMultiSelectedElements, setSelected, setSelectedAll } from 'src/redux/slices/mindMap';
 
 export const MultiSelectToolbar = (props) => {
   const dispatch = useDispatch();
@@ -17,12 +11,18 @@ export const MultiSelectToolbar = (props) => {
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const selectAllNodes = (nodes) => {
-    const selectedNodes = nodes.map((node) => ({ ...node, selected: true }));
+    const selectedNodes = nodes.map((node) => ({
+      element: { ...node, selected: true },
+      type: EDIT_MODES.NODE_EDITING,
+    }));
     dispatch(setMultiSelectedElements({ type: 'nodes', elements: selectedNodes }));
   };
 
   const selectAllEdges = (edges) => {
-    const selectedEdges = edges.map((edge) => ({ ...edge, selected: true }));
+    const selectedEdges = edges.map((edge) => ({
+      element: { ...edge, selected: true },
+      type: EDIT_MODES.EDGE_EDITING,
+    }));
     dispatch(setMultiSelectedElements({ type: 'edges', elements: selectedEdges }));
   };
 
