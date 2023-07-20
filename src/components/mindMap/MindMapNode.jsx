@@ -21,18 +21,24 @@ export const MindMapNode = memo((props) => {
   const { id, data, selected } = props;
 
   const dispatch = useDispatch();
-  const { mindMap } = useSelector((state) => state[TYPES.MIND_MAP]);
+  const {
+    mindMap: { selected: selectedNode },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
-  const selectedNode = mindMap.selected?.[0];
+  const selectedNodeWidth = selectedNode?.[0]?.element?.width;
 
-  const [width, setWidth] = useState(selectedNode?.element?.width || NODE_SIZE.WIDTH);
+  const [width, setWidth] = useState(selectedNodeWidth || NODE_SIZE.WIDTH);
 
   const onResizeStart = () => {
     dispatch(updateOpenId(null));
   };
 
   useEffect(() => {
-    if (selectedNode?.element?.id !== id || width === selectedNode?.element?.width) return;
+    setWidth(selectedNodeWidth);
+  }, [selectedNodeWidth]);
+
+  useEffect(() => {
+    if (selectedNode?.element?.id !== id) return;
 
     dispatch(
       setSelected({

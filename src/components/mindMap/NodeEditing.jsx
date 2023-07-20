@@ -95,7 +95,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
       />
       <Box onFocus={() => dispatch(updateOpenId(null))}>
         <InputField
-          id={selected[0].element.id}
+          id={selectedNodeId}
           name="label"
           defaultValue={selected[0].element?.data?.label || ''}
           onChange={setNodeLabel}

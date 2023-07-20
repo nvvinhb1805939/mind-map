@@ -47,7 +47,7 @@ export const NodeContextMenu = (props) => {
         duplicateNode(elementContext.element);
         break;
       case NODE_CONTEXT_MENU_TYPES.COPY_FORMAT:
-        copyFormat(elementContext.element);
+        copyFormat(selected?.[0].element);
         break;
       case NODE_CONTEXT_MENU_TYPES.ONLY_NODE:
         clearMode();
