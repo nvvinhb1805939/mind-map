@@ -28,6 +28,7 @@ import {
 import { updateOpenId } from 'src/redux/slices/popper';
 import { exportToTextFile, htmlToImage } from 'src/utils/mindMap';
 import { BasePopper } from './BasePopper';
+import { useSnackbar } from 'notistack';
 
 const DEFAULT_SLIDER_VALUE = 50;
 
@@ -37,6 +38,8 @@ export const DownloadContextMenu = (props) => {
     mindMap,
     mindMap: { bgcolor },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [type, setType] = useState(DOWNLOAD_CONTEXT_MENU[0]);
   const [downloadTypeAnchorEl, setDownloadTypeAnchorEl] = useState(null);
@@ -69,11 +72,15 @@ export const DownloadContextMenu = (props) => {
   };
 
   const handleDownloadClick = () => {
-    type.id === DOWNLOAD_CONTEXT_MENU_TYPES.PNG
-      ? htmlToImage(getNodes(), toPng, type.id, size, bgcolor) // download with type is image
-      : exportToTextFile(mindMap); // download with type is text
+    try {
+      type.id === DOWNLOAD_CONTEXT_MENU_TYPES.PNG
+        ? htmlToImage(getNodes(), toPng, type.id, size, bgcolor) // download with type is image
+        : exportToTextFile(mindMap); // download with type is text
 
-    dispatch(updateOpenId(null)); // close popper
+      dispatch(updateOpenId(null)); // close popper
+    } catch (error) {
+      enqueueSnackbar('Có lỗi xảy ra. Vui lòng tải lại trang!', { variant: 'error' });
+    }
   };
 
   return (
