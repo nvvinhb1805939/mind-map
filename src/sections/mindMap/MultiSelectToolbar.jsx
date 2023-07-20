@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseToolbar } from 'src/components/mindMap';
 import { EDIT_MODES, MULTI_SELECTION_RADIO, TYPES } from 'src/config-global';
-import { setMultiSelectedElements, setSelected, setSelectedAll } from 'src/redux/slices/mindMap';
+import {
+  setElementContext,
+  setMultiSelectedElements,
+  setSelected,
+  setSelectedAll,
+} from 'src/redux/slices/mindMap';
 
 export const MultiSelectToolbar = (props) => {
   const dispatch = useDispatch();
@@ -42,10 +47,14 @@ export const MultiSelectToolbar = (props) => {
 
   const clearSelected = () => {
     dispatch(setSelected(null));
+    dispatch(setElementContext(null));
   };
 
   const onChange = (event) => {
+    dispatch(setElementContext(null));
+
     const { value } = event.target;
+
     switch (value) {
       case EDIT_MODES.NODE_EDITING:
         selectAllNodes(nodes);
@@ -56,7 +65,6 @@ export const MultiSelectToolbar = (props) => {
       case EDIT_MODES.ALL:
         selectAllNodesAndEdges();
         break;
-
       default:
         clearSelected();
         break;

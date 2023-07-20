@@ -21,6 +21,7 @@ import {
   elevateEdge,
   pushStateToHistory,
   renewMindMap,
+  setElementContext,
   setSelected,
   updateEdge,
 } from 'src/redux/slices/mindMap';
@@ -48,12 +49,11 @@ export const Main = (props) => {
   const dispatch = useDispatch();
   const {
     mindMap,
-    mindMap: { nodes, edges, selected, isMultiSelection },
+    mindMap: { nodes, edges, selected, elementContext, isMultiSelection },
     currentIndex,
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const [edgeContext, setEdgeContext] = useState(null);
-  const [nodeContext, setNodeContext] = useState(null);
 
   const reactFlowWrapper = useRef(null); // access DOM
   const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to determine whether current event is onEdgeUpdate events or onConnect events ()
@@ -141,6 +141,8 @@ export const Main = (props) => {
         type: TYPES.MIND_MAP,
       })
     ); // add new edge
+    dispatch(setElementContext(null)); // clear element context
+
     dispatch(pushStateToHistory()); // push to history
 
     isNodesConnected.current = true;
@@ -169,7 +171,7 @@ export const Main = (props) => {
   const onNodeClick = (event, selectedNode) => {
     if (isMultiSelection) return;
 
-    openNodeContextMenu(event, selectedNode, setNodeContext);
+    openNodeContextMenu(event, selectedNode);
     setSelectedNode(event, selectedNode);
   };
   /** this function is used to open node context menu on multi selection */
@@ -179,7 +181,7 @@ export const Main = (props) => {
 
     if (!selectedNode.selected) return;
 
-    openNodeContextMenu(event, selectedNode, setNodeContext);
+    openNodeContextMenu(event, selectedNode);
   };
   /** this function is used to close popper and clear selected */
   const onNodeDrag = (event, node, nodes) => {
@@ -196,7 +198,7 @@ export const Main = (props) => {
 
     dispatch(pushStateToHistory());
 
-    openNodeContextMenu(event, selectedNode, setNodeContext);
+    openNodeContextMenu(event, selectedNode);
     setSelectedNode(event, selectedNode);
   };
 
@@ -341,7 +343,7 @@ export const Main = (props) => {
 
   /** Clear node context on multi select */
   useEffect(() => {
-    setNodeContext(null);
+    dispatch(setElementContext(null));
   }, [isMultiSelection]);
 
   return (
@@ -350,12 +352,8 @@ export const Main = (props) => {
         {!!edgeContext?.anchorEl && (
           <InsertNodePopup edgeContext={edgeContext} onClose={() => setEdgeContext(null)} />
         )}
-        {!!nodeContext?.anchorEl && (
-          <NodeContextMenu
-            id={NODE_CONTEXT_MENU_ID}
-            nodeContext={nodeContext}
-            onClose={() => setNodeContext(null)}
-          />
+        {elementContext?.type === EDIT_MODES.NODE_EDITING && (
+          <NodeContextMenu id={NODE_CONTEXT_MENU_ID} />
         )}
         <ReactFlow
           /*********** Basic props ***********/

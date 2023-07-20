@@ -11,7 +11,12 @@ import {
   STORAGE_KEYS,
   TYPES,
 } from 'src/config-global';
-import { INITIAL_MIND_MAP, renewMindMap, setSelected } from 'src/redux/slices/mindMap';
+import {
+  INITIAL_MIND_MAP,
+  renewMindMap,
+  setElementContext,
+  setSelected,
+} from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
 import { dispatch } from 'src/redux/store';
 
@@ -114,14 +119,16 @@ export const initMindMap = () => {
   } else dispatch(renewMindMap(INITIAL_MIND_MAP));
 };
 
-export const openNodeContextMenu = (event, selectedNode, setNodeContext) => {
+export const openNodeContextMenu = (event, selectedNode) => {
   dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
 
-  setNodeContext({
-    element: selectedNode,
-    type: EDIT_MODES.NODE_EDITING,
-    anchorEl: event.target.parentElement,
-  });
+  dispatch(
+    setElementContext({
+      element: selectedNode,
+      type: EDIT_MODES.NODE_EDITING,
+      anchorEl: event.target.parentElement,
+    })
+  );
 };
 
 export const setSelectedNode = (event, selectedNode) => {

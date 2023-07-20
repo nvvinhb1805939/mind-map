@@ -9,6 +9,7 @@ export const INITIAL_MIND_MAP = {
   edges: [],
   selected: [],
   copied: null,
+  elementContext: null,
   isMultiSelection: false,
 };
 
@@ -261,6 +262,10 @@ const mindMapSlice = createSlice({
     toggleMultiSelection: (state, action) => {
       state.mindMap.isMultiSelection = action.payload;
     },
+    /** this action is used to set element context */
+    setElementContext: (state, action) => {
+      state.mindMap.elementContext = action.payload;
+    },
   },
 });
 
@@ -290,6 +295,7 @@ export const {
   pasteNodeFormat,
   pasteEdgeFormat,
   toggleMultiSelection,
+  setElementContext,
 } = mindMapSlice.actions;
 
 export default mindMapSlice.reducer;

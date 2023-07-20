@@ -16,6 +16,7 @@ import {
   deleteEdges,
   deleteNode,
   pushStateToHistory,
+  setElementContext,
   setSelected,
 } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
@@ -24,11 +25,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { InsertIncomerAndOutgoerPopup } from '.';
 
 export const NodeContextMenu = (props) => {
-  const { id = '', nodeContext, onClose } = props;
+  const { id = '' } = props;
 
   const dispatch = useDispatch();
   const {
-    mindMap: { nodes, edges, selected },
+    mindMap: { nodes, edges, selected, elementContext },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
   const { openId } = useSelector((state) => state.popper);
 
@@ -43,26 +44,26 @@ export const NodeContextMenu = (props) => {
   const onContextItemClick = (type) => {
     switch (type) {
       case NODE_CONTEXT_MENU_TYPES.DUPLICATE:
-        duplicateNode(selected[0].element);
+        duplicateNode(elementContext.element);
         break;
       case NODE_CONTEXT_MENU_TYPES.COPY_FORMAT:
-        copyFormat(selected[0].element);
+        copyFormat(elementContext.element);
         break;
       case NODE_CONTEXT_MENU_TYPES.ONLY_NODE:
         clearMode();
-        deleteOnlyNode(selected[0].element);
+        deleteOnlyNode(elementContext.element);
         break;
       case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
-        addIncomer(selected[0].element, type);
+        addIncomer(elementContext.element, type);
         clearMode();
         break;
       case NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER:
-        addOutgoer(selected[0].element, type);
+        addOutgoer(elementContext.element, type);
         clearMode();
         break;
       default:
         clearMode();
-        clearNodeAndConnectedEdges(selected[0].element);
+        clearNodeAndConnectedEdges(elementContext.element);
         break;
     }
 
@@ -80,7 +81,11 @@ export const NodeContextMenu = (props) => {
         },
       })
     );
+
+    dispatch(setElementContext(null));
+
     dispatch(pushStateToHistory()); // push to history
+
     enqueueSnackbar('Tạo bản sao thành công!');
   };
 
@@ -160,18 +165,16 @@ export const NodeContextMenu = (props) => {
   };
 
   return !!insertNode?.type ? (
-    <InsertIncomerAndOutgoerPopup
-      nodeContext={nodeContext}
-      insertNode={insertNode}
-      onClose={onClose}
-    />
+    <InsertIncomerAndOutgoerPopup insertNode={insertNode} />
   ) : (
     <Popper
       id={id}
       open={
-        selected?.[0]?.type === EDIT_MODES.NODE_EDITING && !!nodeContext.anchorEl && openId === id
+        selected?.[0]?.type === EDIT_MODES.NODE_EDITING &&
+        !!elementContext.anchorEl &&
+        openId === id
       }
-      anchorEl={nodeContext.anchorEl}
+      anchorEl={elementContext.anchorEl}
       placement="bottom-start"
       sx={{
         py: 2,

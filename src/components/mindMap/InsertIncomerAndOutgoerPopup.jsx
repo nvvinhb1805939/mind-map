@@ -1,16 +1,26 @@
 import { Box, Button, Popover, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NODE_CONTEXT_MENU_TYPES, NODE_SIZE, TYPES } from 'src/config-global';
-import { addEdge, addNode, pushStateToHistory, updateIncomerEdges } from 'src/redux/slices/mindMap';
+import {
+  addEdge,
+  addNode,
+  pushStateToHistory,
+  setElementContext,
+  updateIncomerEdges,
+} from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { InputField } from './InputField';
 
 export const InsertIncomerAndOutgoerPopup = (props) => {
-  const { nodeContext, insertNode, onClose } = props;
+  const { insertNode } = props;
 
   const dispatch = useDispatch();
+  const {
+    mindMap: { elementContext },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -78,7 +88,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
       case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
         insertBeforeNode(
           insertedNode,
-          nodeContext.element,
+          elementContext.element,
           insertNode.incomers,
           insertNode.connectedEdges
         );
@@ -86,7 +96,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
       case NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER:
         insertAfterNode(
           insertedNode,
-          nodeContext.element,
+          elementContext.element,
           insertNode.outgoers,
           insertNode.connectedEdges
         );
@@ -94,6 +104,10 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
       default:
         break;
     }
+  };
+
+  const onClose = () => {
+    dispatch(setElementContext(null));
   };
 
   const handleOnSubmit = (event) => {
@@ -108,18 +122,18 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
       id: uuidv4(),
       type: TYPES.MIND_MAP,
       position: {
-        x: nodeContext.element.position.x,
+        x: elementContext.element.position.x,
         y:
           insertNode.type === NODE_CONTEXT_MENU_TYPES.ADD_INCOMER
-            ? nodeContext.element.position.y - NODE_SIZE.HEIGHT * 2
-            : nodeContext.element.position.y + NODE_SIZE.HEIGHT * 2,
+            ? elementContext.element.position.y - NODE_SIZE.HEIGHT * 2
+            : elementContext.element.position.y + NODE_SIZE.HEIGHT * 2,
       },
       data: { label: label.trim() },
     };
 
+    onClose(); // close add node form
     insertNodeMode(newNode, insertNode.type);
 
-    onClose(); // close add node form
     setLabel(''); // clear form data
 
     enqueueSnackbar('Thêm nút thành công!');
@@ -128,8 +142,8 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
   return (
     <Popover
       id="insert-incomer-and-outgoer-popup"
-      open={!!nodeContext.anchorEl}
-      anchorEl={nodeContext.anchorEl}
+      open={!!elementContext.anchorEl}
+      anchorEl={elementContext.anchorEl}
       onClose={onClose}
       anchorOrigin={{
         horizontal: 'center',
