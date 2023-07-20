@@ -7,10 +7,12 @@ import {
   DOWNLOAD_FILE_NAME,
   EDIT_MODES,
   MIND_MAP_SELECTOR,
+  NODE_CONTEXT_MENU_ID,
   STORAGE_KEYS,
   TYPES,
 } from 'src/config-global';
 import { INITIAL_MIND_MAP, renewMindMap, setSelected } from 'src/redux/slices/mindMap';
+import { updateOpenId } from 'src/redux/slices/popper';
 import { dispatch } from 'src/redux/store';
 
 export const hasConnectBetweenTwoNode = (edges, node1, node2) =>
@@ -110,4 +112,24 @@ export const initMindMap = () => {
     dispatch(renewMindMap(mindMap));
     dispatch(setSelected(null));
   } else dispatch(renewMindMap(INITIAL_MIND_MAP));
+};
+
+export const openNodeContextMenu = (event, selectedNode, setNodeContext) => {
+  dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
+
+  setNodeContext({
+    element: selectedNode,
+    type: EDIT_MODES.NODE_EDITING,
+    anchorEl: event.target.parentElement,
+  });
+};
+
+export const setSelectedNode = (event, selectedNode) => {
+  dispatch(
+    setSelected({
+      element: selectedNode,
+      type: EDIT_MODES.NODE_EDITING,
+      anchorEl: event.target.parentElement,
+    })
+  );
 };

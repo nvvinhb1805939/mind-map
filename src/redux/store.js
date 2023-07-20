@@ -16,10 +16,10 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
-const { dispatch } = store;
+const { dispatch, getState } = store;
 
 const useSelector = useAppSelector;
 
 const useDispatch = () => useAppDispatch();
 
-export { dispatch, persistor, store, useDispatch, useSelector };
+export { dispatch, getState, persistor, store, useDispatch, useSelector };

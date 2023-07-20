@@ -78,7 +78,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
       case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
         insertBeforeNode(
           insertedNode,
-          nodeContext.node,
+          nodeContext.element,
           insertNode.incomers,
           insertNode.connectedEdges
         );
@@ -86,7 +86,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
       case NODE_CONTEXT_MENU_TYPES.ADD_OUTGOER:
         insertAfterNode(
           insertedNode,
-          nodeContext.node,
+          nodeContext.element,
           insertNode.outgoers,
           insertNode.connectedEdges
         );
@@ -108,11 +108,11 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
       id: uuidv4(),
       type: TYPES.MIND_MAP,
       position: {
-        x: nodeContext.node.position.x,
+        x: nodeContext.element.position.x,
         y:
           insertNode.type === NODE_CONTEXT_MENU_TYPES.ADD_INCOMER
-            ? nodeContext.node.position.y - NODE_SIZE.HEIGHT * 2
-            : nodeContext.node.position.y + NODE_SIZE.HEIGHT * 2,
+            ? nodeContext.element.position.y - NODE_SIZE.HEIGHT * 2
+            : nodeContext.element.position.y + NODE_SIZE.HEIGHT * 2,
       },
       data: { label: label.trim() },
     };

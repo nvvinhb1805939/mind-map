@@ -26,11 +26,17 @@ import {
 } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
 import { useDispatch, useSelector } from 'src/redux/store';
-import { getEditingMode, hasConnectBetweenTwoNode, initMindMap } from 'src/utils/mindMap';
+import {
+  getEditingMode,
+  hasConnectBetweenTwoNode,
+  initMindMap,
+  openNodeContextMenu,
+  setSelectedNode,
+} from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { FlowToolbar } from './FlowToolbar';
-import { useStyles } from './styles';
 import { MultiSelectToolbar } from './MultiSelectToolbar';
+import { useStyles } from './styles';
 
 let quantityNewNode = 0;
 
@@ -43,6 +49,7 @@ export const Main = (props) => {
   const {
     mindMap,
     mindMap: { nodes, edges, selected, isMultiSelection },
+    currentIndex,
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const [edgeContext, setEdgeContext] = useState(null);
@@ -160,20 +167,19 @@ export const Main = (props) => {
   };
   /** this function is used to switch to node editing mode */
   const onNodeClick = (event, selectedNode) => {
-    dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
+    if (isMultiSelection) return;
 
-    setNodeContext({
-      anchorEl: event.target.parentElement,
-      node: selectedNode,
-    });
+    openNodeContextMenu(event, selectedNode, setNodeContext);
+    setSelectedNode(event, selectedNode);
+  };
+  /** this function is used to open node context menu on multi selection */
+  const onNodeContextMenu = (event, selectedNode) => {
+    /** open context on multi select mode and node is selected */
+    if (!isMultiSelection) return;
 
-    dispatch(
-      setSelected({
-        element: selectedNode,
-        type: EDIT_MODES.NODE_EDITING,
-        anchorEl: event.target.parentElement,
-      })
-    );
+    if (!selectedNode.selected) return;
+
+    openNodeContextMenu(event, selectedNode, setNodeContext);
   };
   /** this function is used to close popper and clear selected */
   const onNodeDrag = (event, node, nodes) => {
@@ -184,23 +190,14 @@ export const Main = (props) => {
   };
   /** this function is used to set selected node and push history on node stops drag */
   const onNodeDragStop = (event, selectedNode, nodes) => {
+    if (isMultiSelection) return;
+
     if (!selectedNode.dragging) return;
 
     dispatch(pushStateToHistory());
-    dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
 
-    setNodeContext({
-      anchorEl: event.target.parentElement,
-      node: selectedNode,
-    });
-
-    dispatch(
-      setSelected({
-        element: selectedNode,
-        type: EDIT_MODES.NODE_EDITING,
-        anchorEl: event.target.parentElement,
-      })
-    );
+    openNodeContextMenu(event, selectedNode, setNodeContext);
+    setSelectedNode(event, selectedNode);
   };
 
   /*********** Edges ***********/
@@ -282,8 +279,14 @@ export const Main = (props) => {
   };
 
   /*********** Pane ***********/
+
+  /** this function is used to close node context menu on move pane */
   const onMove = () => {
     dispatch(updateOpenId(null));
+  };
+  /** this function is used to open node context menu on move pane end */
+  const onMoveEnd = () => {
+    dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
   };
   /** this function is used to switch to pane editing mode */
   const onPaneClick = (event) => {
@@ -326,6 +329,7 @@ export const Main = (props) => {
   /** Toggle node drag on multi select */
   useEffect(() => {
     nodes?.length > 0 &&
+      currentIndex > 0 && // after page loaded => mindMap is init then currentIndex = 0
       dispatch(
         renewMindMap({
           ...mindMap,
@@ -333,6 +337,11 @@ export const Main = (props) => {
           edges: edges.map((edge) => ({ ...edge, updatable: !isMultiSelection })),
         })
       );
+  }, [isMultiSelection]);
+
+  /** Clear node context on multi select */
+  useEffect(() => {
+    setNodeContext(null);
   }, [isMultiSelection]);
 
   return (
@@ -359,6 +368,7 @@ export const Main = (props) => {
           onNodeDrag={onNodeDrag}
           onNodeDragStop={onNodeDragStop}
           onNodeClick={onNodeClick}
+          onNodeContextMenu={onNodeContextMenu}
           /*********** Edge event handlers ***********/
           onEdgesChange={onEdgesChange}
           onEdgeUpdateStart={onEdgeUpdateStart}
@@ -374,6 +384,7 @@ export const Main = (props) => {
           onConnectEnd={onConnectEnd}
           /*********** Pane event handlers ***********/
           onMove={onMove}
+          onMoveEnd={onMoveEnd}
           onPaneClick={onPaneClick}
           /*********** Flow view ***********/
           fitView={true}

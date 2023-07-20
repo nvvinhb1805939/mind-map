@@ -168,8 +168,10 @@ export const NodeContextMenu = (props) => {
   ) : (
     <Popper
       id={id}
-      open={!!selected?.[0]?.anchorEl && openId === id}
-      anchorEl={selected?.[0]?.anchorEl}
+      open={
+        selected?.[0]?.type === EDIT_MODES.NODE_EDITING && !!nodeContext.anchorEl && openId === id
+      }
+      anchorEl={nodeContext.anchorEl}
       placement="bottom-start"
       sx={{
         py: 2,

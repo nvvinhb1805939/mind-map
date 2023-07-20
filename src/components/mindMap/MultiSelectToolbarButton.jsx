@@ -5,7 +5,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
-import { toggleMultiSelection } from 'src/redux/slices/mindMap';
+import { setSelected, toggleMultiSelection } from 'src/redux/slices/mindMap';
 import { BaseToolbarButton } from './BaseToolbarButton';
 
 export const MultiSelectToolbarButton = () => {
@@ -19,6 +19,7 @@ export const MultiSelectToolbarButton = () => {
   const onClick = () => {
     enqueueSnackbar(isMultiSelection ? 'Hủy chọn nhiều phần tử!' : 'Bật chọn nhiều phần tử!');
     dispatch(toggleMultiSelection(!isMultiSelection));
+    dispatch(setSelected(null));
   };
 
   return (
