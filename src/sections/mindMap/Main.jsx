@@ -52,6 +52,7 @@ export const Main = (props) => {
     mindMap: { nodes, edges, selected, elementContext, isMultiSelection },
     currentIndex,
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+  console.log(selected);
 
   const [edgeContext, setEdgeContext] = useState(null);
 

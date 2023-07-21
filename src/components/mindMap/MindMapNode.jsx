@@ -27,24 +27,20 @@ export const MindMapNode = memo((props) => {
 
   const selectedNodeWidth = selectedNode?.[0]?.element?.width;
 
-  const [width, setWidth] = useState(selectedNodeWidth || NODE_SIZE.WIDTH);
+  const [width, setWidth] = useState(selectedNodeWidth);
 
   const onResizeStart = () => {
     dispatch(updateOpenId(null));
   };
 
   useEffect(() => {
-    setWidth(selectedNodeWidth);
-  }, [selectedNodeWidth]);
-
-  useEffect(() => {
-    if (selectedNode?.element?.id !== id) return;
+    if (selectedNode?.[0]?.element?.id !== id || !width) return;
 
     dispatch(
       setSelected({
-        ...selectedNode,
+        ...selectedNode[0],
         element: {
-          ...selectedNode?.element,
+          ...selectedNode[0].element,
           width,
           height: NODE_SIZE.HEIGHT,
           style: { width, height: NODE_SIZE.HEIGHT },
@@ -54,10 +50,11 @@ export const MindMapNode = memo((props) => {
   }, [width]);
 
   const onResizeEnd = (event, { width }) => {
+    dispatch(pushStateToHistory());
+
     setWidth(width);
 
     dispatch(updateOpenId(NODE_CONTEXT_MENU_ID));
-    dispatch(pushStateToHistory());
   };
 
   return (

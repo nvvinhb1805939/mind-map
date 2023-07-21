@@ -20,7 +20,7 @@ import {
   setSelected,
 } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
-import { getEditingMode, hasConnectBetweenTwoNode } from 'src/utils/mindMap';
+import { hasConnectBetweenTwoNode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { InsertIncomerAndOutgoerPopup } from '.';
 
@@ -38,7 +38,7 @@ export const NodeContextMenu = (props) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const clearMode = () => {
-    getEditingMode(selected) === EDIT_MODES.NODE_EDITING && dispatch(setSelected(null)); // clear node mode
+    dispatch(setSelected(null)); // clear node mode
   };
 
   const onContextItemClick = (type) => {

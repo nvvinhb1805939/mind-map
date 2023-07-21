@@ -30,6 +30,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
     const pastedNode = {
       ...selected[0].element,
       ...copiedNode,
+      selected: true,
       style: { width: copiedNode.width, height: copiedNode.height },
       data: {
         ...copiedNode.data,
@@ -37,8 +38,9 @@ export const NodeEditing = memo(({ selected, copied }) => {
       },
     };
 
-    dispatch(pasteNodeFormat(pastedNode));
     dispatch(setSelected({ ...selected[0], element: pastedNode }));
+    dispatch(pasteNodeFormat(pastedNode));
+    dispatch(updateOpenId(null));
   };
 
   const onNodePropsChangeComplete = (styleProps = {}, otherProps = {}) => {
