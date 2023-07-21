@@ -36,12 +36,17 @@ const updateEdgeSelection = (edge, action) =>
   edge.id === action.payload.element.id
     ? { ...edge, selected: true }
     : { ...edge, selected: false };
-const setSelectedElements = (state, action) => {
+const setAllSelectedElements = (state, action) => {
   if (action.payload.type === 'nodes') clearSelectedEdges(state);
-  else if (action.payload.type === 'edges') clearSelectedNodes(state);
+  else clearSelectedNodes(state);
 
-  state.mindMap[action.payload.type] = action.payload.elements.map((element) => element.element);
-  state.mindMap.selected = action.payload.elements;
+  const selectedElements = action.payload.elements.map((element) => ({
+    element: { ...element, selected: true },
+    type: action.payload.type === 'nodes' ? EDIT_MODES.NODE_EDITING : EDIT_MODES.EDGE_EDITING,
+  }));
+
+  state.mindMap[action.payload.type] = selectedElements.map((element) => element.element);
+  state.mindMap.selected = selectedElements;
 };
 
 const mindMapSlice = createSlice({
@@ -180,14 +185,14 @@ const mindMapSlice = createSlice({
           break;
       }
     },
-    /** this action is used to set multi selected nodes */
-    setMultiSelectedElements: (state, action) => {
-      setSelectedElements(state, action);
+    /** this action is used to set all selected nodes or edges */
+    setAllSelectedNodesOrEdges: (state, action) => {
+      setAllSelectedElements(state, action);
 
       pushHistory(state);
     },
-    /** this action is used to set selected all */
-    setSelectedAll: (state) => {
+    /** this action is used to set selected all (all nodes and all edges) */
+    setAllSelected: (state) => {
       const selectedNodes = state.mindMap.nodes.map((node) => ({
         element: { ...node, selected: true },
         type: EDIT_MODES.NODE_EDITING,
@@ -202,6 +207,14 @@ const mindMapSlice = createSlice({
       state.mindMap.selected = [...selectedNodes, ...selectedEdges];
 
       pushHistory(state);
+    },
+    setMultiSelectedElements: (state, action) => {
+      const { type, element, selected } = action.payload;
+
+      state.mindMap.selected = selected;
+      state.mindMap[type] = state.mindMap[type].map((item) =>
+        item.id === element.id ? element : item
+      );
     },
     /** this action is used to push current state to history */
     pushStateToHistory: (state) => {
@@ -287,8 +300,9 @@ export const {
   undo,
   redo,
   setSelected,
+  setAllSelectedNodesOrEdges,
+  setAllSelected,
   setMultiSelectedElements,
-  setSelectedAll,
   pushStateToHistory,
   insertNodeBetweenTwoEdges,
   copyFormat,

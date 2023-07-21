@@ -22,6 +22,7 @@ import {
   pushStateToHistory,
   renewMindMap,
   setElementContext,
+  setMultiSelectedElements,
   setSelected,
   updateEdge,
 } from 'src/redux/slices/mindMap';
@@ -157,20 +158,57 @@ export const Main = (props) => {
       return;
     }
 
-    const selectedChanges = nodeChanges.map((node) =>
-      node.id === selected?.[0]?.element?.id
-        ? { ...node, selected: true }
-        : { ...node, selected: false }
-    );
+    const selectedChanges = nodeChanges.map((node) => {
+      const selectedNode = selected.find(({ element }) => element.id === node.id);
+
+      return selectedNode ? { ...node, selected: true } : { ...node, selected: false };
+    });
 
     dispatch(changeNodes(selectedChanges));
   };
   /** this function is used to switch to node editing mode */
   const onNodeClick = (event, selectedNode) => {
-    if (isMultiSelection) return;
+    if (!isMultiSelection) {
+      openNodeContextMenu(event, selectedNode);
+      setSelectedNode(event, selectedNode);
+      return;
+    }
 
-    openNodeContextMenu(event, selectedNode);
-    setSelectedNode(event, selectedNode);
+    dispatch(setElementContext(null));
+
+    const selectedNodeIndex = selected.findIndex(({ element }) => element?.id === selectedNode.id);
+
+    if (selectedNodeIndex !== -1) {
+      // check if selected then set it to not selected
+      const reducedSelected = [...selected];
+      reducedSelected.splice(selectedNodeIndex, 1);
+
+      dispatch(
+        setMultiSelectedElements({
+          type: 'nodes',
+          element: { ...selectedNode, selected: false },
+          selected: reducedSelected,
+        })
+      );
+
+      return;
+    }
+
+    const increaseSelected = [
+      ...selected,
+      {
+        element: { ...selectedNode, selected: true },
+        type: EDIT_MODES.NODE_EDITING,
+      },
+    ];
+
+    dispatch(
+      setMultiSelectedElements({
+        type: 'nodes',
+        element: { ...selectedNode, selected: true },
+        selected: increaseSelected,
+      })
+    );
   };
   /** this function is used to open node context menu on multi selection */
   const onNodeContextMenu = (event, selectedNode) => {
@@ -303,6 +341,10 @@ export const Main = (props) => {
   };
   /** this function is used to switch to pane editing mode */
   const onPaneClick = (event) => {
+    if (isMultiSelection) {
+      return;
+    }
+
     if (isPaneClick.current) {
       dispatch(
         setSelected({

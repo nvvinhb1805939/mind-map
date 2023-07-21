@@ -1,13 +1,13 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseToolbar } from 'src/components/mindMap';
 import { EDIT_MODES, MULTI_SELECTION_RADIO, TYPES } from 'src/config-global';
 import {
+  setAllSelected,
+  setAllSelectedNodesOrEdges,
   setElementContext,
-  setMultiSelectedElements,
   setSelected,
-  setSelectedAll,
 } from 'src/redux/slices/mindMap';
 
 export const MultiSelectToolbar = (props) => {
@@ -18,31 +18,16 @@ export const MultiSelectToolbar = (props) => {
 
   const [value, setValue] = useState(EDIT_MODES.CLEAR);
 
-  useEffect(() => {
-    !(
-      selected?.[0]?.type === EDIT_MODES.NODE_EDITING ||
-      selected?.[0]?.type === EDIT_MODES.EDGE_EDITING
-    ) && setValue(EDIT_MODES.CLEAR);
-  }, [selected]);
-
-  const selectAllNodes = (nodes) => {
-    const selectedNodes = nodes.map((node) => ({
-      element: { ...node, selected: true },
-      type: EDIT_MODES.NODE_EDITING,
-    }));
-    dispatch(setMultiSelectedElements({ type: 'nodes', elements: selectedNodes }));
+  const selectAllNodes = (selectedNodes) => {
+    dispatch(setAllSelectedNodesOrEdges({ type: 'nodes', elements: selectedNodes }));
   };
 
-  const selectAllEdges = (edges) => {
-    const selectedEdges = edges.map((edge) => ({
-      element: { ...edge, selected: true },
-      type: EDIT_MODES.EDGE_EDITING,
-    }));
-    dispatch(setMultiSelectedElements({ type: 'edges', elements: selectedEdges }));
+  const selectAllEdges = (selectedEdges) => {
+    dispatch(setAllSelectedNodesOrEdges({ type: 'edges', elements: selectedEdges }));
   };
 
   const selectAllNodesAndEdges = () => {
-    dispatch(setSelectedAll());
+    dispatch(setAllSelected());
   };
 
   const clearSelected = () => {
@@ -50,7 +35,7 @@ export const MultiSelectToolbar = (props) => {
     dispatch(setElementContext(null));
   };
 
-  const onChange = (event) => {
+  const onRadioClick = (event) => {
     dispatch(setElementContext(null));
 
     const { value } = event.target;
@@ -74,15 +59,11 @@ export const MultiSelectToolbar = (props) => {
   return (
     <BaseToolbar position="top-right">
       <FormControl>
-        <RadioGroup
-          onChange={onChange}
-          aria-labelledby="multi-select-radio"
-          value={value}
-          name="multi-select-radio"
-        >
+        <RadioGroup aria-labelledby="multi-select-radio" value={value} name="multi-select-radio">
           {MULTI_SELECTION_RADIO.map(({ id, value, label, icon }) => (
             <FormControlLabel
               onChange={() => setValue(value)}
+              onClick={onRadioClick}
               key={id}
               value={value}
               control={<Radio />}
