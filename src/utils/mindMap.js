@@ -15,6 +15,7 @@ import {
   INITIAL_MIND_MAP,
   renewMindMap,
   setElementContext,
+  setMultiSelectedElements,
   setSelected,
 } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
@@ -137,6 +138,44 @@ export const setSelectedNode = (event, selectedNode) => {
       element: selectedNode,
       type: EDIT_MODES.NODE_EDITING,
       anchorEl: event.target.parentElement,
+    })
+  );
+};
+
+export const setSelectedElements = (selectedElements, selectedElement, type) => {
+  const selectedElementIndex = selectedElements.findIndex(
+    ({ element }) => element?.id === selectedElement.id
+  );
+
+  if (selectedElementIndex !== -1) {
+    // check if selected then set it to not selected
+    const reducedSelected = [...selectedElements];
+    reducedSelected.splice(selectedElementIndex, 1);
+
+    dispatch(
+      setMultiSelectedElements({
+        type,
+        element: { ...selectedElement, selected: false },
+        selected: reducedSelected,
+      })
+    );
+
+    return;
+  }
+
+  const increaseSelected = [
+    ...selectedElements,
+    {
+      element: { ...selectedElement, selected: true },
+      type: type === 'nodes' ? EDIT_MODES.NODE_EDITING : EDIT_MODES.EDGE_EDITING,
+    },
+  ];
+
+  dispatch(
+    setMultiSelectedElements({
+      type,
+      element: { ...selectedElement, selected: true },
+      selected: increaseSelected,
     })
   );
 };

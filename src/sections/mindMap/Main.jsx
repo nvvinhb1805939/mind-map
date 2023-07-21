@@ -33,6 +33,7 @@ import {
   hasConnectBetweenTwoNode,
   initMindMap,
   openNodeContextMenu,
+  setSelectedElements,
   setSelectedNode,
 } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
@@ -159,7 +160,7 @@ export const Main = (props) => {
     }
 
     const selectedChanges = nodeChanges.map((node) => {
-      const selectedNode = selected.find(({ element }) => element.id === node.id);
+      const selectedNode = selected.find(({ element }) => element?.id === node.id);
 
       return selectedNode ? { ...node, selected: true } : { ...node, selected: false };
     });
@@ -176,39 +177,7 @@ export const Main = (props) => {
 
     dispatch(setElementContext(null));
 
-    const selectedNodeIndex = selected.findIndex(({ element }) => element?.id === selectedNode.id);
-
-    if (selectedNodeIndex !== -1) {
-      // check if selected then set it to not selected
-      const reducedSelected = [...selected];
-      reducedSelected.splice(selectedNodeIndex, 1);
-
-      dispatch(
-        setMultiSelectedElements({
-          type: 'nodes',
-          element: { ...selectedNode, selected: false },
-          selected: reducedSelected,
-        })
-      );
-
-      return;
-    }
-
-    const increaseSelected = [
-      ...selected,
-      {
-        element: { ...selectedNode, selected: true },
-        type: EDIT_MODES.NODE_EDITING,
-      },
-    ];
-
-    dispatch(
-      setMultiSelectedElements({
-        type: 'nodes',
-        element: { ...selectedNode, selected: true },
-        selected: increaseSelected,
-      })
-    );
+    setSelectedElements(selected, selectedNode, 'nodes');
   };
   /** this function is used to open node context menu on multi selection */
   const onNodeContextMenu = (event, selectedNode) => {
@@ -242,7 +211,18 @@ export const Main = (props) => {
 
   /** this function is used to handle on edges change */
   const onEdgesChange = (edgeChanges) => {
-    dispatch(changEdges(edgeChanges));
+    // if pane clicked then do nothing
+    if (hasOnlyPaneClicked.current) {
+      hasOnlyPaneClicked.current = false;
+      return;
+    }
+
+    const selectedChanges = edgeChanges.map((egde) => {
+      const selectedEdge = selected.find(({ element }) => element?.id === egde.id);
+      return selectedEdge ? { ...egde, selected: true } : { ...egde, selected: false };
+    });
+
+    dispatch(changEdges(selectedChanges));
   };
   /** this function is used to handle on edge start to update */
   const onEdgeUpdateStart = () => {
@@ -289,16 +269,21 @@ export const Main = (props) => {
     dispatch(elevateEdge(selectedEdge));
   };
   /** this function is used to switch to edge editing mode */
-  const onEdgeClick = (event, edge) => {
-    isEdgeClick.current &&
-      dispatch(
-        setSelected({
-          element: edge,
-          type: EDIT_MODES.EDGE_EDITING,
-        })
-      );
+  const onEdgeClick = (event, selectedEdge) => {
+    if (!isMultiSelection) {
+      isEdgeClick.current &&
+        dispatch(
+          setSelected({
+            element: selectedEdge,
+            type: EDIT_MODES.EDGE_EDITING,
+          })
+        );
+      isEdgeClick.current = true;
 
-    isEdgeClick.current = true;
+      return;
+    }
+
+    setSelectedElements(selected, selectedEdge, 'edges');
   };
   /** this function is used to open insert node popup */
   const onEdgeContextMenu = (event, edge) => {
