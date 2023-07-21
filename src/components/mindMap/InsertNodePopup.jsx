@@ -38,9 +38,9 @@ export const InsertNodePopup = (props) => {
       data: { label: label.trim() },
     };
 
+    onClose(); // close add node form
     dispatch(insertNodeBetweenTwoEdges({ edge: elementContext.element, node: newNode }));
 
-    onClose(); // close add node form
     setLabel(''); // clear form data
 
     enqueueSnackbar('Thêm nút thành công!');

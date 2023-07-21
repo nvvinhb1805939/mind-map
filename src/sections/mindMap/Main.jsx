@@ -158,12 +158,14 @@ export const Main = (props) => {
       hasOnlyPaneClicked.current = false;
       return;
     }
+    const selectedChanges =
+      selected?.length > 0
+        ? nodeChanges.map((node) => {
+            const selectedNode = selected.find(({ element }) => element?.id === node.id);
 
-    const selectedChanges = nodeChanges.map((node) => {
-      const selectedNode = selected.find(({ element }) => element?.id === node.id);
-
-      return selectedNode ? { ...node, selected: true } : { ...node, selected: false };
-    });
+            return selectedNode ? { ...node, selected: true } : { ...node, selected: false };
+          })
+        : nodeChanges;
 
     dispatch(changeNodes(selectedChanges));
   };
@@ -217,10 +219,13 @@ export const Main = (props) => {
       return;
     }
 
-    const selectedChanges = edgeChanges.map((egde) => {
-      const selectedEdge = selected.find(({ element }) => element?.id === egde.id);
-      return selectedEdge ? { ...egde, selected: true } : { ...egde, selected: false };
-    });
+    const selectedChanges =
+      selected?.length > 0
+        ? edgeChanges.map((egde) => {
+            const selectedEdge = selected.find(({ element }) => element?.id === egde.id);
+            return selectedEdge ? { ...egde, selected: true } : { ...egde, selected: false };
+          })
+        : edgeChanges;
 
     dispatch(changEdges(selectedChanges));
   };
