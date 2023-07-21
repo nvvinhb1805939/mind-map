@@ -1,5 +1,5 @@
 import { Box, ClickAwayListener } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactFlow, { Controls, MiniMap, useReactFlow } from 'reactflow';
 import { NodeContextMenu } from 'src/components/mindMap';
 import { InsertNodePopup } from 'src/components/mindMap/InsertNodePopup';
@@ -52,9 +52,6 @@ export const Main = (props) => {
     mindMap: { nodes, edges, selected, elementContext, isMultiSelection },
     currentIndex,
   } = useSelector((state) => state[TYPES.MIND_MAP]);
-  console.log(selected);
-
-  const [edgeContext, setEdgeContext] = useState(null);
 
   const reactFlowWrapper = useRef(null); // access DOM
   const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to determine whether current event is onEdgeUpdate events or onConnect events ()
@@ -267,16 +264,29 @@ export const Main = (props) => {
   };
   /** this function is used to open insert node popup */
   const onEdgeContextMenu = (event, edge) => {
+    if (
+      isMultiSelection &&
+      !(
+        getEditingMode(selected) === EDIT_MODES.EDGE_EDITING ||
+        getEditingMode(selected) === EDIT_MODES.CLEAR
+      )
+    ) {
+      return;
+    }
+
     const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
 
-    setEdgeContext({
-      anchorEl: event.target.parentElement,
-      edge,
-      position: project({
-        x: event.clientX - left - NODE_SIZE.WIDTH * (getZoom() / DEFAULT_MAX_ZOOM), // responsive position relative to zoom
-        y: event.clientY - top,
-      }),
-    });
+    dispatch(
+      setElementContext({
+        type: EDIT_MODES.EDGE_EDITING,
+        anchorEl: event.target.parentElement,
+        element: edge,
+        position: project({
+          x: event.clientX - left - NODE_SIZE.WIDTH * (getZoom() / DEFAULT_MAX_ZOOM), // responsive position relative to zoom
+          y: event.clientY - top,
+        }),
+      })
+    );
 
     dispatch(setSelected(null));
   };
@@ -350,9 +360,7 @@ export const Main = (props) => {
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <Box ref={reactFlowWrapper} sx={styles}>
-        {!!edgeContext?.anchorEl && (
-          <InsertNodePopup edgeContext={edgeContext} onClose={() => setEdgeContext(null)} />
-        )}
+        {elementContext?.type === EDIT_MODES.EDGE_EDITING && <InsertNodePopup />}
         {elementContext?.type === EDIT_MODES.NODE_EDITING && (
           <NodeContextMenu id={NODE_CONTEXT_MENU_ID} />
         )}

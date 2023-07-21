@@ -1,21 +1,27 @@
 import { Box, Button, Popover, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
-import { insertNodeBetweenTwoEdges } from 'src/redux/slices/mindMap';
+import { insertNodeBetweenTwoEdges, setElementContext } from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { InputField } from './InputField';
 
 export const InsertNodePopup = (props) => {
-  const { edgeContext, onClose } = props;
-
   const dispatch = useDispatch();
+  const {
+    mindMap: { elementContext },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [error, setError] = useState('');
   const [label, setLabel] = useState('');
+
+  const onClose = () => {
+    dispatch(setElementContext(null));
+  };
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
@@ -28,11 +34,11 @@ export const InsertNodePopup = (props) => {
     const newNode = {
       id: uuidv4(),
       type: TYPES.MIND_MAP,
-      position: edgeContext.position,
+      position: elementContext.position,
       data: { label: label.trim() },
     };
 
-    dispatch(insertNodeBetweenTwoEdges({ edge: edgeContext.edge, node: newNode }));
+    dispatch(insertNodeBetweenTwoEdges({ edge: elementContext.element, node: newNode }));
 
     onClose(); // close add node form
     setLabel(''); // clear form data
@@ -43,8 +49,8 @@ export const InsertNodePopup = (props) => {
   return (
     <Popover
       id="insert-node-popup"
-      open={!!edgeContext.anchorEl}
-      anchorEl={edgeContext.anchorEl}
+      open={!!elementContext.anchorEl}
+      anchorEl={elementContext.anchorEl}
       onClose={onClose}
       anchorOrigin={{
         horizontal: 'center',
