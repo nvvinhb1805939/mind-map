@@ -29,7 +29,7 @@ export const NodeContextMenu = (props) => {
 
   const dispatch = useDispatch();
   const {
-    mindMap: { nodes, edges, selected, elementContext },
+    mindMap: { nodes, edges, selected, elementContext, isMultiSelection },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
   const { openId } = useSelector((state) => state.popper);
 
@@ -187,7 +187,14 @@ export const NodeContextMenu = (props) => {
       }}
     >
       {NODE_CONTEXT_MENU.map((item) =>
-        item.type === NODE_CONTEXT_MENU_TYPES.GROUP_BY ? (
+        isMultiSelection ? (
+          item.isVisbleInMultiSelection && (
+            <MenuItem key={item.id} onClick={() => onContextItemClick(item.type)} sx={{ gap: 2 }}>
+              {item.icon}
+              <Typography>{item.title}</Typography>
+            </MenuItem>
+          )
+        ) : item.type === NODE_CONTEXT_MENU_TYPES.GROUP_BY ? (
           <Divider key={item.id} sx={{ width: '100%' }} />
         ) : (
           <MenuItem key={item.id} onClick={() => onContextItemClick(item.type)} sx={{ gap: 2 }}>

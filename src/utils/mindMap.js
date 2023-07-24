@@ -13,6 +13,8 @@ import {
 } from 'src/config-global';
 import {
   INITIAL_MIND_MAP,
+  deleteEdges,
+  pushStateToHistory,
   renewMindMap,
   setElementContext,
   setMultiSelectedElements,
@@ -178,4 +180,14 @@ export const setSelectedElements = (selectedElements, selectedElement, type) => 
       selected: increaseSelected,
     })
   );
+};
+
+export const onDeleteEdges = (edges, deletedEdges) => {
+  const remainingEdges = edges.filter(
+    (edge) => deletedEdges.findIndex((deletedEdge) => deletedEdge.id === edge.id) === -1
+  );
+
+  dispatch(deleteEdges(remainingEdges));
+  dispatch(setSelected(null));
+  dispatch(pushStateToHistory());
 };

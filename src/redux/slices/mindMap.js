@@ -118,10 +118,6 @@ const mindMapSlice = createSlice({
     deleteEdges: (state, action) => {
       state.mindMap.edges = action.payload;
     },
-    /** this action is used to delete an edge */
-    deleteEdge: (state, action) => {
-      state.mindMap.edges = state.mindMap.edges.filter((edge) => edge.id !== action.payload.id);
-    },
     /** this action is used to delete a node */
     deleteNode: (state, action) => {
       state.mindMap.nodes = state.mindMap.nodes.filter((node) => node.id !== action.payload.id);
@@ -293,7 +289,6 @@ export const {
   updateEdge,
   changeEdgeColor,
   updateNodeProps,
-  deleteEdge,
   deleteEdges,
   deleteNode,
   changeBgColor,

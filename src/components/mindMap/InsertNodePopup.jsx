@@ -3,7 +3,11 @@ import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TYPES } from 'src/config-global';
-import { insertNodeBetweenTwoEdges, setElementContext } from 'src/redux/slices/mindMap';
+import {
+  insertNodeBetweenTwoEdges,
+  setElementContext,
+  setSelected,
+} from 'src/redux/slices/mindMap';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
 import { InputField } from './InputField';
@@ -11,7 +15,7 @@ import { InputField } from './InputField';
 export const InsertNodePopup = (props) => {
   const dispatch = useDispatch();
   const {
-    mindMap: { elementContext },
+    mindMap: { elementContext, isMultiSelection },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -21,6 +25,8 @@ export const InsertNodePopup = (props) => {
 
   const onClose = () => {
     dispatch(setElementContext(null));
+
+    !isMultiSelection && dispatch(setSelected(null));
   };
 
   const handleOnSubmit = (event) => {

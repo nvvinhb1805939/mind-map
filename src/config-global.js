@@ -119,6 +119,7 @@ export const NODE_CONTEXT_MENU = [
     title: 'Tạo bản sao',
     type: NODE_CONTEXT_MENU_TYPES.DUPLICATE,
     icon: <DifferenceOutlinedIcon />,
+    isVisbleInMultiSelection: true,
   },
   {
     id: uuidv4(),
@@ -157,6 +158,7 @@ export const NODE_CONTEXT_MENU = [
     title: 'Xóa nút và các liên kết',
     type: NODE_CONTEXT_MENU_TYPES.CLEAR_ALL,
     icon: <ClearOutlinedIcon />,
+    isVisbleInMultiSelection: true,
   },
 ];
 

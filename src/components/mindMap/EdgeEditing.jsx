@@ -1,5 +1,8 @@
-import { ImagesearchRollerOutlined as ImagesearchRollerOutlinedIcon } from '@mui/icons-material';
-import { Button, Stack, Tooltip } from '@mui/material';
+import {
+  DeleteOutlineOutlined as DeleteOutlineOutlinedIcon,
+  ImagesearchRollerOutlined as ImagesearchRollerOutlinedIcon,
+} from '@mui/icons-material';
+import { Stack } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,12 +13,13 @@ import {
   pasteEdgeFormat,
   setSelected,
 } from 'src/redux/slices/mindMap';
-import { ColorPicker, PasteFormat } from '.';
+import { getEditingMode, onDeleteEdges } from 'src/utils/mindMap';
+import { BaseTooltipButton, ColorPicker, PasteFormat } from '.';
 
 export const EdgeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
   const {
-    mindMap: { isMultiSelection },
+    mindMap: { edges, isMultiSelection },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -46,6 +50,10 @@ export const EdgeEditing = memo(({ selected, copied }) => {
     enqueueSnackbar('Sao chép định dạng thành công!');
   };
 
+  const deleteEdges = () => {
+    onDeleteEdges(edges, [selected[0].element]);
+  };
+
   const pasteFormat = () => {
     const { copy_type, ...copiedEdge } = copied;
 
@@ -68,21 +76,24 @@ export const EdgeEditing = memo(({ selected, copied }) => {
       />
 
       {!isMultiSelection && (
-        <Tooltip title="Sao chép định dạng" disableInteractive>
-          <Button
-            onClick={copyEdgeFormat}
-            sx={{ minWidth: 'unset', width: '40px !important', height: '40px !important' }}
-            variant="outlined"
-            color="inherit"
-          >
-            <ImagesearchRollerOutlinedIcon />
-          </Button>
-        </Tooltip>
+        <BaseTooltipButton
+          title="Sao chép định dạng"
+          action={copyEdgeFormat}
+          icon={<ImagesearchRollerOutlinedIcon />}
+        />
       )}
 
       {/** if is multi select mode or not selected edge then not render */}
       {!isMultiSelection && !!selected && (
         <PasteFormat selected={selected} copied={copied} action={pasteFormat} />
+      )}
+
+      {getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && (
+        <BaseTooltipButton
+          title="Xóa đường kẻ"
+          action={deleteEdges}
+          icon={<DeleteOutlineOutlinedIcon />}
+        />
       )}
     </Stack>
   );

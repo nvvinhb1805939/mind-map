@@ -17,12 +17,10 @@ import {
   addNode,
   changEdges,
   changeNodes,
-  deleteEdge,
   elevateEdge,
   pushStateToHistory,
   renewMindMap,
   setElementContext,
-  setMultiSelectedElements,
   setSelected,
   updateEdge,
 } from 'src/redux/slices/mindMap';
@@ -32,6 +30,7 @@ import {
   getEditingMode,
   hasConnectBetweenTwoNode,
   initMindMap,
+  onDeleteEdges,
   openNodeContextMenu,
   setSelectedElements,
   setSelectedNode,
@@ -69,6 +68,8 @@ export const Main = (props) => {
 
   /** this function is used to handle on user implement connect from source to target */
   const onConnectStart = (event, { nodeId, handleType }) => {
+    if (isMultiSelection) return;
+
     dispatch(updateOpenId(null)); // hide poppover
     dispatch(setSelected(null)); // clear selected on start connect
 
@@ -84,6 +85,8 @@ export const Main = (props) => {
   };
   /** this function is used to add edge when user complete connect from source to target */
   const onConnect = ({ source, target }) => {
+    if (isMultiSelection) return;
+
     if (isOnEdgeUpdateEvents.current) return; // check if current event is onEdgeUpdate then do nothing
 
     if (hasConnectBetweenTwoNode(edges, source, target)) {
@@ -106,6 +109,8 @@ export const Main = (props) => {
   };
   /** this function is used to add node on drop edge */
   const onConnectEnd = (event) => {
+    if (isMultiSelection) return;
+
     isPaneClick.current = false;
 
     if (isNodesConnected.current) return; // check if source node is connected to target node then do nothing
@@ -188,7 +193,8 @@ export const Main = (props) => {
 
     if (!selectedNode.selected) return;
 
-    openNodeContextMenu(event, selectedNode);
+    getEditingMode(selected) === EDIT_MODES.NODE_EDITING &&
+      openNodeContextMenu(event, selectedNode);
   };
   /** this function is used to close popper and clear selected */
   const onNodeDrag = (event, node, nodes) => {
@@ -258,10 +264,8 @@ export const Main = (props) => {
     hasMovingEdge.current = false;
   };
   /** this function is used to delete edge on double click */
-  const onEdgeDoubleClick = (event, edge) => {
-    dispatch(deleteEdge(edge));
-    getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && dispatch(setSelected(null));
-    dispatch(pushStateToHistory());
+  const onEdgeDoubleClick = (event, selectedEdge) => {
+    onDeleteEdges(edges, [selectedEdge]);
   };
   /** this function is used to elevate zIndex of selectedEdge */
   const onEdgeMouseEnter = (event, selectedEdge) => {
@@ -315,8 +319,6 @@ export const Main = (props) => {
         }),
       })
     );
-
-    dispatch(setSelected(null));
   };
 
   /*********** Pane ***********/
@@ -388,6 +390,10 @@ export const Main = (props) => {
   useEffect(() => {
     dispatch(setElementContext(null));
   }, [isMultiSelection]);
+
+  useEffect(() => {
+    getEditingMode(selected) === EDIT_MODES.ALL && dispatch(updateOpenId(null));
+  });
 
   return (
     <ClickAwayListener onClickAway={onClickAway}>

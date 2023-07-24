@@ -5,6 +5,7 @@ import { getEditingMode } from 'src/utils/mindMap';
 import { EdgeEditing } from './EdgeEditing';
 import { NodeEditing } from './NodeEditing';
 import { PaneEditing } from './PaneEditing';
+import { SelectionElementDeleting } from '.';
 
 export const EditModeRendering = (props) => {
   const {
@@ -24,6 +25,7 @@ export const EditModeRendering = (props) => {
           <Stack direction="row" gap={1}>
             <EdgeEditing selected={selected} copied={copied} />
             <NodeEditing selected={selected} copied={copied} />
+            <SelectionElementDeleting selected={selected} />
           </Stack>
         );
       default:
