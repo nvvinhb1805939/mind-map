@@ -197,22 +197,29 @@ export const Main = (props) => {
       openNodeContextMenu(event, selectedNode);
   };
   /** this function is used to close popper and clear selected */
+  const onNodeDragStart = (event, selectedNode, nodes) => {
+    if (isMultiSelection) return;
+
+    dispatch(updateOpenId(null)); // close popper
+    setSelectedNode(event, selectedNode);
+  };
+  /** this function is used to close popper and clear selected */
   const onNodeDrag = (event, node, nodes) => {
     if (node.dragging) return; // prevent dispatch constantly
 
     dispatch(updateOpenId(null)); // close popper
-    dispatch(setSelected(null)); // clear selected
   };
   /** this function is used to set selected node and push history on node stops drag */
   const onNodeDragStop = (event, selectedNode, nodes) => {
-    if (isMultiSelection) return;
-
     if (!selectedNode.dragging) return;
 
-    dispatch(pushStateToHistory());
+    if (isMultiSelection) {
+      dispatch(pushStateToHistory());
+      return;
+    }
 
     openNodeContextMenu(event, selectedNode);
-    setSelectedNode(event, selectedNode);
+    dispatch(pushStateToHistory());
   };
 
   /*********** Edges ***********/
@@ -373,19 +380,6 @@ export const Main = (props) => {
     initMindMap();
   }, [dispatch]);
 
-  /** Toggle node drag on multi select */
-  useEffect(() => {
-    nodes?.length > 0 &&
-      currentIndex > 0 && // after page loaded => mindMap is init then currentIndex = 0
-      dispatch(
-        renewMindMap({
-          ...mindMap,
-          nodes: nodes.map((node) => ({ ...node, draggable: !isMultiSelection })),
-          edges: edges.map((edge) => ({ ...edge, updatable: !isMultiSelection })),
-        })
-      );
-  }, [isMultiSelection]);
-
   /** Clear node context on multi select */
   useEffect(() => {
     dispatch(setElementContext(null));
@@ -411,6 +405,7 @@ export const Main = (props) => {
           /*********** Node event handlers ***********/
           onNodesChange={onNodesChange}
           onNodeDrag={onNodeDrag}
+          onNodeDragStart={onNodeDragStart}
           onNodeDragStop={onNodeDragStop}
           onNodeClick={onNodeClick}
           onNodeContextMenu={onNodeContextMenu}

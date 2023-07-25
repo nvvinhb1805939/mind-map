@@ -13,7 +13,7 @@ import {
 export const MultiSelectToolbar = (props) => {
   const dispatch = useDispatch();
   const {
-    mindMap: { nodes, edges, selected },
+    mindMap: { nodes, edges },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const [value, setValue] = useState(EDIT_MODES.CLEAR);

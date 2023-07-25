@@ -157,7 +157,11 @@ export const setSelectedElements = (selectedElements, selectedElement, type) => 
     dispatch(
       setMultiSelectedElements({
         type,
-        element: { ...selectedElement, selected: false },
+        element: {
+          ...selectedElement,
+          selected: false,
+          draggable: false,
+        },
         selected: reducedSelected,
       })
     );
@@ -168,7 +172,11 @@ export const setSelectedElements = (selectedElements, selectedElement, type) => 
   const increaseSelected = [
     ...selectedElements,
     {
-      element: { ...selectedElement, selected: true },
+      element: {
+        ...selectedElement,
+        selected: true,
+        draggable: true,
+      },
       type: type === 'nodes' ? EDIT_MODES.NODE_EDITING : EDIT_MODES.EDGE_EDITING,
     },
   ];
@@ -176,7 +184,11 @@ export const setSelectedElements = (selectedElements, selectedElement, type) => 
   dispatch(
     setMultiSelectedElements({
       type,
-      element: { ...selectedElement, selected: true },
+      element: {
+        ...selectedElement,
+        selected: true,
+        draggable: true,
+      },
       selected: increaseSelected,
     })
   );

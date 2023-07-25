@@ -23,7 +23,10 @@ const pushHistory = (state) => {
   state.history.splice(++state.currentIndex, 0, state.mindMap);
 };
 const clearSelectedNodes = (state) => {
-  state.mindMap.nodes = state.mindMap.nodes.map((node) => ({ ...node, selected: false }));
+  state.mindMap.nodes = state.mindMap.nodes.map((node) => ({
+    ...node,
+    selected: false,
+  }));
 };
 const clearSelectedEdges = (state) => {
   state.mindMap.edges = state.mindMap.edges.map((edge) => ({ ...edge, selected: false }));
@@ -41,7 +44,7 @@ const setAllSelectedElements = (state, action) => {
   else clearSelectedNodes(state);
 
   const selectedElements = action.payload.elements.map((element) => ({
-    element: { ...element, selected: true },
+    element: { ...element, selected: true, draggable: true },
     type: action.payload.type === 'nodes' ? EDIT_MODES.NODE_EDITING : EDIT_MODES.EDGE_EDITING,
   }));
 
@@ -190,7 +193,7 @@ const mindMapSlice = createSlice({
     /** this action is used to set selected all (all nodes and all edges) */
     setAllSelected: (state) => {
       const selectedNodes = state.mindMap.nodes.map((node) => ({
-        element: { ...node, selected: true },
+        element: { ...node, selected: true, draggable: true },
         type: EDIT_MODES.NODE_EDITING,
       }));
       const selectedEdges = state.mindMap.edges.map((edge) => ({
@@ -270,6 +273,14 @@ const mindMapSlice = createSlice({
     /** this action is used to toggle multi selection mode */
     toggleMultiSelection: (state, action) => {
       state.mindMap.isMultiSelection = action.payload;
+      state.mindMap.nodes = state.mindMap.nodes.map((node) => ({
+        ...node,
+        draggable: !action.payload,
+      }));
+      state.mindMap.edges = state.mindMap.edges.map((edge) => ({
+        ...edge,
+        updatable: !action.payload,
+      }));
     },
     /** this action is used to set element context */
     setElementContext: (state, action) => {
