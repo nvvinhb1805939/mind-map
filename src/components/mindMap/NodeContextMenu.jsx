@@ -61,7 +61,7 @@ export const NodeContextMenu = (props) => {
         break;
       case NODE_CONTEXT_MENU_TYPES.ONLY_NODE:
         clearMode();
-        deleteOnlyNode(selected.map((item) => item.element));
+        deleteOnlyNode(elementContext.element);
         break;
       case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
         addIncomer(elementContext.element, type);
@@ -108,18 +108,18 @@ export const NodeContextMenu = (props) => {
     setInsertNode({ type, outgoers, connectedEdges });
   };
 
-  const deleteOnlyNode = (node) => {
-    onDeleteElements(nodes, node, deleteNodes); // delete node
+  const deleteOnlyNode = (deletedNode) => {
+    dispatch(deleteNodes(nodes.filter((node) => node.id !== deletedNode.id))); // delete node
 
-    const connectedEdges = getConnectedEdges(node, edges); // get all connected edges of node
+    const connectedEdges = getConnectedEdges([deletedNode], edges); // get all connected edges of node
 
     if (connectedEdges.length <= 0) {
       dispatch(pushStateToHistory()); // push to history
       return;
     } // in this case, node has no connected edges so only delete node
 
-    const incomers = getIncomers(node, nodes, edges); // get all incommers of node (all input nodes)
-    const outgoers = getOutgoers(node, nodes, edges); // get all outgoers of node (all output nodes)
+    const incomers = getIncomers(deletedNode, nodes, edges); // get all incommers of node (all input nodes)
+    const outgoers = getOutgoers(deletedNode, nodes, edges); // get all outgoers of node (all output nodes)
 
     const remainingEdges = edges.filter((edge) => !connectedEdges.includes(edge)); // remove connected edges from edges and store remaining edges
 
@@ -148,10 +148,16 @@ export const NodeContextMenu = (props) => {
     onDeleteElements(uniqueEdges, [], deleteEdges);
   };
 
-  const clearNodeAndConnectedEdges = (node) => {
-    onDeleteElements(nodes, node, deleteNodes); // delete node
+  const clearNodeAndConnectedEdges = (deletedNodes) => {
+    dispatch(
+      deleteNodes(
+        nodes.filter(
+          (node) => deletedNodes.findIndex((deletedNode) => deletedNode.id === node.id) === -1
+        )
+      )
+    ); // delete nodes
 
-    const connectedEdges = getConnectedEdges(node, edges); // get connected edges of node
+    const connectedEdges = getConnectedEdges(deletedNodes, edges); // get connected edges of node
 
     if (connectedEdges.length <= 0) {
       dispatch(pushStateToHistory()); // push to history

@@ -215,6 +215,7 @@ export const Main = (props) => {
       return;
     }
 
+    setSelectedNode(event, selectedNode);
     openNodeContextMenu(event, selectedNode);
     dispatch(pushStateToHistory());
   };
