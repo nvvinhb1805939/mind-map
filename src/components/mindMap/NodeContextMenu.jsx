@@ -11,16 +11,16 @@ import {
   TYPES,
 } from 'src/config-global';
 import {
-  addNode,
+  addNodes,
   copyFormat as copyFormatAction,
   deleteEdges,
-  deleteNode,
+  deleteNodes,
   pushStateToHistory,
   setElementContext,
   setSelected,
 } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
-import { hasConnectBetweenTwoNode } from 'src/utils/mindMap';
+import { hasConnectBetweenTwoNode, onDeleteElements } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { InsertIncomerAndOutgoerPopup } from '.';
 
@@ -44,14 +44,24 @@ export const NodeContextMenu = (props) => {
   const onContextItemClick = (type) => {
     switch (type) {
       case NODE_CONTEXT_MENU_TYPES.DUPLICATE:
-        duplicateNode(elementContext.element);
+        duplicateNode(
+          selected.map((item) => ({
+            ...item.element,
+            id: uuidv4(),
+            position: {
+              x: item.element.position.x + 10,
+              y: item.element.position.y + 10,
+            },
+            selected: true,
+          }))
+        );
         break;
       case NODE_CONTEXT_MENU_TYPES.COPY_FORMAT:
         copyFormat(selected?.[0].element);
         break;
       case NODE_CONTEXT_MENU_TYPES.ONLY_NODE:
         clearMode();
-        deleteOnlyNode(elementContext.element);
+        deleteOnlyNode(selected.map((item) => item.element));
         break;
       case NODE_CONTEXT_MENU_TYPES.ADD_INCOMER:
         addIncomer(elementContext.element, type);
@@ -63,24 +73,15 @@ export const NodeContextMenu = (props) => {
         break;
       default:
         clearMode();
-        clearNodeAndConnectedEdges(elementContext.element);
+        clearNodeAndConnectedEdges(selected.map((item) => item.element));
         break;
     }
 
     dispatch(updateOpenId(null));
   };
 
-  const duplicateNode = (selectedNode) => {
-    dispatch(
-      addNode({
-        ...selectedNode,
-        id: uuidv4(),
-        position: {
-          x: selectedNode.position.x + 10,
-          y: selectedNode.position.y + 10,
-        },
-      })
-    );
+  const duplicateNode = (selectedNodes) => {
+    dispatch(addNodes(selectedNodes));
 
     dispatch(setElementContext(null));
 
@@ -108,9 +109,9 @@ export const NodeContextMenu = (props) => {
   };
 
   const deleteOnlyNode = (node) => {
-    dispatch(deleteNode(node)); // delete node
+    onDeleteElements(nodes, node, deleteNodes); // delete node
 
-    const connectedEdges = getConnectedEdges([node], edges); // get all connected edges of node
+    const connectedEdges = getConnectedEdges(node, edges); // get all connected edges of node
 
     if (connectedEdges.length <= 0) {
       dispatch(pushStateToHistory()); // push to history
@@ -124,8 +125,7 @@ export const NodeContextMenu = (props) => {
 
     /** in this case, node has either incommers or outgoers so only delete connected edges */
     if (incomers.length <= 0 || outgoers.length <= 0) {
-      dispatch(deleteEdges(remainingEdges)); // apply changes
-      dispatch(pushStateToHistory()); // push to history
+      onDeleteElements(remainingEdges, [], deleteEdges);
       return;
     }
 
@@ -145,14 +145,13 @@ export const NodeContextMenu = (props) => {
       remainingEdges
     );
 
-    dispatch(deleteEdges(uniqueEdges)); // apply changes
-    dispatch(pushStateToHistory()); // push to history
+    onDeleteElements(uniqueEdges, [], deleteEdges);
   };
 
   const clearNodeAndConnectedEdges = (node) => {
-    dispatch(deleteNode(node)); // delete node
+    onDeleteElements(nodes, node, deleteNodes); // delete node
 
-    const connectedEdges = getConnectedEdges([node], edges); // get connected edges of node
+    const connectedEdges = getConnectedEdges(node, edges); // get connected edges of node
 
     if (connectedEdges.length <= 0) {
       dispatch(pushStateToHistory()); // push to history
@@ -160,8 +159,7 @@ export const NodeContextMenu = (props) => {
     } // in this case, node has no connected edges so only delete node
 
     const remainingEdges = edges.filter((edge) => !connectedEdges.includes(edge)); // remove connected edges from edges
-    dispatch(deleteEdges(remainingEdges)); // apply changes
-    dispatch(pushStateToHistory()); // push to history
+    onDeleteElements(remainingEdges, [], deleteEdges);
   };
 
   return !!insertNode?.type ? (

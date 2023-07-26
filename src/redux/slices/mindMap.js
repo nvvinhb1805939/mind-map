@@ -77,10 +77,15 @@ const mindMapSlice = createSlice({
       );
     },
     /** this action is used to add a new node */
-    addNode: (state, action) => {
+    addNodes: (state, action) => {
+      const newNodes = action.payload;
+
       state.mindMap.nodes = state.mindMap.nodes.map((node) => ({ ...node, selected: false }));
-      state.mindMap.nodes.push({ ...action.payload, selected: true });
-      state.mindMap.selected = [{ element: action.payload, type: EDIT_MODES.NODE_EDITING }];
+      state.mindMap.nodes.push(...newNodes);
+      state.mindMap.selected = newNodes.map((node) => ({
+        element: node,
+        type: EDIT_MODES.NODE_EDITING,
+      }));
     },
     /** this action is used to add a new edge */
     addEdge: (state, action) => {
@@ -122,9 +127,9 @@ const mindMapSlice = createSlice({
     deleteEdges: (state, action) => {
       state.mindMap.edges = action.payload;
     },
-    /** this action is used to delete a node */
-    deleteNode: (state, action) => {
-      state.mindMap.nodes = state.mindMap.nodes.filter((node) => node.id !== action.payload.id);
+    /** this action is used to delete edges */
+    deleteNodes: (state, action) => {
+      state.mindMap.nodes = action.payload;
     },
     /** this action is used to change background color */
     changeBgColor: (state, action) => {
@@ -295,14 +300,14 @@ export const {
   changeNodes,
   changEdges,
   elevateEdge,
-  addNode,
+  addNodes,
   addEdge,
   updateIncomerEdges,
   updateEdge,
   changeEdgeColor,
   updateNodeProps,
   deleteEdges,
-  deleteNode,
+  deleteNodes,
   changeBgColor,
   undo,
   redo,

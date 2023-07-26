@@ -193,12 +193,17 @@ export const setSelectedElements = (selectedElements, selectedElement, type) => 
   );
 };
 
-export const onDeleteEdges = (edges, deletedEdges) => {
-  const remainingEdges = edges.filter(
-    (edge) => deletedEdges.findIndex((deletedEdge) => deletedEdge.id === edge.id) === -1
-  );
+export const onDeleteElements = (elements, deletedElements, action) => {
+  let remainingElements = [];
 
-  dispatch(deleteEdges(remainingEdges));
+  !deletedElements || deletedElements?.length === 0
+    ? (remainingElements = elements)
+    : (remainingElements = elements.filter(
+        (element) =>
+          deletedElements.findIndex((deletedElement) => deletedElement.id === element.id) === -1
+      ));
+
+  dispatch(action(remainingElements));
   dispatch(setSelected(null));
   dispatch(pushStateToHistory());
 };

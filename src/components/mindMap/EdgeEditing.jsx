@@ -12,8 +12,9 @@ import {
   copyFormat,
   pasteEdgeFormat,
   setSelected,
+  deleteEdges as deleteEdgesAction,
 } from 'src/redux/slices/mindMap';
-import { getEditingMode, onDeleteEdges } from 'src/utils/mindMap';
+import { getEditingMode, onDeleteElements } from 'src/utils/mindMap';
 import { BaseTooltipButton, ColorPicker, PasteFormat } from '.';
 
 export const EdgeEditing = memo(({ selected, copied }) => {
@@ -51,7 +52,7 @@ export const EdgeEditing = memo(({ selected, copied }) => {
   };
 
   const deleteEdges = () => {
-    onDeleteEdges(edges, [selected[0].element]);
+    onDeleteElements(edges, [selected[0].element], deleteEdgesAction);
   };
 
   const pasteFormat = () => {

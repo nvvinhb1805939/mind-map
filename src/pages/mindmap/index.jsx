@@ -13,8 +13,6 @@ const MindMapPage = (props) => {
     mindMap: { nodes, bgcolor, edges },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
-  console.log(nodes);
-
   /** disable default right click event of browser  */
   useEffect(() => {
     const handleContextmenu = (e) => {
@@ -31,8 +29,8 @@ const MindMapPage = (props) => {
       saveDataToLocalStorage(
         {
           nodes: nodes.map((node) => ({ ...node, selected: false, draggable: true })),
+          edges: edges.map((edge) => ({ ...edge, selected: false, updatable: true })),
           bgcolor,
-          edges,
         },
         STORAGE_KEYS.MIND_MAP
       )

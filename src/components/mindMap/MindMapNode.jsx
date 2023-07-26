@@ -34,7 +34,9 @@ export const MindMapNode = memo((props) => {
   };
 
   useEffect(() => {
-    if (selectedNode?.[0]?.element?.id !== id || !width) return;
+    if (selectedNode?.length !== 1) return;
+
+    if (selectedNode[0].element.id !== id || !width) return;
 
     dispatch(
       setSelected({

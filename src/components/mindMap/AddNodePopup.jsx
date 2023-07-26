@@ -2,7 +2,7 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { TYPES } from 'src/config-global';
-import { addNode, pushStateToHistory } from 'src/redux/slices/mindMap';
+import { addNodes, pushStateToHistory } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
 import { useDispatch } from 'src/redux/store';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,9 +34,10 @@ export const AddNodePopup = () => {
       type: TYPES.MIND_MAP,
       position: { x: position, y: position },
       data: { label: label.trim() },
+      selected: true,
     };
 
-    dispatch(addNode(newNode)); // add node
+    dispatch(addNodes([newNode])); // add node
     dispatch(pushStateToHistory()); // push to history
     dispatch(updateOpenId(null)); // close popper
 

@@ -14,12 +14,12 @@ import {
 } from 'src/config-global';
 import {
   addEdge,
-  addNode,
+  addNodes,
   changEdges,
   changeNodes,
+  deleteEdges,
   elevateEdge,
   pushStateToHistory,
-  renewMindMap,
   setElementContext,
   setSelected,
   updateEdge,
@@ -30,7 +30,7 @@ import {
   getEditingMode,
   hasConnectBetweenTwoNode,
   initMindMap,
-  onDeleteEdges,
+  onDeleteElements,
   openNodeContextMenu,
   setSelectedElements,
   setSelectedNode,
@@ -49,9 +49,7 @@ export const Main = (props) => {
 
   const dispatch = useDispatch();
   const {
-    mindMap,
     mindMap: { nodes, edges, selected, elementContext, isMultiSelection },
-    currentIndex,
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const reactFlowWrapper = useRef(null); // access DOM
@@ -136,7 +134,7 @@ export const Main = (props) => {
       data: { label: `Nút ${++quantityNewNode}` },
     };
 
-    dispatch(addNode(newNode)); // add new node
+    dispatch(addNodes(newNode)); // add new node
     dispatch(
       addEdge({
         id: uuidv4(),
@@ -171,7 +169,6 @@ export const Main = (props) => {
             return selectedNode ? { ...node, selected: true } : { ...node, selected: false };
           })
         : nodeChanges;
-
     dispatch(changeNodes(selectedChanges));
   };
   /** this function is used to switch to node editing mode */
@@ -272,7 +269,7 @@ export const Main = (props) => {
   };
   /** this function is used to delete edge on double click */
   const onEdgeDoubleClick = (event, selectedEdge) => {
-    onDeleteEdges(edges, [selectedEdge]);
+    onDeleteElements(edges, [selectedEdge], deleteEdges);
   };
   /** this function is used to elevate zIndex of selectedEdge */
   const onEdgeMouseEnter = (event, selectedEdge) => {

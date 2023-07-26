@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { NODE_CONTEXT_MENU_TYPES, NODE_SIZE, TYPES } from 'src/config-global';
 import {
   addEdge,
-  addNode,
+  addNodes,
   pushStateToHistory,
   setElementContext,
   updateIncomerEdges,
@@ -28,7 +28,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
   const [label, setLabel] = useState('');
 
   const insertBeforeNode = (insertedNode, selectedNode, incomers, connectedEdges) => {
-    dispatch(addNode(insertedNode));
+    dispatch(addNodes([insertedNode]));
 
     const newEdge = {
       id: uuidv4(),
@@ -56,7 +56,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
   };
 
   const insertAfterNode = (insertedNode, selectedNode, outgoers, connectedEdges) => {
-    dispatch(addNode(insertedNode));
+    dispatch(addNodes([insertedNode]));
 
     const newEdge = {
       id: uuidv4(),
@@ -129,6 +129,7 @@ export const InsertIncomerAndOutgoerPopup = (props) => {
             : elementContext.element.position.y + NODE_SIZE.HEIGHT * 2,
       },
       data: { label: label.trim() },
+      selected: true,
     };
 
     onClose(); // close add node form
