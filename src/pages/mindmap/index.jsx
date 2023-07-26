@@ -29,7 +29,11 @@ const MindMapPage = (props) => {
   useBeforeUnload(
     useCallback(() =>
       saveDataToLocalStorage(
-        { nodes: nodes.map((node) => ({ ...node, draggable: true })), bgcolor, edges },
+        {
+          nodes: nodes.map((node) => ({ ...node, selected: false, draggable: true })),
+          bgcolor,
+          edges,
+        },
         STORAGE_KEYS.MIND_MAP
       )
     ),
