@@ -118,7 +118,6 @@ export const initMindMap = () => {
 
   if (mindMap) {
     dispatch(renewMindMap(mindMap));
-    dispatch(setSelected(null));
   } else dispatch(renewMindMap(INITIAL_MIND_MAP));
 };
 

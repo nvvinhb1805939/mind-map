@@ -26,6 +26,7 @@ const clearSelectedNodes = (state) => {
   state.mindMap.nodes = state.mindMap.nodes.map((node) => ({
     ...node,
     selected: false,
+    ...(state.mindMap.isMultiSelection && { draggable: false }),
   }));
 };
 const clearSelectedEdges = (state) => {
