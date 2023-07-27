@@ -115,11 +115,21 @@ const mindMapSlice = createSlice({
     },
     /** this action is used to update node props */
     updateNodeProps: (state, action) => {
-      const { id, data } = action.payload;
+      const { ids, data } = action.payload;
 
-      state.mindMap.nodes = state.mindMap.nodes.map((node) =>
-        node.id === id ? { ...node, data } : node
-      );
+      state.mindMap.selected = [];
+
+      state.mindMap.nodes = state.mindMap.nodes.map((node) => {
+        if (!ids.includes(node.id)) return node;
+
+        const styledNode = { ...node, data: data(node) };
+
+        state.mindMap.selected.push({
+          element: styledNode,
+          type: EDIT_MODES.NODE_EDITING,
+        });
+        return styledNode;
+      });
 
       pushHistory(state);
     },

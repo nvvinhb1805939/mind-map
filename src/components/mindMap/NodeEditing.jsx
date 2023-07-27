@@ -44,27 +44,18 @@ export const NodeEditing = memo(({ selected, copied }) => {
   };
 
   const onNodePropsChangeComplete = (styleProps = {}, otherProps = {}) => {
-    const data = {
-      ...selected[0].element.data,
+    const data = (selectedElement) => ({
+      ...selectedElement.data,
       ...otherProps,
       styles: {
-        ...selected[0].element.data.styles,
+        ...selectedElement.data.styles,
         ...styleProps,
       },
-    };
+    });
 
     dispatch(
-      setSelected({
-        ...selected[0],
-        element: {
-          ...selected[0].element,
-          data,
-        },
-      })
-    );
-    dispatch(
       updateNodeProps({
-        id: selected[0].element.id,
+        ids: selected.map(({ element }) => element.id),
         data,
       })
     );
