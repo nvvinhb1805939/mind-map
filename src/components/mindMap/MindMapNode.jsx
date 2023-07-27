@@ -44,7 +44,7 @@ export const MindMapNode = memo((props) => {
 
     const ids = selectedNode.map(({ element }) => element.id);
 
-    if (!ids.includes(id) || !width) return;
+    if (!ids.includes(id) || !width || width === selectedNodeWidth) return;
 
     dispatch(
       updateNodeProps({

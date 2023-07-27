@@ -50,7 +50,10 @@ export const Main = (props) => {
   const dispatch = useDispatch();
   const {
     mindMap: { nodes, edges, selected, elementContext, isMultiSelection },
+    history,
+    currentIndex,
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+  console.log(history, currentIndex);
 
   const reactFlowWrapper = useRef(null); // access DOM
   const isOnEdgeUpdateEvents = useRef(false); // when user MOVE edge, it is used to determine whether current event is onEdgeUpdate events or onConnect events ()
@@ -132,9 +135,10 @@ export const Main = (props) => {
             : event.clientY - top,
       }),
       data: { label: `Nút ${++quantityNewNode}` },
+      selected: true,
     };
 
-    dispatch(addNodes(newNode)); // add new node
+    dispatch(addNodes([newNode])); // add new node
     dispatch(
       addEdge({
         id: uuidv4(),
