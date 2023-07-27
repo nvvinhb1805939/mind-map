@@ -27,14 +27,8 @@ export const EdgeEditing = memo(({ selected, copied }) => {
 
   const onChangeComplete = ({ hex }) => {
     dispatch(
-      setSelected({
-        element: { ...selected[0].element, style: { stroke: hex } },
-        type: EDIT_MODES.EDGE_EDITING,
-      })
-    );
-    dispatch(
       changeEdgeColor({
-        id: selected[0].element.id,
+        ids: selected.map(({ element }) => element.id),
         stroke: hex,
       })
     );
