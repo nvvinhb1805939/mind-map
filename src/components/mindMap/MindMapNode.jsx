@@ -7,13 +7,15 @@ import {
   DEFAULT_NODE_BG_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   DEFAULT_TEXT_COLOR,
+  EDIT_MODES,
   MIND_MAP_CLASSES,
   NODE_CONTEXT_MENU_ID,
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
-import { pushStateToHistory, setSelected } from 'src/redux/slices/mindMap';
+import { pushStateToHistory, updateNodeProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
+import { getEditingMode } from 'src/utils/mindMap';
 
 export const MindMapNode = memo((props) => {
   const theme = useTheme();
@@ -34,15 +36,20 @@ export const MindMapNode = memo((props) => {
   };
 
   useEffect(() => {
-    if (selectedNode?.length !== 1) return;
+    if (
+      getEditingMode(selectedNode) !== EDIT_MODES.NODE_EDITING &&
+      getEditingMode(selectedNode) !== EDIT_MODES.ALL
+    )
+      return;
 
-    if (selectedNode[0].element.id !== id || !width) return;
+    const ids = selectedNode.map(({ element }) => element.id);
+
+    if (!ids.includes(id) || !width) return;
 
     dispatch(
-      setSelected({
-        ...selectedNode[0],
-        element: {
-          ...selectedNode[0].element,
+      updateNodeProps({
+        ids,
+        nodeProps: {
           width,
           height: NODE_SIZE.HEIGHT,
           style: { width, height: NODE_SIZE.HEIGHT },
