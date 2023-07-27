@@ -1,24 +1,22 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   DEFAULT_HANDLE_COLOR,
   DEFAULT_NODE_BG_COLOR,
   DEFAULT_NODE_BORDER_COLOR,
   DEFAULT_TEXT_COLOR,
-  TYPES,
+  EDIT_MODES,
 } from 'src/config-global';
-import { pasteNodeFormat, setSelected, updateNodeProps } from 'src/redux/slices/mindMap';
+import { updateNodeProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
+import { getEditingMode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorPicker, PasteFormat } from '.';
 import { InputField } from './InputField';
 
 export const NodeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
-  const {
-    mindMap: { isMultiSelection },
-  } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const selectedNodeId = selected[0].element?.id || uuidv4();
 
@@ -27,19 +25,24 @@ export const NodeEditing = memo(({ selected, copied }) => {
   const pasteFormat = () => {
     const { copy_type, ...copiedNode } = copied;
 
-    const pastedNode = {
-      ...selected[0].element,
+    const pastedNode = (selectedElement) => ({
+      ...selectedElement,
       ...copiedNode,
       selected: true,
       style: { width: copiedNode.width, height: copiedNode.height },
       data: {
         ...copiedNode.data,
-        label: selected[0].element.data.label,
+        label: selectedElement.data.label,
       },
-    };
+    });
 
-    dispatch(setSelected({ ...selected[0], element: pastedNode }));
-    dispatch(pasteNodeFormat(pastedNode));
+    dispatch(
+      updateNodeProps({
+        ids: selected.map(({ element }) => element.id),
+        nodeProps: pastedNode,
+      })
+    );
+
     dispatch(updateOpenId(null));
   };
 
@@ -131,7 +134,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
         tooltip="Màu cổng"
       />
       {/** if is multi select mode or not selected node then not render */}
-      {!isMultiSelection && !!selected && (
+      {getEditingMode(selected) === EDIT_MODES.NODE_EDITING && !!selected && (
         <PasteFormat selected={selected} copied={copied} action={pasteFormat} />
       )}
     </Stack>

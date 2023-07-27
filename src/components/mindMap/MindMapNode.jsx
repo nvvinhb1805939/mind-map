@@ -49,11 +49,11 @@ export const MindMapNode = memo((props) => {
     dispatch(
       updateNodeProps({
         ids,
-        nodeProps: {
+        nodeProps: () => ({
           width,
           height: NODE_SIZE.HEIGHT,
           style: { width, height: NODE_SIZE.HEIGHT },
-        },
+        }),
       })
     );
   }, [width]);

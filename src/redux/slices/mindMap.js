@@ -125,7 +125,7 @@ const mindMapSlice = createSlice({
         const styledNode = {
           ...node,
           ...(data && { data: data(node) }),
-          ...nodeProps,
+          ...(nodeProps && nodeProps(node)),
         };
 
         state.mindMap.selected.push({
@@ -275,14 +275,6 @@ const mindMapSlice = createSlice({
     copyFormat: (state, action) => {
       state.mindMap.copied = action.payload;
     },
-    /** this action is used to paste format of node */
-    pasteNodeFormat: (state, action) => {
-      state.mindMap.nodes = state.mindMap.nodes.map((node) =>
-        action.payload.id === node.id ? action.payload : node
-      );
-
-      pushHistory(state);
-    },
     /** this action is used to paste format of edge */
     pasteEdgeFormat: (state, action) => {
       state.mindMap.edges = state.mindMap.edges.map((edge) =>
@@ -333,7 +325,6 @@ export const {
   pushStateToHistory,
   insertNodeBetweenTwoEdges,
   copyFormat,
-  pasteNodeFormat,
   pasteEdgeFormat,
   toggleMultiSelection,
   setElementContext,
