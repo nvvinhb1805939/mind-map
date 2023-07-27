@@ -10,9 +10,9 @@ import { DEFAULT_EDGE_COLOR, EDIT_MODES, TYPES } from 'src/config-global';
 import {
   changeEdgeColor,
   copyFormat,
+  deleteEdges as deleteEdgesAction,
   pasteEdgeFormat,
   setSelected,
-  deleteEdges as deleteEdgesAction,
 } from 'src/redux/slices/mindMap';
 import { getEditingMode, onDeleteElements } from 'src/utils/mindMap';
 import { BaseTooltipButton, ColorPicker, PasteFormat } from '.';
@@ -52,7 +52,11 @@ export const EdgeEditing = memo(({ selected, copied }) => {
   };
 
   const deleteEdges = () => {
-    onDeleteElements(edges, [selected[0].element], deleteEdgesAction);
+    onDeleteElements(
+      edges,
+      selected.map(({ element }) => element),
+      deleteEdgesAction
+    );
   };
 
   const pasteFormat = () => {
