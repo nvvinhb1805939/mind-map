@@ -104,50 +104,26 @@ const mindMapSlice = createSlice({
         return newIndex !== -1 ? action.payload[newIndex] : edge;
       });
     },
-    /** this action is used to change edge color */
-    changeEdgeColor: (state, action) => {
-      const { ids, stroke } = action.payload;
-
-      state.mindMap.selected = [];
-
-      state.mindMap.edges = state.mindMap.edges.map((edge) => {
-        if (ids.includes(edge.id)) {
-          const styledEdge = { ...edge, style: { stroke } };
-
-          state.mindMap.selected.push({
-            element: styledEdge,
-            type: EDIT_MODES.EDGE_EDITING,
-          });
-
-          return styledEdge;
-        }
-
-        return edge;
-      });
-
-      pushHistory(state);
-    },
     /** this action is used to update node props */
-    updateNodeProps: (state, action) => {
-      const { ids, data = null, nodeProps = null } = action.payload;
+    updateElementProps: (state, action) => {
+      const { type, ids, elementProps = null } = action.payload;
 
       state.mindMap.selected = [];
 
-      state.mindMap.nodes = state.mindMap.nodes.map((node) => {
-        if (!ids.includes(node.id)) return node;
+      state.mindMap[type] = state.mindMap[type].map((element) => {
+        if (!ids.includes(element.id)) return element;
 
-        const styledNode = {
-          ...node,
-          ...(data && { data: data(node) }),
-          ...(nodeProps && nodeProps(node)),
+        const styledElement = {
+          ...element,
+          ...(elementProps && elementProps(element)),
         };
 
         state.mindMap.selected.push({
-          element: styledNode,
-          type: EDIT_MODES.NODE_EDITING,
+          element: styledElement,
+          type: type === 'nodes' ? EDIT_MODES.NODE_EDITING : EDIT_MODES.EDGE_EDITING,
         });
 
-        return styledNode;
+        return styledElement;
       });
 
       pushHistory(state);
@@ -325,8 +301,7 @@ export const {
   addEdge,
   updateIncomerEdges,
   updateEdge,
-  changeEdgeColor,
-  updateNodeProps,
+  updateElementProps,
   deleteEdges,
   deleteNodes,
   changeBgColor,

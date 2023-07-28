@@ -8,7 +8,7 @@ import {
   DEFAULT_TEXT_COLOR,
   EDIT_MODES,
 } from 'src/config-global';
-import { updateNodeProps } from 'src/redux/slices/mindMap';
+import { updateElementProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
 import { getEditingMode } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,7 +25,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
   const pasteFormat = () => {
     const { copy_type, ...copiedNode } = copied;
 
-    const pastedNode = (selectedElement) => ({
+    const elementProps = (selectedElement) => ({
       ...selectedElement,
       ...copiedNode,
       selected: true,
@@ -37,9 +37,10 @@ export const NodeEditing = memo(({ selected, copied }) => {
     });
 
     dispatch(
-      updateNodeProps({
+      updateElementProps({
+        type: 'nodes',
         ids: selected.map(({ element }) => element.id),
-        nodeProps: pastedNode,
+        elementProps,
       })
     );
 
@@ -47,19 +48,22 @@ export const NodeEditing = memo(({ selected, copied }) => {
   };
 
   const onNodePropsChangeComplete = (styleProps = {}, otherProps = {}) => {
-    const data = (selectedElement) => ({
-      ...selectedElement.data,
-      ...otherProps,
-      styles: {
-        ...selectedElement.data.styles,
-        ...styleProps,
+    const elementProps = (selectedElement) => ({
+      data: {
+        ...selectedElement.data,
+        ...otherProps,
+        styles: {
+          ...selectedElement.data.styles,
+          ...styleProps,
+        },
       },
     });
 
     dispatch(
-      updateNodeProps({
+      updateElementProps({
+        type: 'nodes',
         ids: selected.map(({ element }) => element.id),
-        data,
+        elementProps,
       })
     );
   };

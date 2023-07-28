@@ -8,11 +8,9 @@ import { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DEFAULT_EDGE_COLOR, EDIT_MODES, TYPES } from 'src/config-global';
 import {
-  changeEdgeColor,
   copyFormat,
   deleteEdges as deleteEdgesAction,
-  pasteEdgeFormat,
-  setSelected,
+  updateElementProps,
 } from 'src/redux/slices/mindMap';
 import { getEditingMode, onDeleteElements } from 'src/utils/mindMap';
 import { BaseTooltipButton, ColorPicker, PasteFormat } from '.';
@@ -27,9 +25,14 @@ export const EdgeEditing = memo(({ selected, copied }) => {
 
   const onChangeComplete = ({ hex }) => {
     dispatch(
-      changeEdgeColor({
+      updateElementProps({
+        type: 'edges',
         ids: selected.map(({ element }) => element.id),
-        stroke: hex,
+        elementProps: () => ({
+          style: {
+            stroke: hex,
+          },
+        }),
       })
     );
   };
@@ -56,13 +59,15 @@ export const EdgeEditing = memo(({ selected, copied }) => {
   const pasteFormat = () => {
     const { copy_type, ...copiedEdge } = copied;
 
-    const pastedEdge = {
-      ...selected[0].element,
-      ...copiedEdge,
-    };
-
-    dispatch(setSelected({ ...selected[0], element: pastedEdge }));
-    dispatch(pasteEdgeFormat(pastedEdge));
+    dispatch(
+      updateElementProps({
+        type: 'edges',
+        ids: selected.map(({ element }) => element.id),
+        elementProps: () => ({
+          ...copiedEdge,
+        }),
+      })
+    );
   };
 
   return (
@@ -83,7 +88,7 @@ export const EdgeEditing = memo(({ selected, copied }) => {
       )}
 
       {/** if is multi select mode or not selected edge then not render */}
-      {!isMultiSelection && !!selected && (
+      {getEditingMode(selected) === EDIT_MODES.EDGE_EDITING && !!selected && (
         <PasteFormat selected={selected} copied={copied} action={pasteFormat} />
       )}
 

@@ -13,7 +13,7 @@ import {
   NODE_SIZE,
   TYPES,
 } from 'src/config-global';
-import { pushStateToHistory, updateNodeProps } from 'src/redux/slices/mindMap';
+import { pushStateToHistory, updateElementProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
 import { getEditingMode } from 'src/utils/mindMap';
 
@@ -47,9 +47,10 @@ export const MindMapNode = memo((props) => {
     if (!ids.includes(id) || !width || width === selectedNodeWidth) return;
 
     dispatch(
-      updateNodeProps({
+      updateElementProps({
+        type: 'nodes',
         ids,
-        nodeProps: () => ({
+        elementProps: () => ({
           width,
           height: NODE_SIZE.HEIGHT,
           style: { width, height: NODE_SIZE.HEIGHT },
