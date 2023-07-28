@@ -108,8 +108,6 @@ const mindMapSlice = createSlice({
     updateElementProps: (state, action) => {
       const { type, ids, elementProps = null } = action.payload;
 
-      state.mindMap.selected = [];
-
       state.mindMap[type] = state.mindMap[type].map((element) => {
         if (!ids.includes(element.id)) return element;
 
@@ -118,10 +116,14 @@ const mindMapSlice = createSlice({
           ...(elementProps && elementProps(element)),
         };
 
-        state.mindMap.selected.push({
+        const newSelectedElement = {
           element: styledElement,
           type: type === 'nodes' ? EDIT_MODES.NODE_EDITING : EDIT_MODES.EDGE_EDITING,
-        });
+        };
+
+        state.mindMap.selected = state.mindMap.selected.map((selectedElement) =>
+          selectedElement.element.id === element.id ? newSelectedElement : selectedElement
+        );
 
         return styledElement;
       });

@@ -384,14 +384,12 @@ export const Main = (props) => {
     dispatch(setElementContext(null));
   }, [isMultiSelection]);
 
-  useEffect(() => {
-    getEditingMode(selected) === EDIT_MODES.ALL && dispatch(updateOpenId(null));
-  });
-
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <Box ref={reactFlowWrapper} sx={styles}>
-        {elementContext?.type === EDIT_MODES.EDGE_EDITING && <InsertNodePopup />}
+        {!isMultiSelection && elementContext?.type === EDIT_MODES.EDGE_EDITING && (
+          <InsertNodePopup />
+        )}
         {elementContext?.type === EDIT_MODES.NODE_EDITING && (
           <NodeContextMenu id={NODE_CONTEXT_MENU_ID} />
         )}
