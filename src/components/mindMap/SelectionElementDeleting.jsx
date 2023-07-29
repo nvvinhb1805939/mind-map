@@ -1,10 +1,16 @@
-import React from 'react';
-import { BaseTooltipButton } from '.';
 import { DeleteOutlineOutlined as DeleteOutlineOutlinedIcon } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { TYPES } from 'src/config-global';
+import { BaseTooltipButton } from '.';
+import { deleteBothNodesAndEdges } from 'src/utils/mindMap';
 
 export const SelectionElementDeleting = ({ selected }) => {
+  const {
+    mindMap: { nodes, edges },
+  } = useSelector((state) => state[TYPES.MIND_MAP]);
+
   const onDeleteSelectedElements = () => {
-    console.log(selected);
+    deleteBothNodesAndEdges(nodes, edges, selected);
   };
 
   return (

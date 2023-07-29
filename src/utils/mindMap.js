@@ -14,6 +14,7 @@ import {
 import {
   INITIAL_MIND_MAP,
   deleteEdges,
+  deleteNodes,
   pushStateToHistory,
   renewMindMap,
   setElementContext,
@@ -200,10 +201,31 @@ export const onDeleteElements = (elements, deletedElements, action) => {
     ? (remainingElements = elements)
     : (remainingElements = elements.filter(
         (element) =>
-          deletedElements.findIndex((deletedElement) => deletedElement.id === element.id) === -1
+          deletedElements.findIndex((deletedElement) => deletedElement?.id === element.id) === -1
       ));
 
   dispatch(action(remainingElements));
+  dispatch(setSelected(null));
+  dispatch(pushStateToHistory());
+};
+
+export const deleteBothNodesAndEdges = (nodes, edges, deletedElements) => {
+  let deletedNodes = [],
+    deletedEdges = [],
+    remainingNodes = [],
+    remainingEdges = [];
+
+  deletedElements.forEach(({ element, type }) => {
+    type === EDIT_MODES.NODE_EDITING
+      ? deletedNodes.push(element.id)
+      : deletedEdges.push(element.id);
+  });
+
+  remainingNodes = nodes.filter((node) => !deletedNodes.includes(node.id));
+  remainingEdges = edges.filter((edge) => !deletedEdges.includes(edge.id));
+
+  dispatch(deleteNodes(remainingNodes));
+  dispatch(deleteEdges(remainingEdges));
   dispatch(setSelected(null));
   dispatch(pushStateToHistory());
 };
