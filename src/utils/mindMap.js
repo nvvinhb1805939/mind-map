@@ -108,6 +108,9 @@ export const importTextFile = (encryptedData) => {
 };
 
 export const saveDataToLocalStorage = (data, storageKey) => {
+  data.nodes = data.nodes.map((node) => ({ ...node, selected: false, draggable: true }));
+  data.edges = data.edges.map((edge) => ({ ...edge, selected: false, updatable: true }));
+
   localStorage.setItem(storageKey, JSON.stringify(data));
 };
 
