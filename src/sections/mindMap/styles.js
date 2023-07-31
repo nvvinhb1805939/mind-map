@@ -44,15 +44,6 @@ export const useStyles = () => {
         height: 'max-content !important',
       },
 
-      [`& .react-flow__node.selected .${MIND_MAP_CLASSES.NODE}, & .react-flow__node.dragging .${MIND_MAP_CLASSES.NODE}`]:
-        {
-          filter: `drop-shadow(0 0 20px ${
-            selected?.[0]?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
-          }) drop-shadow(0 0 50px ${
-            selected?.[0]?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
-          })`,
-        },
-
       /** Style for Edges */
       '& .react-flow__edge .react-flow__edge-path': {
         filter: (theme) =>

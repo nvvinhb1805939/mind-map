@@ -1,5 +1,5 @@
 import { Stack, Typography, useTheme } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Handle, NodeResizer, Position } from 'reactflow';
 import {
@@ -20,12 +20,17 @@ import { getEditingMode } from 'src/utils/mindMap';
 export const MindMapNode = memo((props) => {
   const theme = useTheme();
 
-  const { id, data, selected } = props;
+  const { id, data, selected, dragging } = props;
 
   const dispatch = useDispatch();
   const {
     mindMap: { selected: selectedNode },
   } = useSelector((state) => state[TYPES.MIND_MAP]);
+
+  const currentSelectedNode = useMemo(
+    () => selectedNode?.find(({ element }) => element.id === id),
+    [selectedNode]
+  );
 
   const selectedNodeWidth = selectedNode?.[0]?.element?.width;
 
@@ -87,6 +92,14 @@ export const MindMapNode = memo((props) => {
         '& .react-flow__handle': {
           bgcolor: data?.styles?.['.react-flow__handle']?.bgcolor || DEFAULT_HANDLE_COLOR,
         },
+
+        ...((dragging || selected) && {
+          filter: `drop-shadow(0 0 20px ${
+            currentSelectedNode?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
+          }) drop-shadow(0 0 50px ${
+            currentSelectedNode?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
+          })`,
+        }),
 
         ...data?.styles,
       }}
