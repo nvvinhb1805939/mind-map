@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   DEFAULT_HANDLE_COLOR,
@@ -10,7 +10,7 @@ import {
 } from 'src/config-global';
 import { updateElementProps } from 'src/redux/slices/mindMap';
 import { updateOpenId } from 'src/redux/slices/popper';
-import { getEditingMode } from 'src/utils/mindMap';
+import { getEditingMode, getLastSelectedElement } from 'src/utils/mindMap';
 import { v4 as uuidv4 } from 'uuid';
 import { ColorPicker, PasteFormat } from '.';
 import { InputField } from './InputField';
@@ -18,9 +18,14 @@ import { InputField } from './InputField';
 export const NodeEditing = memo(({ selected, copied }) => {
   const dispatch = useDispatch();
 
-  const selectedNodeId = selected[0].element?.id || uuidv4();
+  const lastSelectedNode = useMemo(
+    () => getLastSelectedElement(selected, EDIT_MODES.NODE_EDITING),
+    [selected]
+  );
 
-  const [nodeLabel, setNodeLabel] = useState(selected[0].element?.data?.label || '');
+  const selectedNodeId = lastSelectedNode?.element?.id || uuidv4();
+
+  const [nodeLabel, setNodeLabel] = useState(lastSelectedNode?.element?.data?.label || '');
 
   const pasteFormat = () => {
     const { copy_type, ...copiedNode } = copied;
@@ -69,7 +74,10 @@ export const NodeEditing = memo(({ selected, copied }) => {
   };
 
   useEffect(() => {
-    if (nodeLabel.trim().length === 0 || nodeLabel.trim() === selected[0].element?.data?.label)
+    if (
+      nodeLabel.trim().length === 0 ||
+      nodeLabel.trim() === lastSelectedNode?.element?.data?.label
+    )
       return;
 
     const delayTimer = setTimeout(() => {
@@ -84,20 +92,22 @@ export const NodeEditing = memo(({ selected, copied }) => {
       <ColorPicker
         id={`color-picker-bgcolor-${selectedNodeId}`}
         onChangeComplete={({ hex }) => onNodePropsChangeComplete({ bgcolor: hex })}
-        initialColor={selected[0].element?.data?.styles?.bgcolor || DEFAULT_NODE_BG_COLOR}
+        initialColor={lastSelectedNode?.element?.data?.styles?.bgcolor || DEFAULT_NODE_BG_COLOR}
         tooltip="Màu nền"
       />
       <ColorPicker
         id={`color-picker-border-color-${selectedNodeId}`}
         onChangeComplete={({ hex }) => onNodePropsChangeComplete({ borderColor: hex })}
-        initialColor={selected[0].element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR}
+        initialColor={
+          lastSelectedNode?.element?.data?.styles?.borderColor || DEFAULT_NODE_BORDER_COLOR
+        }
         tooltip="Màu viền"
       />
       <Box onFocus={() => dispatch(updateOpenId(null))}>
         <InputField
           id={selectedNodeId}
           name="label"
-          defaultValue={selected[0].element?.data?.label || ''}
+          defaultValue={lastSelectedNode?.element?.data?.label || ''}
           onChange={setNodeLabel}
           floatHelperText={true}
           width={300}
@@ -109,7 +119,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
           onNodePropsChangeComplete({ color: hex, '& .MuiTypography-root': { color: hex } })
         }
         icon={<Typography>A</Typography>}
-        initialColor={selected[0].element?.data?.styles?.color || DEFAULT_TEXT_COLOR}
+        initialColor={lastSelectedNode?.element?.data?.styles?.color || DEFAULT_TEXT_COLOR}
         tooltip="Màu chữ"
         buttonStyles={{
           bgcolor: DEFAULT_NODE_BG_COLOR,
@@ -117,12 +127,12 @@ export const NodeEditing = memo(({ selected, copied }) => {
 
           '& .MuiButton-startIcon': { m: 0 },
 
-          ...selected[0].element?.data?.styles,
+          ...lastSelectedNode?.element?.data?.styles,
 
           '&:hover': {
             bgcolor: DEFAULT_NODE_BG_COLOR,
             color: DEFAULT_TEXT_COLOR,
-            ...selected[0].element?.data?.styles,
+            ...lastSelectedNode?.element?.data?.styles,
           },
         }}
       />
@@ -132,7 +142,7 @@ export const NodeEditing = memo(({ selected, copied }) => {
           onNodePropsChangeComplete({ '& .react-flow__handle': { bgcolor: hex } })
         }
         initialColor={
-          selected[0].element?.data?.styles?.['& .react-flow__handle']?.bgcolor ||
+          lastSelectedNode?.element?.data?.styles?.['& .react-flow__handle']?.bgcolor ||
           DEFAULT_HANDLE_COLOR
         }
         tooltip="Màu cổng"

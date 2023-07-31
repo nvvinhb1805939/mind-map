@@ -44,6 +44,9 @@ export const getEditingMode = (elements = []) => {
     : firstElement.type;
 };
 
+export const getLastSelectedElement = (selectedElements, type) =>
+  selectedElements.findLast((selectedElement) => selectedElement.type === type);
+
 const downloadImage = (dataUrl, type) => {
   const a = document.createElement('a');
 
