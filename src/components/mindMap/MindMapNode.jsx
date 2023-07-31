@@ -28,7 +28,10 @@ export const MindMapNode = memo((props) => {
   } = useSelector((state) => state[TYPES.MIND_MAP]);
 
   const currentSelectedNode = useMemo(
-    () => selectedNode?.find(({ element }) => element.id === id),
+    () =>
+      selectedNode?.find(
+        ({ element, type }) => type !== EDIT_MODES.PANE_EDITING && element.id === id
+      ),
     [selectedNode]
   );
 

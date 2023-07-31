@@ -1,14 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useSettingsContext } from 'src/components/settings';
-import {
-  DEFAULT_EDGE_COLOR,
-  DEFAULT_NODE_BORDER_COLOR,
-  HANDLE_SIZE,
-  MIND_MAP_CLASSES,
-  NODE_SIZE,
-  TYPES,
-} from 'src/config-global';
+import { HANDLE_SIZE, NODE_SIZE, TYPES } from 'src/config-global';
 import { INITIAL_MIND_MAP } from 'src/redux/slices/mindMap';
 
 export const useStyles = () => {
@@ -55,10 +48,9 @@ export const useStyles = () => {
         strokeWidth: 4,
       },
       '& .react-flow__edge.selected .react-flow__edge-path': {
-        stroke: `${selected?.[0]?.element?.style?.stroke || DEFAULT_EDGE_COLOR} !important`,
+        strokeWidth: 4,
         filter: (theme) =>
           `drop-shadow(0px 0px 4px ${theme.palette.grey[300]}) drop-shadow(0px 0px 4px ${theme.palette.grey[300]})`,
-        strokeWidth: 4,
       },
 
       /** Style for Handles */
